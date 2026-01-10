@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunisian Campers - Approche Méthodologique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #45998A;
+            --primary-light: #6DBBAA;
+            --primary-lighter: #ACE4CB;
+            --primary-dark: #267675;
+            --accent: #F48E40;
+            --accent-light: #FBAC54;
+            --blue: #4A8EBF;
+            --blue-light: #76AED9;
+            --purple: #AF93C6;
+            --green: #80C261;
+            --gray-100: #E8E8E8;
+            --gray-200: #D1D1D1;
+            --gray-300: #BABABA;
+            --gray-500: #7E7E7E;
+            --gray-600: #5B5B5B;
+            --white: #FFFFFF;
+            --background: #FAFAFA;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--background);
+            color: var(--gray-600);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-600);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-500);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-slide {
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--blue-light) 25%, var(--primary-light) 100%);
+            text-align: center;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--white);
+            padding: 12px 24px;
+            border-radius: 30px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .company-badge .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .company-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .phase-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .phase-card.phase-1::before {
+            background: var(--blue);
+        }
+
+        .phase-card.phase-2::before {
+            background: var(--accent);
+        }
+
+        .phase-card.phase-3::before {
+            background: var(--green);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .phase-number {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .phase-1 .phase-number {
+            background: var(--blue);
+        }
+
+        .phase-2 .phase-number {
+            background: var(--accent);
+        }
+
+        .phase-3 .phase-number {
+            background: var(--green);
+        }
+
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .phase-subtitle {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .phase-description {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+
+        .timeline-marker {
+            min-width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefit-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        .benefit-list .material-icons {
+            color: var(--primary);
+            margin-right: 12px;
+            font-size: 24px;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, var(--primary-lighter), var(--blue-light));
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .icon-circle .material-icons {
+            font-size: 40px;
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            margin: 16px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="currentSlide">1</span>/<span id="totalSlides">5</span>
+    </div>
+
+    <!-- Slide 1: Titre -->
+    <section class="slide hero-slide">
+        <div class="slide-content">
+            <div class="company-badge">
+                <span class="material-icons">terrain</span>
+                <span class="company-name">Tunisian Campers</span>
+            </div>
+            <h1>Approche Méthodologique</h1>
+            <div class="section-divider"></div>
+            <p class="subtitle">Une Démarche Structurée en 3 Phases<br>pour Définir Votre Stratégie des 10 Prochaines Années</p>
+            <div class="stat-grid" style="max-width: 700px; margin: 48px auto 0;">
+                <div class="stat-card" style="border-left-color: var(--blue);">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Phases</div>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--accent);">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Années</div>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--green);">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Stratégie</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: Vue d'ensemble des 3 phases -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2>Une Démarche Progressive et Structurée</h2>
+            <p class="subtitle">Chaque phase s'appuie sur la précédente pour construire une stratégie solide</p>
+
+            <div class="grid-3">
+                <div class="phase-card phase-1">
+                    <div class="phase-number">1</div>
+                    <h3 class="phase-title">Diagnostic</h3>
+                    <p class="phase-subtitle">« Où en sommes-nous ? »</p>
+                    <p class="phase-description">
+                        Analyse approfondie de votre situation actuelle après 10 ans d'opérations. Évaluation des forces, faiblesses, opportunités et contraintes.
+                    </p>
+                </div>
+
+                <div class="phase-card phase-2">
+                    <div class="phase-number">2</div>
+                    <h3 class="phase-title">Options Stratégiques</h3>
+                    <p class="phase-subtitle">« Quelles sont nos possibilités ? »</p>
+                    <p class="phase-description">
+                        Identification et exploration de plusieurs voies stratégiques alternatives basées sur les résultats du diagnostic.
+                    </p>
+                </div>
+
+                <div class="phase-card phase-3">
+                    <div class="phase-number">3</div>
+                    <h3 class="phase-title">Sélection & Plan d'Action</h3>
+                    <p class="phase-subtitle">« Comment y arriver ? »</p>
+                    <p class="phase-description">
+                        Choix de la stratégie optimale et élaboration d'un plan d'action concret pour les 10 prochaines années.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Phase 1 - Diagnostic -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2>Phase 1 : Diagnostic Stratégique</h2>
+            <p class="subtitle">Comprendre votre situation actuelle pour mieux préparer l'avenir</p>
+
+            <div class="card" style="margin-top: 32px;">
+                <div style="display: flex; align-items: center; margin-bottom: 32px;">
+                    <div class="icon-circle" style="background: var(--blue);">
+                        <span class="material-icons">analytics</span>
+                    </div>
+                    <div style="margin-left: 24px;">
+                        <h3 style="margin-bottom: 8px; color: var(--blue);">État des Lieux Complet</h3>
+                        <p style="color: var(--gray-500);">Analyse de 5 piliers fondamentaux de votre entreprise</p>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top: 24px;">
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--primary); margin-bottom: 8px;">payments</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Financier</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Revenus, marges, flux</p>
+                    </div>
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--accent); margin-bottom: 8px;">settings</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Opérations</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Capacité, efficacité</p>
+                    </div>
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--blue); margin-bottom: 8px;">people</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Clients</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Segments, satisfaction</p>
+                    </div>
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--purple); margin-bottom: 8px;">leaderboard</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Concurrence</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Positionnement</p>
+                    </div>
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--green); margin-bottom: 8px;">groups</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Équipe</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Compétences, structure</p>
+                    </div>
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="material-icons" style="font-size: 36px; color: var(--primary); margin-bottom: 8px;">insights</span>
+                        <p style="font-weight: 600; font-size: 0.95rem;">Résultats</p>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Opportunités claires</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Phases 2 & 3 -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2>Phases 2 & 3 : Stratégie et Exécution</h2>
+            <p class="subtitle">Du choix stratégique au plan d'action concret</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker" style="background: var(--accent);">2</div>
+                    <div class="timeline-content">
+                        <h3 style="color: var(--accent); margin-bottom: 16px;">Exploration des Options Stratégiques</h3>
+                        <p style="margin-bottom: 16px; color: var(--gray-600);">Identification de 6 à 8 voies stratégiques alternatives basées sur votre diagnostic :</p>
+                        <ul class="benefit-list" style="margin-left: 0;">
+                            <li><span class="material-icons">check_circle</span><span>Expansion géographique ou verticale</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Pivot vers de nouveaux segments (B2B, niches)</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Modèles d'affaires innovants (plateforme, licence)</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Évaluation rigoureuse : faisabilité, impact, risques</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker" style="background: var(--green);">3</div>
+                    <div class="timeline-content">
+                        <h3 style="color: var(--green); margin-bottom: 16px;">Sélection et Plan d'Action</h3>
+                        <p style="margin-bottom: 16px; color: var(--gray-600);">Choix de la stratégie optimale et construction d'une feuille de route :</p>
+                        <ul class="benefit-list" style="margin-left: 0;">
+                            <li><span class="material-icons">check_circle</span><span>Cadre décisionnel pour sélectionner la meilleure option</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Plan d'action détaillé sur 90 jours, 1 an, 3 ans</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Indicateurs de performance et jalons clés</span></li>
+                            <li><span class="material-icons">check_circle</span><span>Allocation des ressources et responsabilités</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Pourquoi cette approche -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2>Pourquoi Cette Approche ?</h2>
+            <p class="subtitle">Une méthodologie éprouvée pour une stratégie solide et réalisable</p>
+
+            <div class="quote-box">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary); margin-bottom: 16px;">format_quote</span>
+                <p class="quote-text">« On ne peut pas décider où aller si on ne sait pas où on est. »</p>
+            </div>
+
+            <div class="grid-3" style="margin-top: 40px;">
+                <div class="card" style="text-align: center;">
+                    <div class="icon-circle" style="background: var(--blue);">
+                        <span class="material-icons">foundation</span>
+                    </div>
+                    <h3 style="font-size: 1.1rem;">Basée sur les Faits</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">Le diagnostic assure que chaque décision repose sur des données concrètes, pas des suppositions.</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div class="icon-circle" style="background: var(--accent);">
+                        <span class="material-icons">explore</span>
+                    </div>
+                    <h3 style="font-size: 1.1rem;">Exploration Complète</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">Plusieurs options sont explorées pour ne pas se limiter à la solution la plus évidente.</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div class="icon-circle" style="background: var(--green);">
+                        <span class="material-icons">rocket_launch</span>
+                    </div>
+                    <h3 style="font-size: 1.1rem;">Orientée Action</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">Le plan d'action concret assure une mise en œuvre rapide et efficace de la stratégie choisie.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 40px; background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--green) 100%); text-align: center; padding: 32px;">
+                <h3 style="color: var(--white); font-size: 1.4rem; margin-bottom: 12px;">Résultat Final</h3>
+                <p style="color: var(--white); font-size: 1.1rem; line-height: 1.6;">
+                    Une stratégie claire, validée et actionnable pour guider Tunisian Campers vers une croissance durable sur les 10 prochaines années.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+
+        totalSlidesEl.textContent = slides.length;
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideIndex = Array.from(slides).indexOf(entry.target) + 1;
+                    currentSlideEl.textContent = slideIndex;
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => slideObserver.observe(slide));
+
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length) {
+                    slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSlide > 1) {
+                    slides[currentSlide - 2].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            if (e.key === 'Home') {
+                e.preventDefault();
+                slides[0].scrollIntoView({ behavior: 'smooth' });
+            }
+
+            if (e.key === 'End') {
+                e.preventDefault();
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
