@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunisian Campers - Phase de Diagnostic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #45998A;
+            --primary-light: #6DBBAA;
+            --primary-lighter: #ACE4CB;
+            --primary-dark: #267675;
+            --accent: #F48E40;
+            --accent-light: #FBAC54;
+            --accent-lighter: #FFCD80;
+            --blue: #4A8EBF;
+            --blue-light: #76AED9;
+            --blue-lighter: #B6DBF3;
+            --purple: #AF93C6;
+            --purple-light: #DCC9EC;
+            --green: #80C261;
+            --green-light: #9FD775;
+            --orange-dark: #E15720;
+            --red: #E65655;
+            --gray-100: #E8E8E8;
+            --gray-200: #D1D1D1;
+            --gray-300: #BABABA;
+            --gray-400: #A2A2A2;
+            --gray-500: #7E7E7E;
+            --gray-600: #5B5B5B;
+            --white: #FFFFFF;
+            --background: #FAFAFA;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--background);
+            color: var(--gray-600);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-600);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--white);
+            padding: 16px 12px;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .chapter-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chapter-nav::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 2px;
+        }
+
+        .chapter-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 4px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            color: var(--gray-500);
+            white-space: nowrap;
+        }
+
+        .chapter-item:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .chapter-item.active {
+            background: var(--primary-lighter);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .chapter-item .material-icons {
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            margin-left: 200px;
+            padding: 0 40px;
+        }
+
+        @media (max-width: 768px) {
+            .slides-container {
+                margin-left: 0;
+                padding: 0 20px;
+            }
+            .chapter-nav {
+                display: none;
+            }
+        }
+
+        /* Individual Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* MD3 Elevated Card */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .card-elevated {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .accent-text {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Big Numbers */
+        .big-number {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .big-number-label {
+            font-size: 1.1rem;
+            color: var(--gray-500);
+            margin-top: 8px;
+        }
+
+        /* Icon Styles */
+        .icon-large {
+            font-size: 64px;
+            color: var(--primary);
+        }
+
+        .icon-medium {
+            font-size: 40px;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .icon-circle .material-icons {
+            font-size: 40px;
+            color: var(--white);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4, .grid-5 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-track {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gray-200);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        /* Gauge Chart */
+        .gauge-container {
+            position: relative;
+            width: 160px;
+            height: 80px;
+            margin: 0 auto;
+        }
+
+        .gauge-bg {
+            position: absolute;
+            width: 160px;
+            height: 80px;
+            border-radius: 80px 80px 0 0;
+            background: var(--gray-200);
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            position: absolute;
+            width: 160px;
+            height: 80px;
+            border-radius: 80px 80px 0 0;
+            background: var(--primary);
+            transform-origin: center bottom;
+        }
+
+        .gauge-center {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 50px 50px 0 0;
+        }
+
+        .gauge-value {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Question List */
+        .question-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+
+        .question-number {
+            min-width: 32px;
+            height: 32px;
+            background: var(--primary-lighter);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 16px;
+        }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .checklist-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--green-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+
+        .checklist-icon .material-icons {
+            color: var(--white);
+        }
+
+        /* Benchmark Bar */
+        .benchmark-bar {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+        }
+
+        .benchmark-label {
+            width: 140px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .benchmark-track {
+            flex: 1;
+            height: 24px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benchmark-fill {
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--white);
+        }
+
+        .benchmark-target {
+            position: absolute;
+            top: -4px;
+            bottom: -4px;
+            width: 3px;
+            background: var(--gray-600);
+        }
+
+        .benchmark-target::after {
+            content: attr(data-target);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: var(--gray-500);
+            white-space: nowrap;
+        }
+
+        /* Pillar Cards */
+        .pillar-card {
+            text-align: center;
+            padding: 24px 16px;
+        }
+
+        .pillar-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .pillar-icon .material-icons {
+            font-size: 36px;
+            color: var(--white);
+        }
+
+        /* Color Variants */
+        .bg-primary { background: var(--primary); }
+        .bg-primary-light { background: var(--primary-light); }
+        .bg-accent { background: var(--accent); }
+        .bg-blue { background: var(--blue); }
+        .bg-purple { background: var(--purple); }
+        .bg-green { background: var(--green); }
+        .bg-orange { background: var(--accent); }
+        .bg-red { background: var(--red); }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-blue { color: var(--blue); }
+
+        /* Stat Card */
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        /* Two-Week Calendar */
+        .week-container {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .week-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            min-width: 280px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .week-header {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-lighter);
+        }
+
+        .day-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .day-marker {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            margin: 16px 0;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: linear-gradient(135deg, var(--primary-lighter), var(--blue-lighter));
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .quote-text {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            font-style: italic;
+        }
+
+        /* Partner Visual */
+        .partner-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .partner-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .partner-connector {
+            display: flex;
+            align-items: center;
+        }
+
+        .connector-line {
+            width: 60px;
+            height: 3px;
+            background: var(--gray-300);
+        }
+
+        /* Funnel Visual */
+        .funnel-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .funnel-stage {
+            text-align: center;
+            padding: 16px;
+            margin: 8px auto;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .funnel-stage:hover {
+            transform: scale(1.02);
+        }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 4px;
+        }
+
+        .category-badge .material-icons {
+            font-size: 16px;
+            margin-right: 6px;
+        }
+
+        /* Title Slide Styles */
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--blue-lighter) 100%);
+            border-radius: 24px;
+            padding: 60px 40px;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--white);
+            padding: 12px 24px;
+            border-radius: 30px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .company-badge .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .company-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        /* Questions Category Section */
+        .questions-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .questions-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .questions-header .material-icons {
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        /* Competitive Grid */
+        .competitor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .competitor-card {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .competitor-card.you {
+            background: var(--primary-lighter);
+            border: 2px solid var(--primary);
+        }
+
+        /* Org Chart */
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .org-level {
+            display: flex;
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        .org-node {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 100px;
+        }
+
+        .org-node.highlight {
+            border: 2px solid var(--primary);
+            background: var(--primary-lighter);
+        }
+
+        .org-connector {
+            width: 2px;
+            height: 20px;
+            background: var(--gray-300);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            cursor: pointer;
+        }
+
+        .mobile-menu-toggle .material-icons {
+            color: var(--white);
+            font-size: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            .big-number { font-size: 3.5rem; }
+            .stat-value { font-size: 2rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span>/<span id="totalSlides">15</span>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <nav class="chapter-nav" id="chapterNav">
+        <div class="chapter-item active" data-slide="1">
+            <span class="material-icons">flag</span>
+            Bienvenue
+        </div>
+        <div class="chapter-item" data-slide="2">
+            <span class="material-icons">search</span>
+            Pourquoi le Diagnostic
+        </div>
+        <div class="chapter-item" data-slide="3">
+            <span class="material-icons">explore</span>
+            Ce que Nous Explorons
+        </div>
+        <div class="chapter-item" data-slide="4">
+            <span class="material-icons">payments</span>
+            Financier
+        </div>
+        <div class="chapter-item" data-slide="5">
+            <span class="material-icons">settings</span>
+            Opérations
+        </div>
+        <div class="chapter-item" data-slide="6">
+            <span class="material-icons">people</span>
+            Clients
+        </div>
+        <div class="chapter-item" data-slide="7">
+            <span class="material-icons">leaderboard</span>
+            Concurrence
+        </div>
+        <div class="chapter-item" data-slide="8">
+            <span class="material-icons">groups</span>
+            Équipe
+        </div>
+        <div class="chapter-item" data-slide="9">
+            <span class="material-icons">quiz</span>
+            Questions
+        </div>
+        <div class="chapter-item" data-slide="10">
+            <span class="material-icons">quiz</span>
+            Questions II
+        </div>
+        <div class="chapter-item" data-slide="11">
+            <span class="material-icons">schedule</span>
+            Calendrier
+        </div>
+        <div class="chapter-item" data-slide="12">
+            <span class="material-icons">inventory_2</span>
+            Livrables
+        </div>
+        <div class="chapter-item" data-slide="13">
+            <span class="material-icons">verified</span>
+            Références
+        </div>
+        <div class="chapter-item" data-slide="14">
+            <span class="material-icons">emoji_events</span>
+            Indicateurs de Succès
+        </div>
+        <div class="chapter-item" data-slide="15">
+            <span class="material-icons">handshake</span>
+            Prochaines Étapes
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileToggle">
+        <span class="material-icons">menu</span>
+    </div>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+
+        <!-- Slide 1: Title -->
+        <section class="slide" id="slide-1" data-chapter="Welcome">
+            <div class="slide-content">
+                <div class="title-slide">
+                    <div class="company-badge">
+                        <span class="material-icons">terrain</span>
+                        <span class="company-name">Tunisian Campers</span>
+                    </div>
+                    <h1>Phase de Diagnostic</h1>
+                    <div class="section-divider" style="margin: 24px auto;"></div>
+                    <p class="subtitle">Comprendre Votre Entreprise pour Débloquer la Croissance</p>
+                    <div style="display: flex; justify-content: center; gap: 32px; margin-top: 48px;">
+                        <div class="stat-card" style="border-left-color: var(--primary);">
+                            <div class="stat-value">10</div>
+                            <div class="stat-label">Années d'Existence</div>
+                        </div>
+                        <div class="stat-card" style="border-left-color: var(--accent);">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Membres de l'Équipe</div>
+                        </div>
+                        <div class="stat-card" style="border-left-color: var(--blue);">
+                            <div class="stat-value">33K</div>
+                            <div class="stat-label">Abonnés</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Why Diagnostic -->
+        <section class="slide" id="slide-2" data-chapter="Why Diagnostic">
+            <div class="slide-content">
+                <h2>Pourquoi Commencer par un Diagnostic ?</h2>
+                <div class="quote-box">
+                    <span class="material-icons icon-large" style="margin-bottom: 16px;">search</span>
+                    <p class="quote-text">« On ne peut pas améliorer ce qu'on ne comprend pas. »</p>
+                </div>
+                <div class="grid-3" style="margin-top: 32px;">
+                    <div class="feature-card">
+                        <div class="icon-circle bg-primary" style="margin: 0 auto 16px;">
+                            <span class="material-icons">foundation</span>
+                        </div>
+                        <h3 style="font-size: 1.1rem;">Base Solide</h3>
+                        <p style="color: var(--gray-500); font-size: 0.9rem;">Construire une stratégie sur des faits, pas des suppositions</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle bg-accent" style="margin: 0 auto 16px;">
+                            <span class="material-icons">visibility</span>
+                        </div>
+                        <h3 style="font-size: 1.1rem;">Révéler les Problèmes Cachés</h3>
+                        <p style="color: var(--gray-500); font-size: 0.9rem;">Identifier les problèmes avant qu'ils ne deviennent des crises</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle bg-blue" style="margin: 0 auto 16px;">
+                            <span class="material-icons">gps_fixed</span>
+                        </div>
+                        <h3 style="font-size: 1.1rem;">Prioriser les Actions</h3>
+                        <p style="color: var(--gray-500); font-size: 0.9rem;">Concentrer l'énergie là où l'impact est le plus grand</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: What We'll Explore -->
+        <section class="slide" id="slide-3" data-chapter="What We Explore">
+            <div class="slide-content">
+                <h2 style="text-align: center;">Cinq Piliers de Découverte</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 40px;">Une vue complète de la santé de votre entreprise</p>
+                <div class="grid-5">
+                    <div class="feature-card pillar-card">
+                        <div class="pillar-icon bg-primary">
+                            <span class="material-icons">payments</span>
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Financier</h3>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Revenus, marges, flux de trésorerie</p>
+                    </div>
+                    <div class="feature-card pillar-card">
+                        <div class="pillar-icon bg-accent">
+                            <span class="material-icons">settings</span>
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Opérations</h3>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Capacité, efficacité, coûts</p>
+                    </div>
+                    <div class="feature-card pillar-card">
+                        <div class="pillar-icon bg-blue">
+                            <span class="material-icons">people</span>
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Clients</h3>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Segments, fidélisation, satisfaction</p>
+                    </div>
+                    <div class="feature-card pillar-card">
+                        <div class="pillar-icon bg-purple">
+                            <span class="material-icons">leaderboard</span>
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Concurrence</h3>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Position sur le marché, menaces</p>
+                    </div>
+                    <div class="feature-card pillar-card">
+                        <div class="pillar-icon bg-green">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Équipe</h3>
+                        <p style="font-size: 0.85rem; color: var(--gray-500);">Compétences, structure, lacunes</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Financial Deep-Dive -->
+        <section class="slide" id="slide-4" data-chapter="Financial">
+            <div class="slide-content">
+                <div class="card card-elevated">
+                    <div style="display: flex; align-items: center; margin-bottom: 24px;">
+                        <div class="icon-circle bg-primary" style="margin-right: 16px;">
+                            <span class="material-icons">payments</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 0;">Santé Financière</h2>
+                            <p class="subtitle" style="font-size: 1rem;">Comprendre vos chiffres</p>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 16px;">Ce dont Nous Avons Besoin</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                <span class="category-badge" style="background: var(--primary-lighter); color: var(--primary-dark);">
+                                    <span class="material-icons">trending_up</span>Revenus par Type d'Excursion
+                                </span>
+                                <span class="category-badge" style="background: var(--accent-lighter); color: var(--orange-dark);">
+                                    <span class="material-icons">percent</span>Marges Bénéficiaires
+                                </span>
+                                <span class="category-badge" style="background: var(--blue-lighter); color: var(--blue);">
+                                    <span class="material-icons">account_balance_wallet</span>Flux de Trésorerie
+                                </span>
+                                <span class="category-badge" style="background: var(--purple-light); color: var(--purple);">
+                                    <span class="material-icons">sell</span>Structure de Prix
+                                </span>
+                                <span class="category-badge" style="background: var(--green-light); color: var(--primary-dark);">
+                                    <span class="material-icons">calendar_month</span>Saisonnalité
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 16px;">Pourquoi C'est Important</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="display: flex; align-items: center; margin-bottom: 12px;">
+                                    <span class="material-icons" style="color: var(--primary); margin-right: 12px;">check_circle</span>
+                                    Identifier les offres les plus rentables
+                                </li>
+                                <li style="display: flex; align-items: center; margin-bottom: 12px;">
+                                    <span class="material-icons" style="color: var(--primary); margin-right: 12px;">check_circle</span>
+                                    Repérer les vulnérabilités de trésorerie
+                                </li>
+                                <li style="display: flex; align-items: center; margin-bottom: 12px;">
+                                    <span class="material-icons" style="color: var(--primary); margin-right: 12px;">check_circle</span>
+                                    Trouver des opportunités d'optimisation des prix
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Operations -->
+        <section class="slide" id="slide-5" data-chapter="Operations">
+            <div class="slide-content">
+                <div class="card card-elevated">
+                    <div style="display: flex; align-items: center; margin-bottom: 24px;">
+                        <div class="icon-circle bg-accent" style="margin-right: 16px;">
+                            <span class="material-icons">settings</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 0;">Opérations et Capacité</h2>
+                            <p class="subtitle" style="font-size: 1rem;">Quelle est votre efficacité opérationnelle ?</p>
+                        </div>
+                    </div>
+                    <div class="grid-4">
+                        <div style="text-align: center;">
+                            <div class="gauge-container">
+                                <div class="gauge-bg"></div>
+                                <div class="gauge-fill" style="transform: rotate(-90deg) rotate(126deg); background: var(--primary);"></div>
+                                <div class="gauge-center"></div>
+                                <div class="gauge-value">?%</div>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 12px;">Utilisation des Excursions</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="gauge-container">
+                                <div class="gauge-bg"></div>
+                                <div class="gauge-fill" style="transform: rotate(-90deg) rotate(108deg); background: var(--accent);"></div>
+                                <div class="gauge-center"></div>
+                                <div class="gauge-value">?%</div>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 12px;">Utilisation de l'Équipement</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="gauge-container">
+                                <div class="gauge-bg"></div>
+                                <div class="gauge-fill" style="transform: rotate(-90deg) rotate(144deg); background: var(--blue);"></div>
+                                <div class="gauge-center"></div>
+                                <div class="gauge-value">?%</div>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 12px;">Disponibilité des Guides</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="gauge-container">
+                                <div class="gauge-bg"></div>
+                                <div class="gauge-fill" style="transform: rotate(-90deg) rotate(90deg); background: var(--purple);"></div>
+                                <div class="gauge-center"></div>
+                                <div class="gauge-value">?%</div>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 12px;">Demande de Pointe Satisfaite</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--gray-200);">
+                        <h3 style="font-size: 1rem; margin-bottom: 16px;">Questions Clés</h3>
+                        <div class="grid-2">
+                            <p style="font-size: 0.9rem; color: var(--gray-500);">
+                                <span class="material-icons" style="font-size: 18px; vertical-align: middle; color: var(--accent);">help</span>
+                                Combien d'excursions pouvez-vous organiser simultanément ?
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--gray-500);">
+                                <span class="material-icons" style="font-size: 18px; vertical-align: middle; color: var(--accent);">help</span>
+                                Quel est votre coût par participant ?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Customers -->
+        <section class="slide" id="slide-6" data-chapter="Customers">
+            <div class="slide-content">
+                <div style="display: flex; align-items: center; margin-bottom: 32px;">
+                    <div class="icon-circle bg-blue" style="margin-right: 16px;">
+                        <span class="material-icons">people</span>
+                    </div>
+                    <div>
+                        <h2 style="margin-bottom: 0;">Intelligence Client</h2>
+                        <p class="subtitle" style="font-size: 1rem;">Qui sont vos clients et comment vous trouvent-ils ?</p>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 style="color: var(--blue); font-size: 1.1rem; margin-bottom: 20px;">
+                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">category</span>
+                            Segments de Clientèle
+                        </h3>
+                        <div class="funnel-container">
+                            <div class="funnel-stage" style="width: 100%; background: var(--blue);">Aventuriers Individuels</div>
+                            <div class="funnel-stage" style="width: 85%; background: var(--blue-light);">Groupes Familiaux</div>
+                            <div class="funnel-stage" style="width: 70%; background: var(--primary);">Équipes d'Entreprise</div>
+                            <div class="funnel-stage" style="width: 55%; background: var(--primary-light);">International</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 20px;">
+                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">share</span>
+                            Canaux d'Acquisition
+                        </h3>
+                        <div>
+                            <div class="benchmark-bar">
+                                <span class="benchmark-label">Facebook</span>
+                                <div class="benchmark-track">
+                                    <div class="benchmark-fill" style="width: 70%; background: var(--blue);">?%</div>
+                                </div>
+                            </div>
+                            <div class="benchmark-bar">
+                                <span class="benchmark-label">Bouche-à-Oreille</span>
+                                <div class="benchmark-track">
+                                    <div class="benchmark-fill" style="width: 50%; background: var(--primary);">?%</div>
+                                </div>
+                            </div>
+                            <div class="benchmark-bar">
+                                <span class="benchmark-label">Ventes d'Entreprise</span>
+                                <div class="benchmark-track">
+                                    <div class="benchmark-fill" style="width: 30%; background: var(--accent);">?%</div>
+                                </div>
+                            </div>
+                            <div class="benchmark-bar">
+                                <span class="benchmark-label">Autre</span>
+                                <div class="benchmark-track">
+                                    <div class="benchmark-fill" style="width: 20%; background: var(--purple);">?%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Competition -->
+        <section class="slide" id="slide-7" data-chapter="Competition">
+            <div class="slide-content">
+                <div style="display: flex; align-items: center; margin-bottom: 32px;">
+                    <div class="icon-circle bg-purple" style="margin-right: 16px;">
+                        <span class="material-icons">leaderboard</span>
+                    </div>
+                    <div>
+                        <h2 style="margin-bottom: 0;">Paysage Concurrentiel</h2>
+                        <p class="subtitle" style="font-size: 1rem;">Où vous situez-vous sur le marché ?</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 20px; color: var(--purple);">Carte de Positionnement Marché</h3>
+                            <div style="position: relative; height: 250px; background: linear-gradient(135deg, var(--gray-100), var(--purple-light)); border-radius: 12px; padding: 20px;">
+                                <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: var(--gray-500);">PREMIUM</div>
+                                <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: var(--gray-500);">ÉCONOMIQUE</div>
+                                <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--gray-500);">LOCAL</div>
+                                <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--gray-500);">RÉGIONAL</div>
+                                <div style="position: absolute; top: 30%; left: 60%; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">VOUS</div>
+                                <div style="position: absolute; top: 50%; left: 30%; width: 40px; height: 40px; background: var(--gray-400); border-radius: 50%;"></div>
+                                <div style="position: absolute; top: 25%; left: 25%; width: 35px; height: 35px; background: var(--gray-400); border-radius: 50%;"></div>
+                                <div style="position: absolute; top: 60%; left: 70%; width: 45px; height: 45px; background: var(--gray-400); border-radius: 50%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 20px; color: var(--purple);">Ce que Nous Analyserons</h3>
+                            <div class="checklist-item">
+                                <div class="checklist-icon" style="background: var(--purple);">
+                                    <span class="material-icons">store</span>
+                                </div>
+                                <span>Concurrents directs et leurs offres</span>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon" style="background: var(--purple);">
+                                    <span class="material-icons">sell</span>
+                                </div>
+                                <span>Comparaison du positionnement tarifaire</span>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon" style="background: var(--purple);">
+                                    <span class="material-icons">star</span>
+                                </div>
+                                <span>Vos différenciateurs uniques</span>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon" style="background: var(--purple);">
+                                    <span class="material-icons">warning</span>
+                                </div>
+                                <span>Menaces et opportunités</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Team -->
+        <section class="slide" id="slide-8" data-chapter="Team">
+            <div class="slide-content">
+                <div style="display: flex; align-items: center; margin-bottom: 32px;">
+                    <div class="icon-circle bg-green" style="margin-right: 16px;">
+                        <span class="material-icons">groups</span>
+                    </div>
+                    <div>
+                        <h2 style="margin-bottom: 0;">Équipe et Organisation</h2>
+                        <p class="subtitle" style="font-size: 1rem;">Votre atout le plus précieux</p>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 20px; color: var(--green);">
+                            <span class="material-icons" style="vertical-align: middle;">account_tree</span>
+                            Structure Actuelle
+                        </h3>
+                        <div class="org-chart">
+                            <div class="org-node highlight">
+                                <span class="material-icons" style="font-size: 20px; color: var(--primary);">person</span>
+                                <div style="font-weight: 600; font-size: 0.9rem;">Fondateur</div>
+                            </div>
+                            <div class="org-connector"></div>
+                            <div class="org-level">
+                                <div class="org-node">
+                                    <span class="material-icons" style="font-size: 18px; color: var(--gray-500);">hiking</span>
+                                    <div style="font-size: 0.85rem;">Guides</div>
+                                </div>
+                                <div class="org-node">
+                                    <span class="material-icons" style="font-size: 18px; color: var(--gray-500);">support_agent</span>
+                                    <div style="font-size: 0.85rem;">Support</div>
+                                </div>
+                                <div class="org-node">
+                                    <span class="material-icons" style="font-size: 18px; color: var(--gray-500);">campaign</span>
+                                    <div style="font-size: 0.85rem;">Marketing</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <span class="big-number" style="font-size: 3rem;">7</span>
+                            <p class="big-number-label">Membres de l'Équipe</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 20px; color: var(--green);">
+                            <span class="material-icons" style="vertical-align: middle;">psychology</span>
+                            Ce que Nous Évaluerons
+                        </h3>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--green-light);">1</div>
+                            <span>Clarté des rôles et responsabilités</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--green-light);">2</div>
+                            <span>Lacunes de compétences et besoins de formation</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--green-light);">3</div>
+                            <span>Contraintes de capacité</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--green-light);">4</div>
+                            <span>Dépendances aux personnes clés</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--green-light);">5</div>
+                            <span>Préparation à la croissance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Questions Part 1 -->
+        <section class="slide" id="slide-9" data-chapter="Questions">
+            <div class="slide-content">
+                <h2 style="text-align: center; margin-bottom: 8px;">Questions de Découverte</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 32px;">Partie 1 : Finances et Opérations</p>
+                <div class="grid-2">
+                    <div class="questions-section">
+                        <div class="questions-header">
+                            <span class="material-icons" style="color: var(--primary);">payments</span>
+                            <h3 style="margin: 0; font-size: 1rem;">Questions Financières</h3>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">1</div>
+                            <span style="font-size: 0.9rem;">Quel est votre chiffre d'affaires annuel total et comment a-t-il évolué sur 3 ans ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">2</div>
+                            <span style="font-size: 0.9rem;">Répartition des revenus par type d'excursion ? (camping, randonnée, entreprise)</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">3</div>
+                            <span style="font-size: 0.9rem;">Quelle est votre marge bénéficiaire moyenne par excursion ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">4</div>
+                            <span style="font-size: 0.9rem;">Comment fixez-vous vos prix ? Par personne, par excursion ou sur mesure ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">5</div>
+                            <span style="font-size: 0.9rem;">Quels sont vos principaux générateurs de coûts ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number">6</div>
+                            <span style="font-size: 0.9rem;">Combien de mois de trésorerie maintenez-vous ?</span>
+                        </div>
+                    </div>
+                    <div class="questions-section">
+                        <div class="questions-header">
+                            <span class="material-icons" style="color: var(--accent);">settings</span>
+                            <h3 style="margin: 0; font-size: 1rem;">Questions Opérationnelles</h3>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">1</div>
+                            <span style="font-size: 0.9rem;">Combien d'excursions pouvez-vous organiser par mois à pleine capacité ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">2</div>
+                            <span style="font-size: 0.9rem;">Quel pourcentage de capacité utilisez-vous généralement ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">3</div>
+                            <span style="font-size: 0.9rem;">Quel est le ratio de réservations haute saison vs. basse saison ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">4</div>
+                            <span style="font-size: 0.9rem;">À combien de temps à l'avance les clients réservent-ils généralement ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">5</div>
+                            <span style="font-size: 0.9rem;">Quel équipement possédez-vous vs. louez-vous ?</span>
+                        </div>
+                        <div class="question-item">
+                            <div class="question-number" style="background: var(--accent-lighter); color: var(--orange-dark);">6</div>
+                            <span style="font-size: 0.9rem;">Quelle est votre politique et votre taux d'annulation/remboursement ?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Questions Part 2 -->
+        <section class="slide" id="slide-10" data-chapter="Questions II">
+            <div class="slide-content">
+                <h2 style="text-align: center; margin-bottom: 8px;">Questions de Découverte</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 32px;">Partie 2 : Clients, Concurrence et Équipe</p>
+                <div class="grid-3">
+                    <div class="questions-section" style="padding: 20px;">
+                        <div class="questions-header" style="padding-bottom: 8px;">
+                            <span class="material-icons" style="color: var(--blue); font-size: 24px;">people</span>
+                            <h3 style="margin: 0; font-size: 0.95rem;">Clients</h3>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--blue-lighter); color: var(--blue); min-width: 24px; height: 24px; font-size: 12px;">1</div>
+                            <span style="font-size: 0.85rem;">Répartition des segments de clientèle ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--blue-lighter); color: var(--blue); min-width: 24px; height: 24px; font-size: 12px;">2</div>
+                            <span style="font-size: 0.85rem;">Comment les clients vous trouvent-ils ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--blue-lighter); color: var(--blue); min-width: 24px; height: 24px; font-size: 12px;">3</div>
+                            <span style="font-size: 0.85rem;">Taux de clients récurrents ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--blue-lighter); color: var(--blue); min-width: 24px; height: 24px; font-size: 12px;">4</div>
+                            <span style="font-size: 0.85rem;">Dépense moyenne par client ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--blue-lighter); color: var(--blue); min-width: 24px; height: 24px; font-size: 12px;">5</div>
+                            <span style="font-size: 0.85rem;">Score de satisfaction client ?</span>
+                        </div>
+                    </div>
+                    <div class="questions-section" style="padding: 20px;">
+                        <div class="questions-header" style="padding-bottom: 8px;">
+                            <span class="material-icons" style="color: var(--purple); font-size: 24px;">leaderboard</span>
+                            <h3 style="margin: 0; font-size: 0.95rem;">Concurrence</h3>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--purple-light); color: #79409E; min-width: 24px; height: 24px; font-size: 12px;">1</div>
+                            <span style="font-size: 0.85rem;">Top 3 des concurrents ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--purple-light); color: #79409E; min-width: 24px; height: 24px; font-size: 12px;">2</div>
+                            <span style="font-size: 0.85rem;">Votre différenciateur clé ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--purple-light); color: #79409E; min-width: 24px; height: 24px; font-size: 12px;">3</div>
+                            <span style="font-size: 0.85rem;">Pourquoi les clients vous choisissent-ils ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--purple-light); color: #79409E; min-width: 24px; height: 24px; font-size: 12px;">4</div>
+                            <span style="font-size: 0.85rem;">Contrats perdus - où vont-ils ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--purple-light); color: #79409E; min-width: 24px; height: 24px; font-size: 12px;">5</div>
+                            <span style="font-size: 0.85rem;">Enseignements de l'expansion au Maroc ?</span>
+                        </div>
+                    </div>
+                    <div class="questions-section" style="padding: 20px;">
+                        <div class="questions-header" style="padding-bottom: 8px;">
+                            <span class="material-icons" style="color: var(--green); font-size: 24px;">groups</span>
+                            <h3 style="margin: 0; font-size: 0.95rem;">Équipe</h3>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--green-light); color: var(--primary-dark); min-width: 24px; height: 24px; font-size: 12px;">1</div>
+                            <span style="font-size: 0.85rem;">Répartition des rôles de l'équipe ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--green-light); color: var(--primary-dark); min-width: 24px; height: 24px; font-size: 12px;">2</div>
+                            <span style="font-size: 0.85rem;">Temps plein vs. freelance ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--green-light); color: var(--primary-dark); min-width: 24px; height: 24px; font-size: 12px;">3</div>
+                            <span style="font-size: 0.85rem;">Plus grandes lacunes de compétences ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--green-light); color: var(--primary-dark); min-width: 24px; height: 24px; font-size: 12px;">4</div>
+                            <span style="font-size: 0.85rem;">Si vous n'êtes pas disponible, qui dirige ?</span>
+                        </div>
+                        <div class="question-item" style="padding: 8px 0;">
+                            <div class="question-number" style="background: var(--green-light); color: var(--primary-dark); min-width: 24px; height: 24px; font-size: 12px;">5</div>
+                            <span style="font-size: 0.85rem;">Recrutements prévus cette année ?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Timeline -->
+        <section class="slide" id="slide-11" data-chapter="Timeline">
+            <div class="slide-content">
+                <h2 style="text-align: center;">Calendrier de Diagnostic de 2 Semaines</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 40px;">Un processus ciblé et efficace</p>
+                <div class="week-container">
+                    <div class="week-card">
+                        <div class="week-header" style="color: var(--primary);">
+                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">date_range</span>
+                            Semaine 1 : Découverte
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--primary);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jours 1-2 :</strong> Lancement et collecte de données</span>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--primary-light);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jours 3-4 :</strong> Entretien avec le fondateur (2h)</span>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--primary-lighter);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jour 5 :</strong> Entretiens avec l'équipe (optionnel)</span>
+                        </div>
+                    </div>
+                    <div class="week-card">
+                        <div class="week-header" style="color: var(--accent);">
+                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">analytics</span>
+                            Semaine 2 : Analyse
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--accent);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jours 6-8 :</strong> Analyse des données et recherche</span>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--accent-light);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jours 9-10 :</strong> Préparation du rapport</span>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-marker" style="background: var(--accent-lighter);"></div>
+                            <span style="font-size: 0.9rem;"><strong>Jours 11-14 :</strong> Présentation et discussion</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <div style="display: inline-flex; align-items: center; background: var(--gray-100); padding: 16px 32px; border-radius: 30px;">
+                        <span class="material-icons" style="color: var(--primary); margin-right: 12px; font-size: 28px;">schedule</span>
+                        <span style="font-size: 1.1rem; font-weight: 600;">Votre engagement de temps : ~4-5 heures au total</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Deliverables -->
+        <section class="slide" id="slide-12" data-chapter="Deliverables">
+            <div class="slide-content">
+                <h2 style="text-align: center;">Ce que Vous Recevrez</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 40px;">Des informations exploitables, pas seulement des données</p>
+                <div class="grid-2">
+                    <div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--primary);">
+                                <span class="material-icons">description</span>
+                            </div>
+                            <div>
+                                <strong>Rapport de Santé de l'Entreprise</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Évaluation complète des 5 piliers</p>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--accent);">
+                                <span class="material-icons">insights</span>
+                            </div>
+                            <div>
+                                <strong>Tableau de Bord des Résultats Clés</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Résumé visuel des indicateurs vs. références</p>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--blue);">
+                                <span class="material-icons">priority_high</span>
+                            </div>
+                            <div>
+                                <strong>Liste des Problèmes Prioritaires</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Principaux défis classés par impact</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--purple);">
+                                <span class="material-icons">lightbulb</span>
+                            </div>
+                            <div>
+                                <strong>Carte des Opportunités</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Gains rapides + potentiel à long terme</p>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--green);">
+                                <span class="material-icons">flag</span>
+                            </div>
+                            <div>
+                                <strong>Prochaines Étapes Recommandées</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Plan d'action clair avec priorités</p>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-icon" style="background: var(--red);">
+                                <span class="material-icons">forum</span>
+                            </div>
+                            <div>
+                                <strong>Session de Discussion Stratégique</strong>
+                                <p style="font-size: 0.85rem; color: var(--gray-500); margin: 4px 0 0;">Analyse approfondie des résultats de 90 min</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: Benchmarks -->
+        <section class="slide" id="slide-13" data-chapter="Benchmarks">
+            <div class="slide-content">
+                <h2 style="text-align: center;">À Quoi Ressemble le « Bon »</h2>
+                <p class="subtitle" style="text-align: center; margin-bottom: 40px;">Références de l'industrie du tourisme d'aventure</p>
+                <div class="card card-elevated">
+                    <div class="benchmark-bar">
+                        <span class="benchmark-label">Marge Brute</span>
+                        <div class="benchmark-track">
+                            <div class="benchmark-fill" style="width: 60%; background: linear-gradient(90deg, var(--primary-light), var(--primary));">Cible : 40-60%</div>
+                            <div class="benchmark-target" style="left: 50%;" data-target="50%"></div>
+                        </div>
+                    </div>
+                    <div class="benchmark-bar">
+                        <span class="benchmark-label">Clients Récurrents</span>
+                        <div class="benchmark-track">
+                            <div class="benchmark-fill" style="width: 35%; background: linear-gradient(90deg, var(--blue-light), var(--blue));">Cible : 25-35%</div>
+                            <div class="benchmark-target" style="left: 30%;" data-target="30%"></div>
+                        </div>
+                    </div>
+                    <div class="benchmark-bar">
+                        <span class="benchmark-label">Utilisation Capacité</span>
+                        <div class="benchmark-track">
+                            <div class="benchmark-fill" style="width: 75%; background: linear-gradient(90deg, var(--accent-light), var(--accent));">Cible : 65-75%</div>
+                            <div class="benchmark-target" style="left: 70%;" data-target="70%"></div>
+                        </div>
+                    </div>
+                    <div class="benchmark-bar">
+                        <span class="benchmark-label">Satisfaction Client</span>
+                        <div class="benchmark-track">
+                            <div class="benchmark-fill" style="width: 90%; background: linear-gradient(90deg, var(--green-light), var(--green));">Cible : 85%+</div>
+                            <div class="benchmark-target" style="left: 85%;" data-target="85%"></div>
+                        </div>
+                    </div>
+                    <div class="benchmark-bar">
+                        <span class="benchmark-label">Coût Marketing</span>
+                        <div class="benchmark-track">
+                            <div class="benchmark-fill" style="width: 15%; background: linear-gradient(90deg, var(--purple-light), var(--purple));">Cible : 10-15%</div>
+                            <div class="benchmark-target" style="left: 12%;" data-target="12%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 0.9rem; color: var(--gray-500); margin-top: 24px;">
+                    <span class="material-icons" style="vertical-align: middle; font-size: 18px;">info</span>
+                    Références basées sur des opérateurs de tourisme d'aventure de taille similaire dans la région MENA
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 14: Success Metrics -->
+        <section class="slide" id="slide-14" data-chapter="Success Metrics">
+            <div class="slide-content">
+                <h2 style="text-align: center;">Signes d'une Entreprise d'Aventure en Bonne Santé</h2>
+                <div class="section-divider" style="margin: 16px auto 40px;"></div>
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--primary); margin-bottom: 16px;">trending_up</span>
+                        <h3 style="font-size: 1rem;">Croissance Durable</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">Croissance annuelle du chiffre d'affaires de 15-25% sans sacrifier la marge</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--accent); margin-bottom: 16px;">balance</span>
+                        <h3 style="font-size: 1rem;">Revenus Diversifiés</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">Aucun type de client unique >50% des revenus</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--blue); margin-bottom: 16px;">savings</span>
+                        <h3 style="font-size: 1rem;">Réserve de Trésorerie</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">3-6 mois de réserve pour la basse saison</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--purple); margin-bottom: 16px;">favorite</span>
+                        <h3 style="font-size: 1rem;">Clients Fidèles</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">Recommandations solides et réservations répétées</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--green); margin-bottom: 16px;">group_work</span>
+                        <h3 style="font-size: 1rem;">Équipe Évolutive</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">L'entreprise fonctionne sans le fondateur 24h/24 7j/7</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="material-icons icon-medium" style="color: var(--red); margin-bottom: 16px;">verified_user</span>
+                        <h3 style="font-size: 1rem;">Dossier de Sécurité</h3>
+                        <p style="font-size: 0.9rem; color: var(--gray-500);">Zéro incident majeur, assurance appropriée</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 15: Next Steps -->
+        <section class="slide" id="slide-15" data-chapter="Next Steps">
+            <div class="slide-content">
+                <div class="title-slide" style="background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--green-light) 100%);">
+                    <span class="material-icons" style="font-size: 80px; color: var(--primary); margin-bottom: 24px;">handshake</span>
+                    <h1>Commençons</h1>
+                    <p class="subtitle" style="margin-bottom: 40px;">Un partenariat pour la croissance</p>
+                    <div class="partner-visual">
+                        <div class="partner-circle" style="background: var(--primary);">
+                            <span class="material-icons" style="font-size: 40px;">terrain</span>
+                        </div>
+                        <div class="partner-connector">
+                            <div class="connector-line"></div>
+                            <span class="material-icons" style="color: var(--gray-400); margin: 0 8px;">add</span>
+                            <div class="connector-line"></div>
+                        </div>
+                        <div class="partner-circle" style="background: var(--blue);">
+                            <span class="material-icons" style="font-size: 40px;">psychology</span>
+                        </div>
+                    </div>
+                    <div style="max-width: 500px; margin: 32px auto 0; text-align: left;">
+                        <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                            <span class="material-icons" style="color: var(--primary); margin-right: 16px;">check_circle</span>
+                            <span>Confirmer l'engagement et le calendrier</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                            <span class="material-icons" style="color: var(--primary); margin-right: 16px;">check_circle</span>
+                            <span>Partager les données financières (en toute confidentialité)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                            <span class="material-icons" style="color: var(--primary); margin-right: 16px;">check_circle</span>
+                            <span>Planifier l'entretien avec le fondateur</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 40px;">
+                        <div style="display: inline-flex; align-items: center; background: var(--white); padding: 16px 32px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            <span class="material-icons" style="color: var(--accent); margin-right: 12px;">rocket_launch</span>
+                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--gray-600);">Prêt à libérer votre potentiel ?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Slide tracking
+        const slides = document.querySelectorAll('.slide');
+        const chapterItems = document.querySelectorAll('.chapter-item');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+
+        totalSlidesEl.textContent = slides.length;
+
+        // Intersection Observer for slide tracking
+        const observerOptions = {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const slideNumber = slideId.split('-')[1];
+                    currentSlideEl.textContent = slideNumber;
+
+                    // Update chapter navigation
+                    chapterItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.dataset.slide === slideNumber) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => slideObserver.observe(slide));
+
+        // Chapter navigation click handlers
+        chapterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const slideNumber = item.dataset.slide;
+                const targetSlide = document.getElementById(`slide-${slideNumber}`);
+                targetSlide.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const chapterNav = document.getElementById('chapterNav');
+        let navVisible = false;
+
+        mobileToggle.addEventListener('click', () => {
+            navVisible = !navVisible;
+            if (navVisible) {
+                chapterNav.style.display = 'block';
+                chapterNav.style.left = '0';
+            } else {
+                chapterNav.style.display = 'none';
+            }
+        });
+
+        // Close nav on chapter click (mobile)
+        chapterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    chapterNav.style.display = 'none';
+                    navVisible = false;
+                }
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length) {
+                    document.getElementById(`slide-${currentSlide + 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSlide > 1) {
+                    document.getElementById(`slide-${currentSlide - 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            if (e.key === 'Home') {
+                e.preventDefault();
+                document.getElementById('slide-1').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            if (e.key === 'End') {
+                e.preventDefault();
+                document.getElementById(`slide-${slides.length}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
