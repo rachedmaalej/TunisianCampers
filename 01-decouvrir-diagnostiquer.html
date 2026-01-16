@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 1 : Découvrir & Diagnostiquer - Tunisian Campers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Color palette - Teal theme */
+            --primary: #45998A;
+            --primary-light: #6DBBAA;
+            --primary-pale: #D4EBE7;
+            --accent: #F48E40;
+            --accent-light: #FBAC54;
+
+            /* Supporting colors */
+            --blue: #4A8EBF;
+            --green: #357D23;
+            --purple: #79409E;
+            --orange: #E15720;
+
+            /* Neutrals */
+            --gray-900: #2C2C2C;
+            --gray-700: #4B4B4B;
+            --gray-600: #5B5B5B;
+            --gray-500: #7A7A7A;
+            --gray-300: #D1D1D1;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            line-height: 1.6;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            color: var(--gray-700);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 220px;
+            background: var(--white);
+            padding: 24px 0;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .nav-logo {
+            padding: 20px 20px 20px;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+        }
+
+        .chapter-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .chapter-item .material-icons {
+            font-size: 20px;
+            color: var(--gray-500);
+        }
+
+        .chapter-item:hover {
+            background: var(--primary-pale);
+            border-left-color: var(--primary-light);
+        }
+
+        .chapter-item.active {
+            background: var(--primary-pale);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chapter-item.active .material-icons {
+            color: var(--primary);
+        }
+
+        /* Subsection styles */
+        .sub-items {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sub-items.expanded {
+            max-height: 300px;
+        }
+
+        .sub-item {
+            padding: 8px 20px 8px 52px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--gray-600);
+            display: block;
+        }
+
+        .sub-item:hover {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .sub-item.active {
+            background: color-mix(in srgb, var(--primary-pale) 50%, white);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1001;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            margin-left: 220px;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .title-slide .subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .company-badge .material-icons {
+            font-size: 20px;
+        }
+
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.25);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* Content Slide */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 38px;
+            font-weight: 400;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .card .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .card .icon-wrapper .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-primary {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .badge-accent {
+            background: #FCEADE;
+            color: var(--accent);
+        }
+
+        /* Pillar Card */
+        .pillar-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--primary);
+        }
+
+        .pillar-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .pillar-card .pillar-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .pillar-card .pillar-icon .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .pillar-card h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .pillar-card p {
+            font-size: 12px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* SWOT Grid */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .swot-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .swot-card.strengths {
+            border-left: 4px solid var(--green);
+        }
+
+        .swot-card.weaknesses {
+            border-left: 4px solid var(--orange);
+        }
+
+        .swot-card.opportunities {
+            border-left: 4px solid var(--blue);
+        }
+
+        .swot-card.threats {
+            border-left: 4px solid #CE2B26;
+        }
+
+        .swot-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .swot-card h3 .material-icons {
+            font-size: 22px;
+        }
+
+        .swot-card.strengths h3 { color: var(--green); }
+        .swot-card.weaknesses h3 { color: var(--orange); }
+        .swot-card.opportunities h3 { color: var(--blue); }
+        .swot-card.threats h3 { color: #CE2B26; }
+
+        .swot-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .swot-card li {
+            font-size: 12px;
+            color: var(--gray-600);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .swot-card li:last-child {
+            border-bottom: none;
+        }
+
+        .swot-card li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 46px;
+            width: 2px;
+            height: calc(100% - 28px);
+            background: var(--gray-300);
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon .material-icons {
+            color: var(--white);
+            font-size: 20px;
+        }
+
+        .timeline-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 3px;
+        }
+
+        .timeline-content p {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Canvas Grid */
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 12px;
+        }
+
+        .canvas-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .canvas-item h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .canvas-item h4 .material-icons {
+            font-size: 16px;
+        }
+
+        .canvas-item p {
+            font-size: 11px;
+            color: var(--gray-600);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .canvas-item.value-prop {
+            grid-row: span 2;
+            background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);
+            border: 2px solid var(--primary-light);
+        }
+
+        /* Deliverable Card */
+        .deliverable-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .deliverable-card .doc-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .deliverable-card .doc-icon .material-icons {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .deliverable-card h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .deliverable-card p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Success Criteria */
+        .criteria-list {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .criteria-item:last-child {
+            border-bottom: none;
+        }
+
+        .criteria-item .check-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .criteria-item .check-icon .material-icons {
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .criteria-item p {
+            font-size: 13px;
+            margin: 0;
+            color: var(--gray-700);
+        }
+
+        /* Stat Card */
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .stat-card .stat-number {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Trend Card */
+        .trend-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .trend-card .trend-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .trend-card .trend-icon .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .trend-card h3 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .trend-card p {
+            font-size: 11px;
+            margin: 0;
+        }
+
+        /* Specific slide adjustments */
+        #slide-4 .grid-5,
+        #slide-5 .canvas-grid,
+        #slide-7 .swot-grid,
+        #slide-11 .grid-2 {
+            margin-top: 24px;
+        }
+
+        #slide-4 h1,
+        #slide-5 h1,
+        #slide-7 h1,
+        #slide-8 h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        #slide-4 h2,
+        #slide-5 h2,
+        #slide-7 h2,
+        #slide-8 h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-4, .grid-5 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .canvas-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .swot-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chapter-nav {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .chapter-nav.active {
+                transform: translateX(0) translateY(-50%);
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .slides-container {
+                margin-left: 0;
+            }
+
+            .slide {
+                padding: 80px 20px 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 32px;
+            }
+
+            .title-slide .subtitle {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .grid-5 {
+                grid-template-columns: 1fr;
+            }
+
+            .canvas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .swot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-counter {
+                top: 16px;
+                right: 16px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="menuToggle">
+        <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Chapter Navigation -->
+    <nav class="chapter-nav" id="chapterNav">
+        <div class="nav-logo">
+            <img src="logo-black.png" alt="Tunisian Campers">
+        </div>
+        <div class="chapter-item active" data-slide="1">
+            <span class="material-icons">home</span>
+            Introduction
+        </div>
+        <div class="chapter-item" data-slide="2">
+            <span class="material-icons">flag</span>
+            Objectifs
+        </div>
+        <div class="chapter-item" data-slide="3" data-has-subs="true">
+            <span class="material-icons">search</span>
+            Diagnostic
+        </div>
+        <div class="sub-items" id="sub-diagnostic">
+            <div class="sub-item" data-slide="3">Vue d'Ensemble</div>
+            <div class="sub-item" data-slide="4">5 Piliers</div>
+            <div class="sub-item" data-slide="5">Business Model</div>
+        </div>
+        <div class="chapter-item" data-slide="6" data-has-subs="true">
+            <span class="material-icons">analytics</span>
+            Analyses
+        </div>
+        <div class="sub-items" id="sub-analyses">
+            <div class="sub-item" data-slide="6">Marché & Tendances</div>
+            <div class="sub-item" data-slide="7">SWOT</div>
+            <div class="sub-item" data-slide="8">Questions Stratégiques</div>
+        </div>
+        <div class="chapter-item" data-slide="9" data-has-subs="true">
+            <span class="material-icons">assignment</span>
+            Livrables
+        </div>
+        <div class="sub-items" id="sub-livrables">
+            <div class="sub-item" data-slide="9">Documents</div>
+            <div class="sub-item" data-slide="10">Critères de Succès</div>
+        </div>
+        <div class="chapter-item" data-slide="11">
+            <span class="material-icons">event</span>
+            Calendrier
+        </div>
+        <div class="chapter-item" data-slide="12">
+            <span class="material-icons">arrow_forward</span>
+            Prochaines Étapes
+        </div>
+    </nav>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" id="slide-1" data-chapter="Introduction">
+            <div class="slide-content">
+                <div class="company-badge" style="margin-bottom: 40px;">
+                    <span class="material-icons">eco</span>
+                    Tunisian Campers
+                </div>
+                <div class="phase-badge">
+                    <span class="material-icons">looks_one</span>
+                    Réunion 1 • Semaine 1 • 2h30
+                </div>
+                <h1 style="color: var(--white); margin-bottom: 16px;">Phase 1 : Découvrir & Diagnostiquer</h1>
+                <p class="subtitle" style="color: var(--white);">"Où sommes-nous maintenant et pourquoi ?"</p>
+                <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 40px;">
+                    Établir une compréhension complète de l'état actuel de Tunisian Campers
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Objectives -->
+        <section class="slide" id="slide-2" data-chapter="Objectifs">
+            <div class="slide-content">
+                <span class="badge badge-primary">Objectifs de la Phase 1</span>
+                <h1>Ce Que Nous Allons Accomplir</h1>
+                <h2>4 objectifs clés pour cette première réunion</h2>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">foundation</span>
+                        </div>
+                        <h3>Établir une Base Complète</h3>
+                        <p>Comprendre en profondeur l'état actuel de Tunisian Campers à travers les 5 piliers d'évaluation.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">psychology</span>
+                        </div>
+                        <h3>Identifier Forces & Faiblesses</h3>
+                        <p>Cartographier les capacités internes, les opportunités externes et les défis à surmonter.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">visibility</span>
+                        </div>
+                        <h3>Comprendre la Vision du Fondateur</h3>
+                        <p>Aligner les aspirations personnelles de Mohamed avec la direction stratégique de l'entreprise.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">handshake</span>
+                        </div>
+                        <h3>Créer une Compréhension Partagée</h3>
+                        <p>S'assurer que toutes les parties prenantes ont la même vision de la situation actuelle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Diagnostic Overview -->
+        <section class="slide" id="slide-3" data-chapter="Diagnostic">
+            <div class="slide-content">
+                <span class="badge badge-primary">Diagnostic Approfondi</span>
+                <h1>Notre Approche de Diagnostic</h1>
+                <h2>Une évaluation structurée à travers 3 composantes</h2>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">dashboard</span>
+                        </div>
+                        <h3>1. Évaluation des 5 Piliers</h3>
+                        <p>Analyse complète des dimensions financière, opérationnelle, client, concurrentielle et équipe.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">grid_view</span>
+                        </div>
+                        <h3>2. Business Model Canvas</h3>
+                        <p>Cartographie du modèle d'affaires actuel à travers les 9 composantes clés.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">compare_arrows</span>
+                        </div>
+                        <h3>3. Analyse SWOT</h3>
+                        <p>Identification systématique des forces, faiblesses, opportunités et menaces.</p>
+                    </div>
+                </div>
+
+                <div class="timeline" style="margin-top: 32px;">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">assignment</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Pré-Réunion</h4>
+                            <p>Mohamed remplit le questionnaire diagnostic et rassemble les documents clés</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Réunion 1 (2h30)</h4>
+                            <p>Atelier collaboratif : diagnostic des 5 piliers, SWOT, questions stratégiques</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">analytics</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Post-Réunion</h4>
+                            <p>Analyse approfondie et préparation des options stratégiques pour la Réunion 2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: 5 Pillars -->
+        <section class="slide" id="slide-4" data-chapter="Diagnostic">
+            <div class="slide-content">
+                <span class="badge badge-primary">Évaluation Complète</span>
+                <h1>Les 5 Piliers d'Évaluation</h1>
+                <h2>Chaque pilier sera évalué en profondeur</h2>
+
+                <div class="grid-5">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <span class="material-icons">account_balance</span>
+                        </div>
+                        <h3>Financier</h3>
+                        <p>Revenus, coûts, rentabilité, flux de trésorerie, tarification</p>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <span class="material-icons">settings</span>
+                        </div>
+                        <h3>Opérationnel</h3>
+                        <p>Processus, capacité, qualité, fournisseurs, infrastructure</p>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <span class="material-icons">people</span>
+                        </div>
+                        <h3>Client</h3>
+                        <p>Segmentation, satisfaction, rétention, acquisition, parcours</p>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <span class="material-icons">emoji_events</span>
+                        </div>
+                        <h3>Concurrentiel</h3>
+                        <p>Concurrents, parts de marché, avantages, positionnement</p>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h3>Équipe</h3>
+                        <p>Structure, capacités, engagement, culture, leadership</p>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top: 24px;">
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Années de données financières</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Membres de l'équipe</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">Ans d'expérience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Business Model Canvas -->
+        <section class="slide" id="slide-5" data-chapter="Diagnostic">
+            <div class="slide-content">
+                <span class="badge badge-primary">Cartographie du Modèle</span>
+                <h1>Business Model Canvas</h1>
+                <h2>Les 9 composantes du modèle d'affaires de Tunisian Campers</h2>
+
+                <div class="canvas-grid">
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">handshake</span> Partenaires Clés</h4>
+                        <p>Fournisseurs, collaborateurs, alliances stratégiques locales et internationales</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">build</span> Activités Clés</h4>
+                        <p>Conception d'expéditions, gestion sécurité, formation guides, marketing</p>
+                    </div>
+                    <div class="canvas-item value-prop">
+                        <h4><span class="material-icons">star</span> Proposition de Valeur</h4>
+                        <p>Éco-responsabilité authentique, expériences uniques, connexion spirituelle avec la nature tunisienne</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">favorite</span> Relations Clients</h4>
+                        <p>Service personnalisé, création de communauté, suivi post-expérience</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">category</span> Segments Clients</h4>
+                        <p>Voyageurs éco-conscients, chercheurs d'aventure, retraitants spirituels</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">inventory_2</span> Ressources Clés</h4>
+                        <p>Équipement, lieux exclusifs, expertise guides, réputation de marque</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">share</span> Canaux</h4>
+                        <p>Site web, réseaux sociaux, partenariats, bouche-à-oreille</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">payments</span> Structure de Coûts</h4>
+                        <p>Coûts fixes vs variables, économies d'échelle potentielles</p>
+                    </div>
+                    <div class="canvas-item">
+                        <h4><span class="material-icons">attach_money</span> Sources de Revenus</h4>
+                        <p>Frais de voyage, location équipement, partenariats, marchandises</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Market & Trends -->
+        <section class="slide" id="slide-6" data-chapter="Analyses">
+            <div class="slide-content">
+                <span class="badge badge-primary">Contexte de Marché</span>
+                <h1>Tendances du Marché Éco-Tourisme</h1>
+                <h2>Trois tendances convergentes qui façonnent l'industrie</h2>
+
+                <div class="grid-3">
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <span class="material-icons">eco</span>
+                        </div>
+                        <h3>Tourisme Durable</h3>
+                        <p>Préférences des consommateurs vers les voyages responsables environnementalement et socialement</p>
+                    </div>
+
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <span class="material-icons">terrain</span>
+                        </div>
+                        <h3>Voyage d'Aventure</h3>
+                        <p>Appétit croissant pour des expériences actives, hors des sentiers battus</p>
+                    </div>
+
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <span class="material-icons">spa</span>
+                        </div>
+                        <h3>Tourisme de Bien-Être</h3>
+                        <p>Demande pour des voyages qui améliorent le bien-être physique, mental et spirituel</p>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 24px;">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">trending_up</span>
+                        </div>
+                        <h3>Opportunités Identifiées</h3>
+                        <p>• Demande mondiale croissante pour le tourisme durable<br>
+                           • Nomades digitaux permettant des séjours plus longs<br>
+                           • Marchés internationaux inexploités (Europe, Moyen-Orient)<br>
+                           • Potentiel de partenariats stratégiques</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">warning</span>
+                        </div>
+                        <h3>Défis du Marché</h3>
+                        <p>• Concurrence intensifiée de nouveaux entrants<br>
+                           • Impacts du changement climatique<br>
+                           • Ralentissements économiques potentiels<br>
+                           • Commoditisation des expériences</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: SWOT Analysis -->
+        <section class="slide" id="slide-7" data-chapter="Analyses">
+            <div class="slide-content">
+                <span class="badge badge-primary">Analyse SWOT</span>
+                <h1>Forces, Faiblesses, Opportunités, Menaces</h1>
+                <h2>Évaluation spécifique à l'éco-tourisme de Tunisian Campers</h2>
+
+                <div class="swot-grid">
+                    <div class="swot-card strengths">
+                        <h3><span class="material-icons">thumb_up</span> Forces</h3>
+                        <ul>
+                            <li>10 ans d'expérience opérationnelle</li>
+                            <li>Solides accréditations éco-responsables</li>
+                            <li>Relations établies avec les communautés locales</li>
+                            <li>Accès à des lieux naturels préservés</li>
+                            <li>Base de clients fidèles</li>
+                        </ul>
+                    </div>
+
+                    <div class="swot-card weaknesses">
+                        <h3><span class="material-icons">thumb_down</span> Faiblesses</h3>
+                        <ul>
+                            <li>Scalabilité limitée du modèle actuel</li>
+                            <li>Dépendance au fondateur pour les décisions</li>
+                            <li>Fluctuations saisonnières de la demande</li>
+                            <li>Capacités en marketing digital</li>
+                            <li>Contraintes de ressources</li>
+                        </ul>
+                    </div>
+
+                    <div class="swot-card opportunities">
+                        <h3><span class="material-icons">lightbulb</span> Opportunités</h3>
+                        <ul>
+                            <li>Demande mondiale croissante pour le durable</li>
+                            <li>Tendances bien-être et voyages spirituels</li>
+                            <li>Soutien gouvernemental à l'éco-tourisme</li>
+                            <li>Marchés internationaux inexploités</li>
+                            <li>Potentiel de partenariats stratégiques</li>
+                        </ul>
+                    </div>
+
+                    <div class="swot-card threats">
+                        <h3><span class="material-icons">warning</span> Menaces</h3>
+                        <ul>
+                            <li>Concurrence intensifiée de nouveaux entrants</li>
+                            <li>Impacts du changement climatique</li>
+                            <li>Changements réglementaires</li>
+                            <li>Ralentissements économiques</li>
+                            <li>Préoccupations de sécurité régionale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Strategic Questions -->
+        <section class="slide" id="slide-8" data-chapter="Analyses">
+            <div class="slide-content">
+                <span class="badge badge-primary">Questions Clés</span>
+                <h1>Formulation des Questions Stratégiques</h1>
+                <h2>Les questions auxquelles notre stratégie devra répondre</h2>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">scale</span>
+                        </div>
+                        <h3>Croissance vs. Authenticité</h3>
+                        <p>Comment Tunisian Campers peut-il augmenter son impact tout en maintenant une éco-responsabilité authentique ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">call_split</span>
+                        </div>
+                        <h3>Spécialisation vs. Diversification</h3>
+                        <p>Devrions-nous approfondir notre expertise en retraites spirituelles ou élargir nos offres d'aventure ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">devices</span>
+                        </div>
+                        <h3>Rôle du Digital</h3>
+                        <p>Quel rôle la technologie et les plateformes digitales devraient-elles jouer dans notre croissance ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">public</span>
+                        </div>
+                        <h3>Expansion Géographique</h3>
+                        <p>Faut-il consolider en Tunisie ou explorer de nouveaux marchés géographiques ?</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; border-left: 4px solid var(--accent); background: linear-gradient(135deg, #FCEADE 0%, var(--white) 100%);">
+                    <h3 style="color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                        <span class="material-icons">priority_high</span>
+                        Question Stratégique Centrale
+                    </h3>
+                    <p style="font-size: 16px; color: var(--gray-700); margin: 0;">
+                        <strong>"Comment transformer 10 ans d'expertise éco-responsable en une plateforme de croissance durable pour la prochaine décennie ?"</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Deliverables -->
+        <section class="slide" id="slide-9" data-chapter="Livrables">
+            <div class="slide-content">
+                <span class="badge badge-primary">Documents Produits</span>
+                <h1>Livrables de la Phase 1</h1>
+                <h2>5 documents clés qui guideront les phases suivantes</h2>
+
+                <div class="grid-2">
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">description</span>
+                        </div>
+                        <div>
+                            <h3>Rapport d'Évaluation de l'État Actuel</h3>
+                            <p>15-20 pages couvrant les conclusions détaillées des 5 Piliers, la performance financière et les insights clients.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">grid_on</span>
+                        </div>
+                        <div>
+                            <h3>Matrice d'Analyse SWOT</h3>
+                            <p>Liste complète des forces, faiblesses, opportunités et menaces avec priorisation et évaluation d'impact.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">map</span>
+                        </div>
+                        <div>
+                            <h3>Carte de Positionnement Concurrentiel</h3>
+                            <p>Taille du marché, cartographie du paysage concurrentiel et positionnement actuel de Tunisian Campers.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">people_alt</span>
+                        </div>
+                        <div>
+                            <h3>Profil de Segmentation Client</h3>
+                            <p>Descriptions détaillées des segments, taille, attractivité et recommandations de ciblage.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="deliverable-card" style="margin-top: 24px; border: 2px solid var(--primary);">
+                    <div class="doc-icon" style="background: var(--primary);">
+                        <span class="material-icons" style="color: var(--white);">slideshow</span>
+                    </div>
+                    <div>
+                        <h3>Présentation du Diagnostic</h3>
+                        <p>Présentation visuelle complète de tous les résultats, livrée et discutée lors de la Réunion 1.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Success Criteria -->
+        <section class="slide" id="slide-10" data-chapter="Livrables">
+            <div class="slide-content">
+                <span class="badge badge-primary">Validation</span>
+                <h1>Critères de Succès</h1>
+                <h2>Comment nous saurons que la Phase 1 est réussie</h2>
+
+                <div class="grid-2">
+                    <div class="criteria-list">
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Accord de Mohamed :</strong> "Cela représente fidèlement où nous en sommes et je me reconnais dans cette analyse"</p>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Participation active :</strong> L'équipe a contribué avec des insights documentés</p>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Couverture complète :</strong> 90%+ des questions de découverte ont été répondues avec des preuves</p>
+                        </div>
+                    </div>
+
+                    <div class="criteria-list">
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Question stratégique claire :</strong> Une question centrale convaincante a été formulée</p>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Compréhension partagée :</strong> Toutes les parties prenantes ont la même vision</p>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="check-icon">
+                                <span class="material-icons">check</span>
+                            </div>
+                            <p><strong>Fondation solide :</strong> Base établie pour une prise de décision stratégique confiante</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Timeline -->
+        <section class="slide" id="slide-11" data-chapter="Calendrier">
+            <div class="slide-content">
+                <span class="badge badge-primary">Calendrier</span>
+                <h1>Déroulement de la Semaine 1</h1>
+                <h2>Structure détaillée de la Réunion 1 (2h30)</h2>
+
+                <div class="grid-2">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <span class="material-icons">play_arrow</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>0:00 - 0:15 | Aperçu du Processus</h4>
+                                <p>Présentation rapide de la méthodologie en 3 phases et objectifs de la réunion</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <span class="material-icons">dashboard</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>0:15 - 1:15 | Diagnostic 5 Piliers</h4>
+                                <p>Évaluation rapide : Financier, Opérations, Clients, Concurrence, Équipe</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <span class="material-icons">compare_arrows</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>1:15 - 2:00 | Analyse SWOT</h4>
+                                <p>Cartographie collaborative des forces, faiblesses, opportunités et menaces</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <span class="material-icons">help_outline</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>2:00 - 2:20 | Questions Stratégiques</h4>
+                                <p>Formulation des 3-5 questions clés que la stratégie devra adresser</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <span class="material-icons">arrow_forward</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>2:20 - 2:30 | Prochaines Étapes</h4>
+                                <p>Récapitulatif, actions à suivre et préparation de la Réunion 2</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; text-align: center; background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                    <h3 style="color: var(--primary); margin-bottom: 8px;">
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">schedule</span>
+                        Durée Totale : 2 heures 30 minutes
+                    </h3>
+                    <p style="margin: 0;">Après la réunion : Le consultant analyse les résultats et prépare les options stratégiques pour la Réunion 2</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Next Steps -->
+        <section class="slide" id="slide-12" data-chapter="Prochaines Étapes">
+            <div class="slide-content">
+                <span class="badge badge-accent">Transition vers Phase 2</span>
+                <h1>Prochaines Étapes</h1>
+                <h2>Ce qui se passe après la Réunion 1</h2>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--accent);">analytics</span>
+                        </div>
+                        <h3>Analyse Post-Réunion</h3>
+                        <p>Le consultant analyse en profondeur les résultats du diagnostic et recherche des données de marché complémentaires.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--accent);">lightbulb</span>
+                        </div>
+                        <h3>Développement d'Options</h3>
+                        <p>Création de 4-6 options stratégiques basées sur les conclusions du diagnostic et les tendances du marché.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--accent);">event</span>
+                        </div>
+                        <h3>Préparation Réunion 2</h3>
+                        <p>Préparation du catalogue d'options stratégiques et des outils d'évaluation pour la décision.</p>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 24px;">
+                    <div class="card" style="border-left: 4px solid var(--primary);">
+                        <h3 style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: var(--primary);">looks_two</span>
+                            Réunion 2 : Explorer & Décider
+                        </h3>
+                        <p>Semaine 2 • 3 heures<br>
+                        Présentation des options stratégiques, évaluation rigoureuse et choix stratégique final.</p>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--green);">
+                        <h3 style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: var(--green);">looks_3</span>
+                            Réunion 3 : Planifier & Exécuter
+                        </h3>
+                        <p>Semaine 3 • 2h30<br>
+                        Feuille de route 10 ans, plan d'action 1 an, KPIs et mécanismes d'exécution.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 32px;">
+                    <div class="company-badge" style="background: var(--primary); color: var(--white);">
+                        <span class="material-icons">rocket_launch</span>
+                        Prêts à construire l'avenir de Tunisian Campers !
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Slide navigation and counter
+        const slidesContainer = document.querySelector('.slides-container');
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        const chapterItems = document.querySelectorAll('.chapter-item');
+        const subItems = document.querySelectorAll('.sub-item');
+
+        totalSlidesEl.textContent = slides.length;
+
+        // Update current slide on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const slideNum = parseInt(slideId.replace('slide-', ''));
+                    currentSlideEl.textContent = slideNum;
+
+                    // Update chapter navigation
+                    updateNavigation(slideNum);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Navigation click handlers
+        chapterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const slideNum = item.dataset.slide;
+                const targetSlide = document.getElementById(`slide-${slideNum}`);
+                if (targetSlide) {
+                    targetSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // Toggle sub-items if has subs
+                if (item.dataset.hasSubs === 'true') {
+                    const subItemsContainer = item.nextElementSibling;
+                    if (subItemsContainer && subItemsContainer.classList.contains('sub-items')) {
+                        subItemsContainer.classList.toggle('expanded');
+                    }
+                }
+            });
+        });
+
+        subItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const slideNum = item.dataset.slide;
+                const targetSlide = document.getElementById(`slide-${slideNum}`);
+                if (targetSlide) {
+                    targetSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        function updateNavigation(slideNum) {
+            // Update chapter items
+            chapterItems.forEach(item => {
+                const itemSlide = parseInt(item.dataset.slide);
+                item.classList.remove('active');
+
+                // Check if current slide is within this chapter's range
+                const nextChapter = item.nextElementSibling;
+                let endSlide = itemSlide;
+
+                if (nextChapter && nextChapter.classList.contains('sub-items')) {
+                    const subs = nextChapter.querySelectorAll('.sub-item');
+                    if (subs.length > 0) {
+                        endSlide = parseInt(subs[subs.length - 1].dataset.slide);
+                    }
+                }
+
+                if (slideNum >= itemSlide && slideNum <= endSlide) {
+                    item.classList.add('active');
+                    // Expand sub-items if applicable
+                    if (nextChapter && nextChapter.classList.contains('sub-items')) {
+                        nextChapter.classList.add('expanded');
+                    }
+                }
+            });
+
+            // Update sub-items
+            subItems.forEach(item => {
+                const itemSlide = parseInt(item.dataset.slide);
+                item.classList.remove('active');
+                if (itemSlide === slideNum) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const chapterNav = document.getElementById('chapterNav');
+
+        menuToggle.addEventListener('click', () => {
+            chapterNav.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a slide (mobile)
+        slidesContainer.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                chapterNav.classList.remove('active');
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                const nextSlide = document.getElementById(`slide-${currentSlide + 1}`);
+                if (nextSlide) {
+                    nextSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const prevSlide = document.getElementById(`slide-${currentSlide - 1}`);
+                if (prevSlide) {
+                    prevSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                document.getElementById('slide-1').scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                document.getElementById(`slide-${slides.length}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

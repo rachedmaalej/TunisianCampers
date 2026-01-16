@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 3 : Planifier & Exécuter - Tunisian Campers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Color palette - Green theme */
+            --primary: #357D23;
+            --primary-light: #80C261;
+            --primary-pale: #E6F4DD;
+            --accent: #4A8EBF;
+            --accent-light: #8DC7DE;
+
+            /* Supporting colors */
+            --blue: #4A8EBF;
+            --orange: #E15720;
+            --purple: #79409E;
+            --teal: #45998A;
+
+            /* Neutrals */
+            --gray-900: #2C2C2C;
+            --gray-700: #4B4B4B;
+            --gray-600: #5B5B5B;
+            --gray-500: #7A7A7A;
+            --gray-300: #D1D1D1;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            line-height: 1.6;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            color: var(--gray-700);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 220px;
+            background: var(--white);
+            padding: 24px 0;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .nav-logo {
+            padding: 20px 20px 20px;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+        }
+
+        .chapter-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .chapter-item .material-icons {
+            font-size: 20px;
+            color: var(--gray-500);
+        }
+
+        .chapter-item:hover {
+            background: var(--primary-pale);
+            border-left-color: var(--primary-light);
+        }
+
+        .chapter-item.active {
+            background: var(--primary-pale);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chapter-item.active .material-icons {
+            color: var(--primary);
+        }
+
+        /* Subsection styles */
+        .sub-items {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sub-items.expanded {
+            max-height: 400px;
+        }
+
+        .sub-item {
+            padding: 8px 20px 8px 52px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--gray-600);
+            display: block;
+        }
+
+        .sub-item:hover {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .sub-item.active {
+            background: color-mix(in srgb, var(--primary-pale) 50%, white);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1001;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            margin-left: 220px;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .title-slide .subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .company-badge .material-icons {
+            font-size: 20px;
+        }
+
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.25);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* Content Slide */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 38px;
+            font-weight: 400;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .card .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .card .icon-wrapper .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-primary {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .badge-accent {
+            background: #DBECF4;
+            color: var(--accent);
+        }
+
+        /* Horizon Timeline */
+        .horizon-timeline {
+            display: flex;
+            gap: 0;
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .horizon-block {
+            flex: 1;
+            padding: 24px;
+            position: relative;
+        }
+
+        .horizon-block.h1 {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+        }
+
+        .horizon-block.h2 {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: var(--white);
+        }
+
+        .horizon-block.h3 {
+            background: linear-gradient(135deg, var(--purple) 0%, #AF93C6 100%);
+            color: var(--white);
+        }
+
+        .horizon-block h3 {
+            font-size: 14px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .horizon-block .years {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .horizon-block ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .horizon-block li {
+            font-size: 11px;
+            padding: 4px 0;
+            opacity: 0.9;
+        }
+
+        /* KPI Card */
+        .kpi-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .kpi-card .kpi-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .kpi-card .kpi-icon .material-icons {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .kpi-card h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .kpi-card .kpi-examples {
+            font-size: 10px;
+            color: var(--gray-500);
+            line-height: 1.4;
+        }
+
+        /* Stat Card */
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .stat-card .stat-number {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* 7-S Card */
+        .seven-s-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .seven-s-card .s-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .seven-s-card h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .seven-s-card p {
+            font-size: 10px;
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        /* Rhythm Card */
+        .rhythm-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+        }
+
+        .rhythm-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rhythm-card h4 .material-icons {
+            font-size: 18px;
+        }
+
+        .rhythm-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rhythm-card li {
+            font-size: 12px;
+            color: var(--gray-600);
+            padding: 4px 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 46px;
+            width: 2px;
+            height: calc(100% - 28px);
+            background: var(--gray-300);
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon .material-icons {
+            color: var(--white);
+            font-size: 20px;
+        }
+
+        .timeline-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 3px;
+        }
+
+        .timeline-content p {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Sprint Week */
+        .sprint-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .sprint-week {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sprint-week h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sprint-week h4 .material-icons {
+            font-size: 16px;
+        }
+
+        .sprint-week ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sprint-week li {
+            font-size: 11px;
+            color: var(--gray-600);
+            padding: 3px 0;
+        }
+
+        /* Deliverable Card */
+        .deliverable-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .deliverable-card .doc-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .deliverable-card .doc-icon .material-icons {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .deliverable-card h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .deliverable-card p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Specific slide adjustments */
+        #slide-4 .horizon-timeline,
+        #slide-5 .grid-4,
+        #slide-6 .grid-5,
+        #slide-8 .grid-4,
+        #slide-9 .sprint-grid,
+        #slide-11 .grid-2 {
+            margin-top: 24px;
+        }
+
+        #slide-4 h1,
+        #slide-5 h1,
+        #slide-6 h1,
+        #slide-7 h1,
+        #slide-8 h1,
+        #slide-9 h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        #slide-4 h2,
+        #slide-5 h2,
+        #slide-6 h2,
+        #slide-7 h2,
+        #slide-8 h2,
+        #slide-9 h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-4, .grid-5 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .horizon-timeline {
+                flex-direction: column;
+            }
+
+            .sprint-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chapter-nav {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .chapter-nav.active {
+                transform: translateX(0) translateY(-50%);
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .slides-container {
+                margin-left: 0;
+            }
+
+            .slide {
+                padding: 80px 20px 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 32px;
+            }
+
+            .title-slide .subtitle {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .grid-5 {
+                grid-template-columns: 1fr;
+            }
+
+            .sprint-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-counter {
+                top: 16px;
+                right: 16px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">14</span>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="menuToggle">
+        <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Chapter Navigation -->
+    <nav class="chapter-nav" id="chapterNav">
+        <div class="nav-logo">
+            <img src="logo-black.png" alt="Tunisian Campers">
+        </div>
+        <div class="chapter-item active" data-slide="1">
+            <span class="material-icons">home</span>
+            Introduction
+        </div>
+        <div class="chapter-item" data-slide="2">
+            <span class="material-icons">flag</span>
+            Objectifs
+        </div>
+        <div class="chapter-item" data-slide="3" data-has-subs="true">
+            <span class="material-icons">route</span>
+            Feuille de Route
+        </div>
+        <div class="sub-items" id="sub-roadmap">
+            <div class="sub-item" data-slide="3">Rappel Stratégie</div>
+            <div class="sub-item" data-slide="4">10 Ans</div>
+            <div class="sub-item" data-slide="5">Plan 1 An</div>
+        </div>
+        <div class="chapter-item" data-slide="6" data-has-subs="true">
+            <span class="material-icons">dashboard</span>
+            KPIs
+        </div>
+        <div class="sub-items" id="sub-kpis">
+            <div class="sub-item" data-slide="6">5 Catégories</div>
+            <div class="sub-item" data-slide="7">Cibles</div>
+        </div>
+        <div class="chapter-item" data-slide="8" data-has-subs="true">
+            <span class="material-icons">business</span>
+            Organisation
+        </div>
+        <div class="sub-items" id="sub-org">
+            <div class="sub-item" data-slide="8">Modèle 7-S</div>
+            <div class="sub-item" data-slide="9">Rythmes</div>
+        </div>
+        <div class="chapter-item" data-slide="10">
+            <span class="material-icons">rocket_launch</span>
+            Sprint 90 Jours
+        </div>
+        <div class="chapter-item" data-slide="11" data-has-subs="true">
+            <span class="material-icons">assignment</span>
+            Livrables
+        </div>
+        <div class="sub-items" id="sub-deliverables">
+            <div class="sub-item" data-slide="11">Documents</div>
+            <div class="sub-item" data-slide="12">Playbook</div>
+        </div>
+        <div class="chapter-item" data-slide="13">
+            <span class="material-icons">verified</span>
+            Critères Succès
+        </div>
+        <div class="chapter-item" data-slide="14">
+            <span class="material-icons">update</span>
+            Évolution Continue
+        </div>
+    </nav>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" id="slide-1" data-chapter="Introduction">
+            <div class="slide-content">
+                <div class="company-badge" style="margin-bottom: 40px;">
+                    <span class="material-icons">eco</span>
+                    Tunisian Campers
+                </div>
+                <div class="phase-badge">
+                    <span class="material-icons">looks_3</span>
+                    Réunion 3 • Semaine 3 • 2h30
+                </div>
+                <h1 style="color: var(--white); margin-bottom: 16px;">Phase 3 : Planifier & Exécuter</h1>
+                <p class="subtitle" style="color: var(--white);">"Comment y arriverons-nous et comment saurons-nous que nous gagnons ?"</p>
+                <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 40px;">
+                    Transformer la stratégie en feuille de route actionnable et mécanismes d'exécution
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Objectives -->
+        <section class="slide" id="slide-2" data-chapter="Objectifs">
+            <div class="slide-content">
+                <span class="badge badge-primary">Objectifs de la Phase 3</span>
+                <h1>Ce Que Nous Allons Accomplir</h1>
+                <h2>4 objectifs clés pour cette troisième réunion</h2>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">route</span>
+                        </div>
+                        <h3>Feuille de Route 10 Ans</h3>
+                        <p>Présenter la roadmap détaillée avec les 3 horizons, jalons clés et initiatives majeures sur 10 ans.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">calendar_today</span>
+                        </div>
+                        <h3>Plan d'Action 1 An</h3>
+                        <p>Atelier collaboratif pour assigner les initiatives trimestrielles, définir les responsables et identifier les quick wins.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">dashboard</span>
+                        </div>
+                        <h3>Cadre KPI</h3>
+                        <p>Présenter le tableau de bord avec 5 catégories de KPIs et définir les cibles Année 1/3/10.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">sync</span>
+                        </div>
+                        <h3>Mécanismes d'Exécution</h3>
+                        <p>Établir les rythmes opérationnels, cadences de révision et mécanismes d'apprentissage continu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Strategy Recap -->
+        <section class="slide" id="slide-3" data-chapter="Feuille de Route">
+            <div class="slide-content">
+                <span class="badge badge-primary">Rappel Phase 2</span>
+                <h1>Notre Stratégie Choisie</h1>
+                <h2>La direction qui guidera les 10 prochaines années</h2>
+
+                <div class="grid-2">
+                    <div class="card" style="border-left: 4px solid var(--primary);">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">visibility</span>
+                        </div>
+                        <h3>Vision 2035</h3>
+                        <p style="font-style: italic;">"Être la principale entreprise d'éco-tourisme d'Afrique du Nord, inspirant des milliers de voyageurs à se connecter profondément avec la nature et les cultures locales."</p>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--accent);">
+                        <div class="icon-wrapper" style="background: #DBECF4;">
+                            <span class="material-icons" style="color: var(--accent);">flag</span>
+                        </div>
+                        <h3>Mission</h3>
+                        <p style="font-style: italic;">"Créer des voyages éco-responsables transformateurs qui reconnectent les gens avec la nature et préservent le patrimoine naturel de la Tunisie."</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; border: 2px solid var(--primary); background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                    <h3 style="color: var(--primary); text-align: center;">
+                        <span class="material-icons" style="vertical-align: middle;">check_circle</span>
+                        Stratégie Validée en Réunion 2
+                    </h3>
+                    <p style="text-align: center; margin: 0; font-size: 14px;">
+                        Aujourd'hui, nous transformons cette stratégie en <strong>plan d'action concret</strong> et <strong>mécanismes d'exécution</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: 10-Year Roadmap -->
+        <section class="slide" id="slide-4" data-chapter="Feuille de Route">
+            <div class="slide-content">
+                <span class="badge badge-primary">Cadre McKinsey</span>
+                <h1>Feuille de Route 10 Ans</h1>
+                <h2>Trois horizons de croissance avec allocation des ressources</h2>
+
+                <div class="horizon-timeline">
+                    <div class="horizon-block h1">
+                        <h3>Horizon 1</h3>
+                        <div class="years">Années 1-3</div>
+                        <ul>
+                            <li>• Optimiser l'efficacité opérationnelle</li>
+                            <li>• Améliorer marketing digital</li>
+                            <li>• Implémenter CRM</li>
+                            <li>• Augmenter capacité +30%</li>
+                            <li>• Programme fidélité client</li>
+                        </ul>
+                        <div style="margin-top: 12px; font-size: 14px; font-weight: 700; opacity: 0.9;">
+                            70% des ressources
+                        </div>
+                    </div>
+                    <div class="horizon-block h2">
+                        <h3>Horizon 2</h3>
+                        <div class="years">Années 4-7</div>
+                        <ul>
+                            <li>• Expériences glamping</li>
+                            <li>• Retraites corporate</li>
+                            <li>• Partenariats internationaux</li>
+                            <li>• Programme bien-être</li>
+                            <li>• Éco-lodges durables</li>
+                        </ul>
+                        <div style="margin-top: 12px; font-size: 14px; font-weight: 700; opacity: 0.9;">
+                            20% des ressources
+                        </div>
+                    </div>
+                    <div class="horizon-block h3">
+                        <h3>Horizon 3</h3>
+                        <div class="years">Années 8-10</div>
+                        <ul>
+                            <li>• Technologies immersives</li>
+                            <li>• Expansion géographique</li>
+                            <li>• Modèle plateforme</li>
+                            <li>• Tourisme régénératif</li>
+                            <li>• Impact net positif</li>
+                        </ul>
+                        <div style="margin-top: 12px; font-size: 14px; font-weight: 700; opacity: 0.9;">
+                            10% des ressources
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top: 24px;">
+                    <div class="stat-card">
+                        <div class="stat-number">10-15</div>
+                        <div class="stat-label">Jalons majeurs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5M€</div>
+                        <div class="stat-label">Objectif revenus Année 10</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100k</div>
+                        <div class="stat-label">Voyageurs cible</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: 1-Year Action Plan -->
+        <section class="slide" id="slide-5" data-chapter="Feuille de Route">
+            <div class="slide-content">
+                <span class="badge badge-primary">Plan Horizon 1</span>
+                <h1>Plan d'Action Année 1</h1>
+                <h2>Initiatives trimestrielles avec responsables assignés</h2>
+
+                <div class="grid-4">
+                    <div class="card" style="border-top: 4px solid var(--primary);">
+                        <h3 style="color: var(--primary); font-size: 14px;">
+                            <span class="material-icons" style="vertical-align: middle; font-size: 18px;">event</span> T1
+                        </h3>
+                        <p style="font-size: 12px; margin-bottom: 12px;"><strong>Fondation Digitale</strong></p>
+                        <ul style="list-style: none; padding: 0; font-size: 11px;">
+                            <li style="padding: 4px 0;">• Refonte site web</li>
+                            <li style="padding: 4px 0;">• Stratégie réseaux sociaux</li>
+                            <li style="padding: 4px 0;">• Système feedback client</li>
+                            <li style="padding: 4px 0;">• Formation guides</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-top: 4px solid var(--accent);">
+                        <h3 style="color: var(--accent); font-size: 14px;">
+                            <span class="material-icons" style="vertical-align: middle; font-size: 18px;">event</span> T2
+                        </h3>
+                        <p style="font-size: 12px; margin-bottom: 12px;"><strong>Croissance Client</strong></p>
+                        <ul style="list-style: none; padding: 0; font-size: 11px;">
+                            <li style="padding: 4px 0;">• Implémentation CRM</li>
+                            <li style="padding: 4px 0;">• Programme fidélité</li>
+                            <li style="padding: 4px 0;">• Campagne marketing</li>
+                            <li style="padding: 4px 0;">• Partenariats locaux</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-top: 4px solid var(--orange);">
+                        <h3 style="color: var(--orange); font-size: 14px;">
+                            <span class="material-icons" style="vertical-align: middle; font-size: 18px;">event</span> T3
+                        </h3>
+                        <p style="font-size: 12px; margin-bottom: 12px;"><strong>Expansion Capacité</strong></p>
+                        <ul style="list-style: none; padding: 0; font-size: 11px;">
+                            <li style="padding: 4px 0;">• Augmentation offres +20%</li>
+                            <li style="padding: 4px 0;">• Recrutement guides</li>
+                            <li style="padding: 4px 0;">• Nouveaux équipements</li>
+                            <li style="padding: 4px 0;">• Nouvelles destinations</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-top: 4px solid var(--purple);">
+                        <h3 style="color: var(--purple); font-size: 14px;">
+                            <span class="material-icons" style="vertical-align: middle; font-size: 18px;">event</span> T4
+                        </h3>
+                        <p style="font-size: 12px; margin-bottom: 12px;"><strong>Préparation Horizon 2</strong></p>
+                        <ul style="list-style: none; padding: 0; font-size: 11px;">
+                            <li style="padding: 4px 0;">• Bilan et ajustements</li>
+                            <li style="padding: 4px 0;">• Recherche glamping</li>
+                            <li style="padding: 4px 0;">• Contacts internationaux</li>
+                            <li style="padding: 4px 0;">• Plan Année 2</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                    <h3 style="color: var(--primary);">
+                        <span class="material-icons" style="vertical-align: middle;">flash_on</span>
+                        Quick Wins - Actions Immédiates (30 premiers jours)
+                    </h3>
+                    <div class="grid-3" style="margin-top: 12px;">
+                        <p style="font-size: 12px; margin: 0;">1. Optimiser les profils réseaux sociaux</p>
+                        <p style="font-size: 12px; margin: 0;">2. Lancer formulaire feedback clients</p>
+                        <p style="font-size: 12px; margin: 0;">3. Première session formation équipe</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: KPI Framework -->
+        <section class="slide" id="slide-6" data-chapter="KPIs">
+            <div class="slide-content">
+                <span class="badge badge-primary">Tableau de Bord</span>
+                <h1>Cadre KPI - 5 Catégories</h1>
+                <h2>Les métriques qui mesureront notre succès</h2>
+
+                <div class="grid-5">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <span class="material-icons">account_balance</span>
+                        </div>
+                        <h4>Financier</h4>
+                        <p class="kpi-examples">Revenus, Marge, EBITDA, CAC, LTV, ROI initiatives</p>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <span class="material-icons">settings</span>
+                        </div>
+                        <h4>Opérationnel</h4>
+                        <p class="kpi-examples">Utilisation capacité, Coût/voyage, Sécurité, Efficacité</p>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <span class="material-icons">people</span>
+                        </div>
+                        <h4>Client</h4>
+                        <p class="kpi-examples">CSAT, NPS, Rétention, Répétition, Recommandation</p>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <span class="material-icons">eco</span>
+                        </div>
+                        <h4>Durabilité</h4>
+                        <p class="kpi-examples">CO2/voyage, Zéro déchet, Local %, Impact communauté</p>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h4>Équipe</h4>
+                        <p class="kpi-examples">Engagement, Rétention, Formation, eNPS, Productivité</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <span class="material-icons" style="color: var(--primary);">analytics</span>
+                        Structure du Tableau de Bord
+                    </h3>
+                    <div class="grid-4" style="margin-top: 16px;">
+                        <div style="text-align: center;">
+                            <p style="font-size: 24px; margin-bottom: 4px;">📊</p>
+                            <p style="font-size: 11px; margin: 0;">Résumé visuel 1 page</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 24px; margin-bottom: 4px;">🚦</p>
+                            <p style="font-size: 11px; margin: 0;">Feux rouge/jaune/vert</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 24px; margin-bottom: 4px;">📈</p>
+                            <p style="font-size: 11px; margin: 0;">Tendances flèches</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 24px; margin-bottom: 4px;">🎯</p>
+                            <p style="font-size: 11px; margin: 0;">Réel vs. Cible</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: KPI Targets -->
+        <section class="slide" id="slide-7" data-chapter="KPIs">
+            <div class="slide-content">
+                <span class="badge badge-primary">Cibles</span>
+                <h1>Objectifs KPI : Année 1 / 3 / 10</h1>
+                <h2>Exemples de cibles pour les KPIs prioritaires</h2>
+
+                <div class="card">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--primary); color: var(--white);">
+                                <th style="padding: 12px 16px; text-align: left; font-size: 12px;">KPI</th>
+                                <th style="padding: 12px 16px; text-align: center; font-size: 12px;">Baseline</th>
+                                <th style="padding: 12px 16px; text-align: center; font-size: 12px;">Année 1</th>
+                                <th style="padding: 12px 16px; text-align: center; font-size: 12px;">Année 3</th>
+                                <th style="padding: 12px 16px; text-align: center; font-size: 12px;">Année 10</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--gray-100);">
+                                <td style="padding: 12px 16px; font-size: 12px;"><strong>Revenus</strong></td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px;">500k€</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--primary); font-weight: 600;">750k€</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--accent); font-weight: 600;">1,5M€</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--purple); font-weight: 600;">5M€</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--gray-100);">
+                                <td style="padding: 12px 16px; font-size: 12px;"><strong>NPS</strong></td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px;">65</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--primary); font-weight: 600;">75</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--accent); font-weight: 600;">85</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--purple); font-weight: 600;">90+</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--gray-100);">
+                                <td style="padding: 12px 16px; font-size: 12px;"><strong>CO2/voyage</strong></td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px;">50kg</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--primary); font-weight: 600;">40kg</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--accent); font-weight: 600;">25kg</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--purple); font-weight: 600;">Net Zéro</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--gray-100);">
+                                <td style="padding: 12px 16px; font-size: 12px;"><strong>Rétention client</strong></td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px;">40%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--primary); font-weight: 600;">50%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--accent); font-weight: 600;">65%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--purple); font-weight: 600;">80%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; font-size: 12px;"><strong>Engagement équipe</strong></td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px;">70%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--primary); font-weight: 600;">80%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--accent); font-weight: 600;">85%</td>
+                                <td style="padding: 12px 16px; text-align: center; font-size: 12px; color: var(--purple); font-weight: 600;">90%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="text-align: center; margin-top: 24px; color: var(--gray-500); font-size: 13px;">
+                    <span class="material-icons" style="vertical-align: middle; font-size: 18px;">info</span>
+                    Tableau de bord complet disponible dans le Playbook Stratégique avec tous les KPIs détaillés
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 8: 7-S Model -->
+        <section class="slide" id="slide-8" data-chapter="Organisation">
+            <div class="slide-content">
+                <span class="badge badge-primary">Modèle McKinsey</span>
+                <h1>Alignement Organisationnel 7-S</h1>
+                <h2>Les 7 éléments à aligner pour exécuter la stratégie</h2>
+
+                <div class="grid-4" style="gap: 16px;">
+                    <div class="seven-s-card" style="border: 2px solid var(--primary);">
+                        <div class="s-icon" style="background: var(--primary); color: var(--white);">S</div>
+                        <h4>Stratégie</h4>
+                        <p>Direction stratégique choisie, clairement articulée</p>
+                    </div>
+
+                    <div class="seven-s-card">
+                        <div class="s-icon">S</div>
+                        <h4>Structure</h4>
+                        <p>Organisation équipe, rôles, responsabilités</p>
+                    </div>
+
+                    <div class="seven-s-card">
+                        <div class="s-icon">S</div>
+                        <h4>Systèmes</h4>
+                        <p>Processus, outils, workflows, documentation</p>
+                    </div>
+
+                    <div class="seven-s-card">
+                        <div class="s-icon">S</div>
+                        <h4>Style</h4>
+                        <p>Leadership, prise de décision, communication</p>
+                    </div>
+
+                    <div class="seven-s-card">
+                        <div class="s-icon">S</div>
+                        <h4>Staff</h4>
+                        <p>Capacités équipe, recrutement, formation</p>
+                    </div>
+
+                    <div class="seven-s-card">
+                        <div class="s-icon">S</div>
+                        <h4>Skills</h4>
+                        <p>Compétences clés, développement, mentorat</p>
+                    </div>
+
+                    <div class="seven-s-card" style="grid-column: span 2; background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                        <div class="s-icon" style="background: var(--primary); color: var(--white);">S</div>
+                        <h4>Shared Values</h4>
+                        <p>Valeurs partagées au cœur : Mission, Vision, Culture - guidant toutes les décisions</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <h3 style="color: var(--primary);">
+                        <span class="material-icons" style="vertical-align: middle;">priority_high</span>
+                        Points d'Attention Identifiés
+                    </h3>
+                    <p style="font-size: 12px; margin: 0;">
+                        Le rapport 7-S détaillé dans le Playbook identifie les écarts d'alignement et le plan de changement pour les adresser.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Operating Rhythms -->
+        <section class="slide" id="slide-9" data-chapter="Organisation">
+            <div class="slide-content">
+                <span class="badge badge-primary">Cadence Stratégique</span>
+                <h1>Rythmes Opérationnels</h1>
+                <h2>La cadence de réunions et révisions qui assure l'exécution</h2>
+
+                <div class="grid-4" style="gap: 16px;">
+                    <div class="rhythm-card">
+                        <h4><span class="material-icons">schedule</span> Quotidien</h4>
+                        <ul>
+                            <li>• Stand-up équipe (15 min)</li>
+                            <li>• Suivi opérations jour</li>
+                            <li>• Résolution blocages</li>
+                        </ul>
+                    </div>
+
+                    <div class="rhythm-card">
+                        <h4><span class="material-icons">date_range</span> Hebdomadaire</h4>
+                        <ul>
+                            <li>• Réunion équipe (1h)</li>
+                            <li>• Revue KPIs clés</li>
+                            <li>• Planification semaine</li>
+                            <li>• Partage apprentissages</li>
+                        </ul>
+                    </div>
+
+                    <div class="rhythm-card">
+                        <h4><span class="material-icons">event</span> Mensuel</h4>
+                        <ul>
+                            <li>• Revue performance (2h)</li>
+                            <li>• Analyse KPIs complets</li>
+                            <li>• Ajustements tactiques</li>
+                            <li>• Reconnaissance équipe</li>
+                        </ul>
+                    </div>
+
+                    <div class="rhythm-card">
+                        <h4><span class="material-icons">calendar_month</span> Trimestriel</h4>
+                        <ul>
+                            <li>• Revue stratégique (demi-journée)</li>
+                            <li>• Progrès vs. plan</li>
+                            <li>• Ajustements stratégiques</li>
+                            <li>• Planification trimestre +1</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 24px;">
+                    <div class="rhythm-card" style="border-left-color: var(--accent);">
+                        <h4 style="color: var(--accent);"><span class="material-icons">today</span> Annuel</h4>
+                        <ul>
+                            <li>• Revue stratégique complète (1-2 jours)</li>
+                            <li>• Évaluation performance année</li>
+                            <li>• Validation hypothèses WWHBT</li>
+                            <li>• Actualisation feuille de route</li>
+                            <li>• Planification détaillée année +1</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--primary);">
+                        <h3 style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: var(--primary);">psychology</span>
+                            Apprentissage & Adaptation
+                        </h3>
+                        <p style="font-size: 12px;">
+                            • After-Action Reviews après chaque voyage majeur<br>
+                            • Test et validation des hypothèses stratégiques<br>
+                            • Boucles de feedback client intégrées<br>
+                            • Amélioration continue des processus
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: 90-Day Sprint -->
+        <section class="slide" id="slide-10" data-chapter="Sprint 90 Jours">
+            <div class="slide-content">
+                <span class="badge badge-primary">Lancement</span>
+                <h1>Sprint 90 Jours - Plan de Lancement</h1>
+                <h2>Les 12 premières semaines en détail</h2>
+
+                <div class="sprint-grid">
+                    <div class="sprint-week">
+                        <h4><span class="material-icons">looks_one</span> Semaines 1-2</h4>
+                        <ul>
+                            <li>• Communication stratégie à l'équipe</li>
+                            <li>• Assignation des responsabilités</li>
+                            <li>• Setup outils de suivi</li>
+                            <li>• Quick wins lancés</li>
+                        </ul>
+                    </div>
+
+                    <div class="sprint-week">
+                        <h4><span class="material-icons">looks_two</span> Semaines 3-4</h4>
+                        <ul>
+                            <li>• Brief agence site web</li>
+                            <li>• Audit réseaux sociaux</li>
+                            <li>• Formation équipe #1</li>
+                            <li>• Premier feedback client</li>
+                        </ul>
+                    </div>
+
+                    <div class="sprint-week">
+                        <h4><span class="material-icons">looks_3</span> Semaines 5-8</h4>
+                        <ul>
+                            <li>• Développement site web</li>
+                            <li>• Stratégie contenu lancée</li>
+                            <li>• CRM sélectionné</li>
+                            <li>• Processus feedback établi</li>
+                        </ul>
+                    </div>
+
+                    <div class="sprint-week">
+                        <h4><span class="material-icons">looks_4</span> Semaines 9-12</h4>
+                        <ul>
+                            <li>• Site web lancé</li>
+                            <li>• CRM implémenté</li>
+                            <li>• Première campagne marketing</li>
+                            <li>• Bilan 90 jours</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; border: 2px solid var(--primary); background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                    <h3 style="color: var(--primary); text-align: center;">
+                        <span class="material-icons" style="vertical-align: middle;">campaign</span>
+                        Plan de Communication
+                    </h3>
+                    <div class="grid-3" style="margin-top: 16px;">
+                        <div style="text-align: center;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Équipe</p>
+                            <p style="font-size: 11px; margin: 0;">Réunion de lancement, updates hebdo</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Clients</p>
+                            <p style="font-size: 11px; margin: 0;">Newsletter, nouveautés saison</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 4px;">Partenaires</p>
+                            <p style="font-size: 11px; margin: 0;">Rencontres Q1, opportunités</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Deliverables -->
+        <section class="slide" id="slide-11" data-chapter="Livrables">
+            <div class="slide-content">
+                <span class="badge badge-primary">Documents Produits</span>
+                <h1>Livrables de la Phase 3</h1>
+                <h2>Tous les documents d'exécution</h2>
+
+                <div class="grid-2">
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">route</span>
+                        </div>
+                        <div>
+                            <h3>Feuille de Route Stratégique 10 Ans</h3>
+                            <p>Timeline visuelle avec 3 horizons, initiatives majeures et jalons clés.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">calendar_today</span>
+                        </div>
+                        <div>
+                            <h3>Plan d'Action 1 An</h3>
+                            <p>Initiatives trimestrielles avec responsables assignés et ressources.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">dashboard</span>
+                        </div>
+                        <div>
+                            <h3>Template Tableau de Bord KPI</h3>
+                            <p>5 catégories de KPIs avec cibles Année 1/3/10.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">account_balance</span>
+                        </div>
+                        <div>
+                            <h3>Plan d'Allocation Ressources</h3>
+                            <p>Budget, équipe, technologie et partenaires nécessaires.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">warning</span>
+                        </div>
+                        <div>
+                            <h3>Registre des Risques</h3>
+                            <p>Risques identifiés avec plans de mitigation.</p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="doc-icon">
+                            <span class="material-icons">business</span>
+                        </div>
+                        <div>
+                            <h3>Rapport Alignement 7-S</h3>
+                            <p>Analyse des écarts et plan de changement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Playbook -->
+        <section class="slide" id="slide-12" data-chapter="Livrables">
+            <div class="slide-content">
+                <span class="badge badge-primary">Document Maître</span>
+                <h1>Playbook Stratégique</h1>
+                <h2>Le document de référence complet livré après cette réunion</h2>
+
+                <div class="card" style="border: 2px solid var(--primary); padding: 32px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <span class="material-icons" style="font-size: 40px; color: var(--white);">menu_book</span>
+                    </div>
+                    <h3 style="font-size: 24px; margin-bottom: 16px;">Strategy Playbook - Tunisian Campers 2025-2035</h3>
+                    <p style="font-size: 14px; color: var(--gray-600); margin-bottom: 24px;">
+                        Document consolidé de toutes les phases, prêt pour l'exécution
+                    </p>
+
+                    <div class="grid-4" style="gap: 16px;">
+                        <div style="background: var(--primary-pale); border-radius: 12px; padding: 16px;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin: 0;">Résumé Exécutif</p>
+                        </div>
+                        <div style="background: var(--primary-pale); border-radius: 12px; padding: 16px;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin: 0;">Diagnostic Complet</p>
+                        </div>
+                        <div style="background: var(--primary-pale); border-radius: 12px; padding: 16px;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin: 0;">Choix Stratégique</p>
+                        </div>
+                        <div style="background: var(--primary-pale); border-radius: 12px; padding: 16px;">
+                            <p style="font-size: 12px; font-weight: 600; color: var(--primary); margin: 0;">Plan d'Exécution</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 24px;">
+                    <div class="card">
+                        <h3 style="color: var(--primary);">
+                            <span class="material-icons" style="vertical-align: middle;">schedule</span>
+                            Livraison
+                        </h3>
+                        <p style="font-size: 12px;">3-5 jours après la Réunion 3, versions digitale et imprimée.</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="color: var(--primary);">
+                            <span class="material-icons" style="vertical-align: middle;">event</span>
+                            Première Révision
+                        </h3>
+                        <p style="font-size: 12px;">Revue trimestrielle programmée 3 mois après le lancement.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: Success Criteria -->
+        <section class="slide" id="slide-13" data-chapter="Critères Succès">
+            <div class="slide-content">
+                <span class="badge badge-primary">Validation</span>
+                <h1>Critères de Succès - Phase 3</h1>
+                <h2>Comment nous saurons que nous sommes prêts à exécuter</h2>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">assignment_ind</span>
+                        </div>
+                        <h3>Propriété Assignée</h3>
+                        <p>Chaque initiative Horizon 1 a un responsable parmi les 7 membres de l'équipe avec autorité et accountability.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">track_changes</span>
+                        </div>
+                        <h3>KPIs Définis</h3>
+                        <p>Tous les KPIs critiques ont une baseline + cibles Année 1/3/10 documentées.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">sync</span>
+                        </div>
+                        <h3>Rythmes Compris</h3>
+                        <p>L'équipe comprend et s'engage sur les cadences de réunions (quotidien → annuel).</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">record_voice_over</span>
+                        </div>
+                        <h3>Elevator Pitch</h3>
+                        <p>Mohamed peut expliquer la stratégie en 2 minutes de façon claire et convaincante.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px; border: 2px solid var(--primary); text-align: center; background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);">
+                    <h3 style="color: var(--primary);">
+                        <span class="material-icons" style="vertical-align: middle;">verified</span>
+                        Critère Final
+                    </h3>
+                    <p style="font-size: 16px; margin: 0;">
+                        <strong>100% de l'équipe alignée</strong> sur la stratégie et prête à lancer l'exécution
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 14: Continuous Evolution -->
+        <section class="slide" id="slide-14" data-chapter="Évolution Continue">
+            <div class="slide-content">
+                <span class="badge badge-accent">Années 1-10</span>
+                <h1>Évolution Continue</h1>
+                <h2>Le processus de révision annuelle sur 10 ans</h2>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">analytics</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>1. Évaluation Performance (Q4 chaque année)</h4>
+                            <p>KPIs vs. cibles, complétion initiatives, budget actuel vs. plan, croissance équipe</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">search</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>2. Re-scan Marché & Concurrence (Q4 chaque année)</h4>
+                            <p>Tendances industrie, mouvements concurrents, évolution besoins clients, changements réglementaires</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">fact_check</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>3. Validation Hypothèses (Q4 chaque année)</h4>
+                            <p>Revue des hypothèses WWHBT, valider ou invalider sur base de preuves, ajuster stratégie si nécessaire</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="material-icons">update</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>4. Actualisation Feuille de Route (Q1 année suivante)</h4>
+                            <p>Mise à jour roadmap 10 ans, ajustement initiatives Horizon 1, re-priorisation Horizons 2/3</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 32px;">
+                    <div class="company-badge" style="background: var(--primary); color: var(--white); font-size: 16px; padding: 16px 32px;">
+                        <span class="material-icons" style="font-size: 24px;">rocket_launch</span>
+                        Prêts à construire les 10 prochaines années de Tunisian Campers !
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Slide navigation and counter
+        const slidesContainer = document.querySelector('.slides-container');
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        const chapterItems = document.querySelectorAll('.chapter-item');
+        const subItems = document.querySelectorAll('.sub-item');
+
+        totalSlidesEl.textContent = slides.length;
+
+        // Update current slide on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const slideNum = parseInt(slideId.replace('slide-', ''));
+                    currentSlideEl.textContent = slideNum;
+
+                    // Update chapter navigation
+                    updateNavigation(slideNum);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Navigation click handlers
+        chapterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const slideNum = item.dataset.slide;
+                const targetSlide = document.getElementById(`slide-${slideNum}`);
+                if (targetSlide) {
+                    targetSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // Toggle sub-items if has subs
+                if (item.dataset.hasSubs === 'true') {
+                    const subItemsContainer = item.nextElementSibling;
+                    if (subItemsContainer && subItemsContainer.classList.contains('sub-items')) {
+                        subItemsContainer.classList.toggle('expanded');
+                    }
+                }
+            });
+        });
+
+        subItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const slideNum = item.dataset.slide;
+                const targetSlide = document.getElementById(`slide-${slideNum}`);
+                if (targetSlide) {
+                    targetSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        function updateNavigation(slideNum) {
+            // Update chapter items
+            chapterItems.forEach(item => {
+                const itemSlide = parseInt(item.dataset.slide);
+                item.classList.remove('active');
+
+                // Check if current slide is within this chapter's range
+                const nextChapter = item.nextElementSibling;
+                let endSlide = itemSlide;
+
+                if (nextChapter && nextChapter.classList.contains('sub-items')) {
+                    const subs = nextChapter.querySelectorAll('.sub-item');
+                    if (subs.length > 0) {
+                        endSlide = parseInt(subs[subs.length - 1].dataset.slide);
+                    }
+                }
+
+                if (slideNum >= itemSlide && slideNum <= endSlide) {
+                    item.classList.add('active');
+                    // Expand sub-items if applicable
+                    if (nextChapter && nextChapter.classList.contains('sub-items')) {
+                        nextChapter.classList.add('expanded');
+                    }
+                }
+            });
+
+            // Update sub-items
+            subItems.forEach(item => {
+                const itemSlide = parseInt(item.dataset.slide);
+                item.classList.remove('active');
+                if (itemSlide === slideNum) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const chapterNav = document.getElementById('chapterNav');
+
+        menuToggle.addEventListener('click', () => {
+            chapterNav.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a slide (mobile)
+        slidesContainer.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                chapterNav.classList.remove('active');
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                const nextSlide = document.getElementById(`slide-${currentSlide + 1}`);
+                if (nextSlide) {
+                    nextSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const prevSlide = document.getElementById(`slide-${currentSlide - 1}`);
+                if (prevSlide) {
+                    prevSlide.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                document.getElementById('slide-1').scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                document.getElementById(`slide-${slides.length}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
