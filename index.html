@@ -741,6 +741,47 @@
             font-weight: 500;
         }
 
+        .resource-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .resource-status {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        /* Locked/unavailable resources */
+        .resource-link.locked {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .resource-link.locked .resource-icon {
+            background: var(--gray-300) !important;
+        }
+
+        .resource-link.locked .resource-text {
+            color: var(--gray-400);
+        }
+
+        .resource-link.locked .resource-status {
+            color: var(--gray-400);
+        }
+
+        .resource-link.locked::after {
+            content: '';
+            margin-left: auto;
+        }
+
+        .lock-icon {
+            margin-left: auto;
+            color: var(--gray-300);
+            font-size: 1rem;
+        }
+
         /* Contact Card */
         .contact-card {
             background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);
@@ -1033,33 +1074,47 @@
             <div class="resources-card">
                 <div class="resources-header">
                     <span class="material-icons">folder_open</span>
-                    <h3 class="resources-title">Documents du projet</h3>
+                    <h3 class="resources-title">Présentations par phase</h3>
                 </div>
                 <div class="resources-content">
                     <a href="00 Introduction.html" class="resource-link">
                         <div class="resource-icon intro">
                             <span class="material-icons">menu_book</span>
                         </div>
-                        <span class="resource-text">Introduction & Méthodologie</span>
+                        <div class="resource-info">
+                            <span class="resource-text">Introduction & Méthodologie</span>
+                            <span class="resource-status">Disponible maintenant</span>
+                        </div>
                     </a>
                     <a href="01-decouvrir-diagnostiquer.html" class="resource-link">
                         <div class="resource-icon phase1">
                             <span class="material-icons">search</span>
                         </div>
-                        <span class="resource-text">Phase 1 : Découvrir & Diagnostiquer</span>
+                        <div class="resource-info">
+                            <span class="resource-text">Phase 1 : Découvrir & Diagnostiquer</span>
+                            <span class="resource-status">Réunion du 20 janvier</span>
+                        </div>
                     </a>
-                    <a href="02-explorer-decider.html" class="resource-link">
+                    <div class="resource-link locked">
                         <div class="resource-icon phase2">
                             <span class="material-icons">explore</span>
                         </div>
-                        <span class="resource-text">Phase 2 : Explorer & Décider</span>
-                    </a>
-                    <a href="03-planifier-executer.html" class="resource-link">
+                        <div class="resource-info">
+                            <span class="resource-text">Phase 2 : Explorer & Décider</span>
+                            <span class="resource-status">Disponible après Phase 1</span>
+                        </div>
+                        <span class="material-icons lock-icon">lock</span>
+                    </div>
+                    <div class="resource-link locked">
                         <div class="resource-icon phase3">
                             <span class="material-icons">rocket_launch</span>
                         </div>
-                        <span class="resource-text">Phase 3 : Planifier & Exécuter</span>
-                    </a>
+                        <div class="resource-info">
+                            <span class="resource-text">Phase 3 : Planifier & Exécuter</span>
+                            <span class="resource-status">Disponible après Phase 2</span>
+                        </div>
+                        <span class="material-icons lock-icon">lock</span>
+                    </div>
                 </div>
             </div>
 
