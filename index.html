@@ -132,6 +132,10 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-3);
             font-family: var(--font-display);
             font-size: 2.5rem;
             font-weight: 700;
@@ -139,10 +143,10 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .logo .material-icons {
-            font-size: 2.5rem;
-            vertical-align: middle;
-            margin-right: var(--spacing-2);
+        .logo img {
+            height: 60px;
+            width: auto;
+            filter: brightness(0) invert(1);
         }
 
         .tagline {
@@ -609,7 +613,7 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <span class="material-icons">directions_car</span>
+                <img src="logo-black.png" alt="Tunisian Campers Logo">
                 Tunisian Campers
             </div>
             <p class="tagline">Planification Stratégique 2026</p>
