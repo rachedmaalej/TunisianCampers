@@ -1086,14 +1086,15 @@
                             <span class="resource-status">Disponible maintenant</span>
                         </div>
                     </a>
-                    <a href="01-decouvrir-diagnostiquer.html" class="resource-link">
+                    <a href="01-decouvrir-diagnostiquer.html" class="resource-link locked" id="phase1-link">
                         <div class="resource-icon phase1">
                             <span class="material-icons">search</span>
                         </div>
                         <div class="resource-info">
                             <span class="resource-text">Phase 1 : Découvrir & Diagnostiquer</span>
-                            <span class="resource-status">Réunion du 20 janvier</span>
+                            <span class="resource-status" id="phase1-status">Complétez le questionnaire pour débloquer</span>
                         </div>
+                        <span class="material-icons lock-icon" id="phase1-lock">lock</span>
                     </a>
                     <div class="resource-link locked">
                         <div class="resource-icon phase2">
@@ -1205,12 +1206,22 @@
                 questionnaireComplete = filledFields > 10;
             }
 
+            // Phase 1 link elements
+            const phase1Link = document.getElementById('phase1-link');
+            const phase1Status = document.getElementById('phase1-status');
+            const phase1Lock = document.getElementById('phase1-lock');
+
             if (tasks.questionnaire || questionnaireComplete) {
                 banner.classList.add('completed');
                 bannerTitle.textContent = 'Questionnaire complété';
                 bannerText.textContent = 'Merci ! Vos réponses ont été enregistrées. Vous pouvez les modifier si nécessaire.';
                 bannerBtnIcon.textContent = 'visibility';
                 bannerBtnText.textContent = 'Voir mes réponses';
+
+                // Unlock Phase 1 presentation
+                phase1Link.classList.remove('locked');
+                phase1Status.textContent = 'Réunion du 20 janvier';
+                phase1Lock.style.display = 'none';
 
                 // Auto-check questionnaire task
                 if (!tasks.questionnaire) {
