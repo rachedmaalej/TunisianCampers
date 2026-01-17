@@ -179,29 +179,48 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-5);
-            box-shadow: var(--shadow-md);
-            animation: subtle-pulse 3s ease-in-out infinite;
+            box-shadow: 0 4px 20px rgba(244, 142, 64, 0.5);
+            animation: urgent-flash 2s ease-in-out infinite;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .action-banner.completed {
             background: linear-gradient(135deg, var(--success) 0%, #357D23 100%);
             animation: none;
+            box-shadow: var(--shadow-md);
+            border: none;
         }
 
-        @keyframes subtle-pulse {
-            0%, 100% { box-shadow: var(--shadow-md); }
-            50% { box-shadow: 0 4px 20px rgba(244, 142, 64, 0.4); }
+        @keyframes urgent-flash {
+            0%, 100% {
+                box-shadow: 0 4px 20px rgba(244, 142, 64, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 8px 40px rgba(225, 87, 32, 0.7), 0 0 20px rgba(244, 142, 64, 0.4);
+                transform: scale(1.01);
+            }
         }
 
         .action-banner-icon {
             width: 56px;
             height: 56px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            animation: icon-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .action-banner.completed .action-banner-icon {
+            animation: none;
         }
 
         .action-banner-icon .material-icons {
