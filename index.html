@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planification Stratégique | Tunisian Campers</title>
+    <title>Tableau de Bord Stratégique | Tunisian Campers</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,36 +13,30 @@
 
     <style>
         /* ══════════════════════════════════════════════════════════
-           CSS VARIABLES - Material Design 3 Tokens
+           CSS VARIABLES
            ══════════════════════════════════════════════════════════ */
         :root {
-            /* Primary Colors - Teal Theme */
             --primary: #45998A;
             --primary-light: #6DBBAA;
             --primary-pale: #DAF3E0;
             --primary-dark: #267675;
 
-            /* Secondary Colors */
             --secondary: #4A8EBF;
             --secondary-light: #8DC7DE;
             --secondary-pale: #DBECF4;
 
-            /* Accent Colors */
             --accent: #79409E;
             --accent-light: #AF93C6;
             --accent-pale: #F3E3FE;
 
-            /* Phase Colors */
             --phase1-color: #4A8EBF;
             --phase2-color: #F48E40;
             --phase3-color: #549F3A;
 
-            /* Semantic Colors */
             --success: #549F3A;
             --warning: #F48E40;
             --error: #E65655;
 
-            /* Neutrals */
             --white: #FFFFFF;
             --gray-50: #F8F9FA;
             --gray-100: #E8E8E8;
@@ -52,11 +46,9 @@
             --gray-500: #5B5B5B;
             --gray-900: #1C1B1F;
 
-            /* Typography */
             --font-display: 'Noto Sans Display', sans-serif;
             --font-body: 'Noto Sans', sans-serif;
 
-            /* Spacing */
             --spacing-1: 4px;
             --spacing-2: 8px;
             --spacing-3: 12px;
@@ -67,13 +59,11 @@
             --spacing-10: 40px;
             --spacing-12: 48px;
 
-            /* Border Radius */
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
             --radius-xl: 24px;
 
-            /* Shadows */
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
@@ -97,7 +87,7 @@
             font-size: 16px;
             line-height: 1.6;
             color: var(--gray-900);
-            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            background: var(--gray-50);
             min-height: 100vh;
         }
 
@@ -107,8 +97,7 @@
         .header {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
             color: var(--white);
-            padding: var(--spacing-12) var(--spacing-6);
-            text-align: center;
+            padding: var(--spacing-8) var(--spacing-6);
             position: relative;
             overflow: hidden;
         }
@@ -127,208 +116,623 @@
         .header-content {
             position: relative;
             z-index: 1;
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: var(--spacing-3);
             font-family: var(--font-display);
-            font-size: 2.5rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: var(--spacing-2);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .logo img {
-            height: 60px;
+            height: 50px;
             width: auto;
             filter: brightness(0) invert(1);
         }
 
-        .tagline {
-            font-size: 1.1rem;
+        .header-date {
+            text-align: right;
+            font-size: 0.9rem;
             opacity: 0.9;
-            font-weight: 300;
+        }
+
+        .header-date strong {
+            display: block;
+            font-size: 1.1rem;
         }
 
         /* ══════════════════════════════════════════════════════════
-           PROGRESS BAR
+           MAIN LAYOUT
            ══════════════════════════════════════════════════════════ */
-        .progress-section {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-100);
-            padding: var(--spacing-6) var(--spacing-4);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .progress-container {
-            max-width: 900px;
+        .main-content {
+            max-width: 1100px;
             margin: 0 auto;
+            padding: var(--spacing-6) var(--spacing-4);
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: var(--spacing-6);
         }
 
-        .progress-title {
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--gray-400);
-            margin-bottom: var(--spacing-4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .progress-bar {
+        /* ══════════════════════════════════════════════════════════
+           ACTION REQUIRED BANNER
+           ══════════════════════════════════════════════════════════ */
+        .action-banner {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--warning) 0%, #E15720 100%);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-5) var(--spacing-6);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            position: relative;
+            gap: var(--spacing-5);
+            box-shadow: var(--shadow-md);
+            animation: subtle-pulse 3s ease-in-out infinite;
         }
 
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gray-100);
-            transform: translateY(-50%);
-            z-index: 0;
-            border-radius: 2px;
+        .action-banner.completed {
+            background: linear-gradient(135deg, var(--success) 0%, #357D23 100%);
+            animation: none;
         }
 
-        .progress-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-            transform: translateY(-50%);
-            z-index: 1;
-            border-radius: 2px;
-            transition: width 0.5s ease;
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: var(--shadow-md); }
+            50% { box-shadow: 0 4px 20px rgba(244, 142, 64, 0.4); }
         }
 
-        .progress-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-            cursor: pointer;
-        }
-
-        .step-circle {
-            width: 40px;
-            height: 40px;
+        .action-banner-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
             border-radius: 50%;
-            background: var(--white);
-            border: 3px solid var(--gray-200);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .action-banner-icon .material-icons {
+            font-size: 28px;
+        }
+
+        .action-banner-content {
+            flex: 1;
+        }
+
+        .action-banner-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
             font-weight: 600;
-            font-size: 0.875rem;
-            color: var(--gray-400);
-            transition: all 0.3s ease;
+            margin-bottom: var(--spacing-1);
         }
 
-        .step-circle .material-icons {
-            font-size: 1.25rem;
+        .action-banner-text {
+            font-size: 0.9rem;
+            opacity: 0.95;
         }
 
-        .progress-step.completed .step-circle {
-            background: var(--success);
-            border-color: var(--success);
-            color: var(--white);
-        }
-
-        .progress-step.current .step-circle {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: var(--white);
-            box-shadow: 0 0 0 4px var(--primary-pale);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 4px var(--primary-pale); }
-            50% { box-shadow: 0 0 0 8px rgba(69, 153, 138, 0.1); }
-        }
-
-        .step-label {
-            margin-top: var(--spacing-2);
-            font-size: 0.75rem;
-            color: var(--gray-400);
-            text-align: center;
-            max-width: 80px;
-            line-height: 1.3;
-            transition: color 0.3s ease;
-        }
-
-        .progress-step.completed .step-label,
-        .progress-step.current .step-label {
-            color: var(--gray-900);
-            font-weight: 500;
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           MAIN CONTENT
-           ══════════════════════════════════════════════════════════ */
-        .main-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: var(--spacing-8) var(--spacing-4);
-        }
-
-        /* Introduction Section */
-        .intro-section {
-            text-align: center;
-            margin-bottom: var(--spacing-10);
-            padding: var(--spacing-8);
+        .action-banner-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: var(--spacing-3) var(--spacing-5);
             background: var(--white);
-            border-radius: var(--radius-xl);
+            color: var(--warning);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .action-banner.completed .action-banner-btn {
+            color: var(--success);
+        }
+
+        .action-banner-btn:hover {
+            transform: scale(1.05);
             box-shadow: var(--shadow-md);
         }
 
-        .intro-section h1 {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            color: var(--gray-900);
-            margin-bottom: var(--spacing-4);
-        }
-
-        .intro-section p {
-            color: var(--gray-500);
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto var(--spacing-6);
-            line-height: 1.8;
-        }
-
-        .collaborators {
+        /* ══════════════════════════════════════════════════════════
+           LEFT COLUMN - MAIN CONTENT
+           ══════════════════════════════════════════════════════════ */
+        .left-column {
             display: flex;
-            justify-content: center;
-            gap: var(--spacing-8);
-            margin-top: var(--spacing-6);
-            padding-top: var(--spacing-6);
-            border-top: 1px solid var(--gray-100);
+            flex-direction: column;
+            gap: var(--spacing-6);
         }
 
-        .collaborator {
+        /* Section Card */
+        .section-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: var(--spacing-4) var(--spacing-5);
+            border-bottom: 1px solid var(--gray-100);
             display: flex;
             align-items: center;
             gap: var(--spacing-3);
         }
 
-        .collaborator-avatar {
-            width: 48px;
-            height: 48px;
+        .section-header .material-icons {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .section-content {
+            padding: var(--spacing-5);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           CURRENT PHASE CARD
+           ══════════════════════════════════════════════════════════ */
+        .current-phase-card {
+            background: linear-gradient(135deg, var(--secondary-pale) 0%, var(--white) 100%);
+            border: 2px solid var(--phase1-color);
+        }
+
+        .phase-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-5);
+        }
+
+        .phase-number {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--phase1-color) 0%, #76AED9 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .phase-info h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .phase-info p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .phase-meeting {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-5);
+        }
+
+        .meeting-date-box {
+            background: var(--phase1-color);
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-2) var(--spacing-3);
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .meeting-date-box .day {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .meeting-date-box .month {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meeting-details {
+            flex: 1;
+        }
+
+        .meeting-details strong {
+            display: block;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .meeting-details span {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .countdown-badge {
+            background: var(--warning);
+            color: var(--white);
+            padding: var(--spacing-2) var(--spacing-3);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .phase-objectives {
+            border-top: 1px solid var(--gray-100);
+            padding-top: var(--spacing-4);
+        }
+
+        .phase-objectives h4 {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-3);
+        }
+
+        .objective-list {
+            list-style: none;
+        }
+
+        .objective-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-2);
+            padding: var(--spacing-2) 0;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .objective-list li .material-icons {
+            font-size: 1.1rem;
+            color: var(--phase1-color);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           TIMELINE
+           ══════════════════════════════════════════════════════════ */
+        .timeline {
+            position: relative;
+            padding-left: var(--spacing-8);
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--gray-200);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: var(--spacing-5);
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-marker .material-icons {
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .timeline-item.completed .timeline-marker .material-icons {
+            color: var(--white);
+        }
+
+        .timeline-item.current .timeline-marker {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-pale);
+        }
+
+        .timeline-item.current .timeline-marker .material-icons {
+            color: var(--white);
+        }
+
+        .timeline-item.upcoming .timeline-marker {
+            background: var(--white);
+            border-color: var(--gray-300);
+        }
+
+        .timeline-content {
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-3) var(--spacing-4);
+        }
+
+        .timeline-item.current .timeline-content {
+            background: var(--primary-pale);
+            border: 1px solid var(--primary-light);
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 0.95rem;
+        }
+
+        .timeline-item.upcoming .timeline-title {
+            color: var(--gray-500);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           RIGHT COLUMN - SIDEBAR
+           ══════════════════════════════════════════════════════════ */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-5);
+        }
+
+        /* Checklist */
+        .checklist-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .checklist-header {
+            padding: var(--spacing-4) var(--spacing-5);
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .checklist-header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+
+        .checklist-header .material-icons {
+            color: var(--warning);
+        }
+
+        .checklist-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .checklist-progress {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .checklist-content {
+            padding: var(--spacing-4);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-3);
+            padding: var(--spacing-3);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-2);
+            transition: background 0.2s ease;
+        }
+
+        .checklist-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checklist-item:hover {
+            background: var(--gray-50);
+        }
+
+        .checklist-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-checkbox .material-icons {
+            font-size: 14px;
+            color: transparent;
+        }
+
+        .checklist-item.done .checklist-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .checklist-item.done .checklist-checkbox .material-icons {
+            color: var(--white);
+        }
+
+        .checklist-text {
+            flex: 1;
+        }
+
+        .checklist-text strong {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .checklist-item.done .checklist-text strong {
+            text-decoration: line-through;
+            color: var(--gray-400);
+        }
+
+        .checklist-text span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .checklist-item.done .checklist-text span {
+            color: var(--gray-400);
+        }
+
+        .checklist-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-1);
+            margin-top: var(--spacing-1);
+        }
+
+        .checklist-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Resources Card */
+        .resources-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .resources-header {
+            padding: var(--spacing-4) var(--spacing-5);
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+
+        .resources-header .material-icons {
+            color: var(--accent);
+        }
+
+        .resources-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .resources-content {
+            padding: var(--spacing-3);
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-3);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .resource-link:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .resource-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .resource-icon .material-icons {
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .resource-icon.intro { background: var(--accent); }
+        .resource-icon.phase1 { background: var(--phase1-color); }
+        .resource-icon.phase2 { background: var(--phase2-color); }
+        .resource-icon.phase3 { background: var(--phase3-color); }
+
+        .resource-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-5);
+            text-align: center;
+        }
+
+        .contact-avatar {
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             display: flex;
@@ -336,219 +740,39 @@
             justify-content: center;
             color: var(--white);
             font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .collaborator-info {
-            text-align: left;
-        }
-
-        .collaborator-name {
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .collaborator-role {
-            font-size: 0.875rem;
-            color: var(--gray-400);
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           NAVIGATION CARDS
-           ══════════════════════════════════════════════════════════ */
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-6);
-        }
-
-        .nav-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .nav-card.locked {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .nav-card.locked::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-header {
-            padding: var(--spacing-5) var(--spacing-5) var(--spacing-3);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-3);
-        }
-
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            flex-shrink: 0;
-        }
-
-        .card-icon .material-icons {
-            font-size: 1.5rem;
-        }
-
-        .card-intro .card-icon { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); }
-        .card-phase1 .card-icon { background: linear-gradient(135deg, var(--phase1-color) 0%, #76AED9 100%); }
-        .card-phase2 .card-icon { background: linear-gradient(135deg, var(--phase2-color) 0%, #FBAC54 100%); }
-        .card-phase3 .card-icon { background: linear-gradient(135deg, var(--phase3-color) 0%, #80C261 100%); }
-
-        .card-badge {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: var(--spacing-1) var(--spacing-2);
-            border-radius: var(--radius-sm);
-            background: var(--gray-100);
-            color: var(--gray-500);
-        }
-
-        .card-intro .card-badge { background: var(--accent-pale); color: var(--accent); }
-        .card-phase1 .card-badge { background: var(--secondary-pale); color: var(--phase1-color); }
-        .card-phase2 .card-badge { background: #FFF3E6; color: var(--phase2-color); }
-        .card-phase3 .card-badge { background: var(--primary-pale); color: var(--phase3-color); }
-
-        .card-content {
-            padding: 0 var(--spacing-5) var(--spacing-5);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title {
-            font-family: var(--font-display);
             font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: var(--spacing-2);
+            margin: 0 auto var(--spacing-3);
         }
 
-        .card-description {
-            color: var(--gray-500);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            flex: 1;
-        }
-
-        .card-footer {
-            padding: var(--spacing-4) var(--spacing-5);
-            border-top: 1px solid var(--gray-100);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card-status {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-2);
-            font-size: 0.8rem;
-            color: var(--gray-400);
-        }
-
-        .card-status .material-icons {
-            font-size: 1rem;
-        }
-
-        .card-status.completed {
-            color: var(--success);
-        }
-
-        .card-status.current {
-            color: var(--primary);
-        }
-
-        .card-arrow {
-            color: var(--gray-300);
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .nav-card:hover .card-arrow {
-            transform: translateX(4px);
-            color: var(--primary);
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           QUESTIONNAIRE CTA
-           ══════════════════════════════════════════════════════════ */
-        .questionnaire-cta {
-            margin-top: var(--spacing-10);
-            padding: var(--spacing-8);
-            background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);
-            border-radius: var(--radius-xl);
-            text-align: center;
-            border: 2px dashed var(--primary-light);
-        }
-
-        .questionnaire-cta.completed {
-            background: linear-gradient(135deg, #E8F5E9 0%, var(--white) 100%);
-            border-color: var(--success);
-        }
-
-        .questionnaire-cta h3 {
+        .contact-card h4 {
             font-family: var(--font-display);
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: var(--gray-900);
-            margin-bottom: var(--spacing-2);
+            margin-bottom: var(--spacing-1);
         }
 
-        .questionnaire-cta p {
+        .contact-card p {
+            font-size: 0.85rem;
             color: var(--gray-500);
-            margin-bottom: var(--spacing-5);
+            margin-bottom: var(--spacing-4);
         }
 
-        .btn-questionnaire {
+        .contact-btn {
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-2);
-            padding: var(--spacing-4) var(--spacing-8);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: var(--spacing-2) var(--spacing-4);
+            background: var(--primary);
             color: var(--white);
             text-decoration: none;
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .btn-questionnaire:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-questionnaire.completed {
-            background: linear-gradient(135deg, var(--success) 0%, #357D23 100%);
+        .contact-btn:hover {
+            background: var(--primary-dark);
         }
 
         /* ══════════════════════════════════════════════════════════
@@ -556,54 +780,37 @@
            ══════════════════════════════════════════════════════════ */
         .footer {
             text-align: center;
-            padding: var(--spacing-8) var(--spacing-4);
+            padding: var(--spacing-6) var(--spacing-4);
             color: var(--gray-400);
-            font-size: 0.875rem;
-        }
-
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
+            font-size: 0.8rem;
         }
 
         /* ══════════════════════════════════════════════════════════
            RESPONSIVE
            ══════════════════════════════════════════════════════════ */
-        @media (max-width: 768px) {
-            .header {
-                padding: var(--spacing-8) var(--spacing-4);
-            }
-
-            .logo {
-                font-size: 1.75rem;
-            }
-
-            .progress-bar {
-                gap: var(--spacing-1);
-            }
-
-            .step-circle {
-                width: 32px;
-                height: 32px;
-                font-size: 0.75rem;
-            }
-
-            .step-label {
-                font-size: 0.65rem;
-                max-width: 60px;
-            }
-
-            .collaborators {
+        @media (max-width: 900px) {
+            .header-content {
                 flex-direction: column;
-                gap: var(--spacing-4);
+                text-align: center;
+                gap: var(--spacing-3);
             }
 
-            .intro-section h1 {
-                font-size: 1.5rem;
+            .header-date {
+                text-align: center;
             }
 
-            .nav-grid {
-                grid-template-columns: 1fr;
+            .action-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .right-column {
+                order: -1;
+            }
+
+            .phase-meeting {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -614,324 +821,362 @@
         <div class="header-content">
             <div class="logo">
                 <img src="logo-black.png" alt="Tunisian Campers Logo">
-                Tunisian Campers
+                <span>Tunisian Campers</span>
             </div>
-            <p class="tagline">Planification Stratégique 2026</p>
+            <div class="header-date">
+                <span>Aujourd'hui</span>
+                <strong>17 Janvier 2026</strong>
+            </div>
         </div>
     </header>
 
-    <!-- Progress Bar -->
-    <section class="progress-section">
-        <div class="progress-container">
-            <div class="progress-title">Progression du projet</div>
-            <div class="progress-bar">
-                <div class="progress-line" id="progressLine"></div>
-
-                <div class="progress-step" id="step-questionnaire" data-step="0">
-                    <div class="step-circle">
-                        <span class="material-icons">assignment</span>
-                    </div>
-                    <span class="step-label">Questionnaire</span>
-                </div>
-
-                <div class="progress-step" id="step-phase1" data-step="1">
-                    <div class="step-circle">1</div>
-                    <span class="step-label">Phase 1</span>
-                </div>
-
-                <div class="progress-step" id="step-phase2" data-step="2">
-                    <div class="step-circle">2</div>
-                    <span class="step-label">Phase 2</span>
-                </div>
-
-                <div class="progress-step" id="step-phase3" data-step="3">
-                    <div class="step-circle">3</div>
-                    <span class="step-label">Phase 3</span>
-                </div>
-
-                <div class="progress-step" id="step-complete" data-step="4">
-                    <div class="step-circle">
-                        <span class="material-icons">flag</span>
-                    </div>
-                    <span class="step-label">Terminé</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Introduction Section -->
-        <section class="intro-section">
-            <h1>Ensemble, construisons l'avenir de Tunisian Campers</h1>
-            <p>
-                Ce portail accompagne notre collaboration stratégique en 3 phases.
-                Notre objectif : définir une vision claire, identifier les opportunités de croissance,
-                et construire un plan d'action concret pour développer Tunisian Campers.
-            </p>
-            <div class="collaborators">
-                <div class="collaborator">
-                    <div class="collaborator-avatar">M</div>
-                    <div class="collaborator-info">
-                        <div class="collaborator-name">Mohamed</div>
-                        <div class="collaborator-role">Fondateur, Tunisian Campers</div>
-                    </div>
-                </div>
-                <div class="collaborator">
-                    <div class="collaborator-avatar">R</div>
-                    <div class="collaborator-info">
-                        <div class="collaborator-name">Rached</div>
-                        <div class="collaborator-role">Consultant Stratégique</div>
-                    </div>
+        <!-- Action Required Banner -->
+        <div class="action-banner" id="actionBanner">
+            <div class="action-banner-icon">
+                <span class="material-icons">assignment</span>
+            </div>
+            <div class="action-banner-content">
+                <div class="action-banner-title" id="bannerTitle">Action requise avant le 20 janvier</div>
+                <div class="action-banner-text" id="bannerText">
+                    Merci de compléter le questionnaire diagnostic pour préparer notre première réunion.
                 </div>
             </div>
-        </section>
-
-        <!-- Navigation Cards -->
-        <div class="nav-grid">
-            <!-- Introduction Card -->
-            <a href="00 Introduction.html" class="nav-card card-intro">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <span class="material-icons">menu_book</span>
-                    </div>
-                    <span class="card-badge">Introduction</span>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Découvrir la Méthodologie</h3>
-                    <p class="card-description">
-                        Comprendre notre approche en 3 phases et comment nous allons travailler ensemble pour atteindre vos objectifs.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <div class="card-status">
-                        <span class="material-icons">info</span>
-                        <span>Présentation</span>
-                    </div>
-                    <span class="material-icons card-arrow">arrow_forward</span>
-                </div>
-            </a>
-
-            <!-- Phase 1 Card -->
-            <a href="01-decouvrir-diagnostiquer.html" class="nav-card card-phase1" id="card-phase1">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <span class="material-icons">search</span>
-                    </div>
-                    <span class="card-badge">Phase 1</span>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Découvrir & Diagnostiquer</h3>
-                    <p class="card-description">
-                        Analyse approfondie de la situation actuelle : finances, clients, opérations, et identification des forces et faiblesses.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <div class="card-status" id="status-phase1">
-                        <span class="material-icons">schedule</span>
-                        <span>Semaine 1</span>
-                    </div>
-                    <span class="material-icons card-arrow">arrow_forward</span>
-                </div>
-            </a>
-
-            <!-- Phase 2 Card -->
-            <a href="02-explorer-decider.html" class="nav-card card-phase2" id="card-phase2">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <span class="material-icons">explore</span>
-                    </div>
-                    <span class="card-badge">Phase 2</span>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Explorer & Décider</h3>
-                    <p class="card-description">
-                        Exploration des options stratégiques, analyse du marché et de la concurrence, et choix des axes de développement.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <div class="card-status" id="status-phase2">
-                        <span class="material-icons">schedule</span>
-                        <span>Semaine 2</span>
-                    </div>
-                    <span class="material-icons card-arrow">arrow_forward</span>
-                </div>
-            </a>
-
-            <!-- Phase 3 Card -->
-            <a href="03-planifier-executer.html" class="nav-card card-phase3" id="card-phase3">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <span class="material-icons">rocket_launch</span>
-                    </div>
-                    <span class="card-badge">Phase 3</span>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Planifier & Exécuter</h3>
-                    <p class="card-description">
-                        Construction du plan d'action détaillé avec jalons, responsables, budgets et indicateurs de suivi.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <div class="card-status" id="status-phase3">
-                        <span class="material-icons">schedule</span>
-                        <span>Semaine 3</span>
-                    </div>
-                    <span class="material-icons card-arrow">arrow_forward</span>
-                </div>
+            <a href="questionnaire-diagnostic.html" class="action-banner-btn" id="bannerBtn">
+                <span class="material-icons" id="bannerBtnIcon">edit_note</span>
+                <span id="bannerBtnText">Remplir maintenant</span>
             </a>
         </div>
 
-        <!-- Questionnaire CTA -->
-        <section class="questionnaire-cta" id="questionnaireCta">
-            <h3 id="ctaTitle">Questionnaire de Diagnostic</h3>
-            <p id="ctaDescription">
-                Avant notre première réunion, merci de compléter ce questionnaire pour nous permettre de préparer une analyse personnalisée.
-            </p>
-            <a href="questionnaire-diagnostic.html" class="btn-questionnaire" id="ctaButton">
-                <span class="material-icons">edit_note</span>
-                <span id="ctaButtonText">Remplir le questionnaire</span>
-            </a>
-        </section>
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Current Phase Card -->
+            <div class="section-card current-phase-card">
+                <div class="section-content">
+                    <div class="phase-indicator">
+                        <div class="phase-number">1</div>
+                        <div class="phase-info">
+                            <h2>Découvrir & Diagnostiquer</h2>
+                            <p>Analyse approfondie de la situation actuelle</p>
+                        </div>
+                    </div>
+
+                    <div class="phase-meeting">
+                        <div class="meeting-date-box">
+                            <div class="day">20</div>
+                            <div class="month">Jan</div>
+                        </div>
+                        <div class="meeting-details">
+                            <strong>Réunion Phase 1</strong>
+                            <span>Présentation du diagnostic et analyse des données</span>
+                        </div>
+                        <div class="countdown-badge" id="countdown">Dans 3 jours</div>
+                    </div>
+
+                    <div class="phase-objectives">
+                        <h4>Objectifs de cette phase</h4>
+                        <ul class="objective-list">
+                            <li>
+                                <span class="material-icons">check_circle_outline</span>
+                                Comprendre l'état actuel de Tunisian Campers
+                            </li>
+                            <li>
+                                <span class="material-icons">check_circle_outline</span>
+                                Analyser les performances financières et opérationnelles
+                            </li>
+                            <li>
+                                <span class="material-icons">check_circle_outline</span>
+                                Identifier les forces, faiblesses et opportunités
+                            </li>
+                            <li>
+                                <span class="material-icons">check_circle_outline</span>
+                                Définir les priorités pour la phase suivante
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Timeline -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="material-icons">timeline</span>
+                    <h3 class="section-title">Calendrier du projet</h3>
+                </div>
+                <div class="section-content">
+                    <div class="timeline">
+                        <div class="timeline-item current">
+                            <div class="timeline-marker">
+                                <span class="material-icons">radio_button_checked</span>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">17 - 19 Janvier 2026</div>
+                                <div class="timeline-title">Préparation : Questionnaire diagnostic</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item upcoming">
+                            <div class="timeline-marker">
+                                <span class="material-icons">circle</span>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">20 Janvier 2026</div>
+                                <div class="timeline-title">Phase 1 : Découvrir & Diagnostiquer</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item upcoming">
+                            <div class="timeline-marker">
+                                <span class="material-icons">circle</span>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Semaine 2</div>
+                                <div class="timeline-title">Phase 2 : Explorer & Décider</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item upcoming">
+                            <div class="timeline-marker">
+                                <span class="material-icons">circle</span>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Semaine 3</div>
+                                <div class="timeline-title">Phase 3 : Planifier & Exécuter</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item upcoming">
+                            <div class="timeline-marker">
+                                <span class="material-icons">flag</span>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Fin Janvier 2026</div>
+                                <div class="timeline-title">Livraison du plan stratégique final</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Checklist -->
+            <div class="checklist-card">
+                <div class="checklist-header">
+                    <div class="checklist-header-left">
+                        <span class="material-icons">checklist</span>
+                        <h3 class="checklist-title">À faire avant la réunion</h3>
+                    </div>
+                    <span class="checklist-progress" id="checklistProgress">0/3</span>
+                </div>
+                <div class="checklist-content">
+                    <div class="checklist-item" id="task-intro" data-task="intro">
+                        <div class="checklist-checkbox" onclick="toggleTask('intro')">
+                            <span class="material-icons">check</span>
+                        </div>
+                        <div class="checklist-text">
+                            <strong>Lire l'introduction</strong>
+                            <span>Comprendre la méthodologie en 3 phases</span>
+                            <a href="00 Introduction.html" class="checklist-link">
+                                Voir la présentation <span class="material-icons" style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="checklist-item" id="task-questionnaire" data-task="questionnaire">
+                        <div class="checklist-checkbox" onclick="toggleTask('questionnaire')">
+                            <span class="material-icons">check</span>
+                        </div>
+                        <div class="checklist-text">
+                            <strong>Remplir le questionnaire</strong>
+                            <span>Données financières, clients, opérations</span>
+                            <a href="questionnaire-diagnostic.html" class="checklist-link">
+                                Accéder au questionnaire <span class="material-icons" style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="checklist-item" id="task-documents" data-task="documents">
+                        <div class="checklist-checkbox" onclick="toggleTask('documents')">
+                            <span class="material-icons">check</span>
+                        </div>
+                        <div class="checklist-text">
+                            <strong>Préparer les documents</strong>
+                            <span>Bilans, rapports, données clients si disponibles</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="resources-card">
+                <div class="resources-header">
+                    <span class="material-icons">folder_open</span>
+                    <h3 class="resources-title">Documents du projet</h3>
+                </div>
+                <div class="resources-content">
+                    <a href="00 Introduction.html" class="resource-link">
+                        <div class="resource-icon intro">
+                            <span class="material-icons">menu_book</span>
+                        </div>
+                        <span class="resource-text">Introduction & Méthodologie</span>
+                    </a>
+                    <a href="01-decouvrir-diagnostiquer.html" class="resource-link">
+                        <div class="resource-icon phase1">
+                            <span class="material-icons">search</span>
+                        </div>
+                        <span class="resource-text">Phase 1 : Découvrir & Diagnostiquer</span>
+                    </a>
+                    <a href="02-explorer-decider.html" class="resource-link">
+                        <div class="resource-icon phase2">
+                            <span class="material-icons">explore</span>
+                        </div>
+                        <span class="resource-text">Phase 2 : Explorer & Décider</span>
+                    </a>
+                    <a href="03-planifier-executer.html" class="resource-link">
+                        <div class="resource-icon phase3">
+                            <span class="material-icons">rocket_launch</span>
+                        </div>
+                        <span class="resource-text">Phase 3 : Planifier & Exécuter</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="contact-card">
+                <div class="contact-avatar">R</div>
+                <h4>Rached Maalej</h4>
+                <p>Consultant Stratégique</p>
+                <a href="mailto:rached@example.com" class="contact-btn">
+                    <span class="material-icons">email</span>
+                    Me contacter
+                </a>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Tunisian Campers &copy; 2026 | Accompagnement stratégique par <a href="#">Rached Maalej</a></p>
+        <p>Tunisian Campers &copy; 2026 | Planification Stratégique</p>
     </footer>
 
     <script>
         // ══════════════════════════════════════════════════════════
-        // PROGRESS TRACKING
+        // TASK TRACKING
         // ══════════════════════════════════════════════════════════
+        const TASKS_KEY = 'tunisian_campers_tasks';
 
-        // Storage key for progress
-        const PROGRESS_KEY = 'tunisian_campers_progress';
-
-        // Load progress from localStorage
-        function loadProgress() {
-            const saved = localStorage.getItem(PROGRESS_KEY);
+        function loadTasks() {
+            const saved = localStorage.getItem(TASKS_KEY);
             if (saved) {
                 return JSON.parse(saved);
             }
             return {
-                questionnaireCompleted: false,
-                currentPhase: 0  // 0 = not started, 1-3 = phases, 4 = completed
+                intro: false,
+                questionnaire: false,
+                documents: false
             };
         }
 
-        // Save progress to localStorage
-        function saveProgress(progress) {
-            localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+        function saveTasks(tasks) {
+            localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
         }
 
-        // Update UI based on progress
-        function updateProgressUI() {
-            const progress = loadProgress();
-            const steps = document.querySelectorAll('.progress-step');
-            const progressLine = document.getElementById('progressLine');
+        function toggleTask(taskId) {
+            const tasks = loadTasks();
+            tasks[taskId] = !tasks[taskId];
+            saveTasks(tasks);
+            updateUI();
+        }
 
-            // Calculate progress percentage
-            let currentStep = 0;
-            if (progress.questionnaireCompleted) currentStep = 1;
-            if (progress.currentPhase >= 1) currentStep = 1;
-            if (progress.currentPhase >= 2) currentStep = 2;
-            if (progress.currentPhase >= 3) currentStep = 3;
-            if (progress.currentPhase >= 4) currentStep = 4;
+        function updateUI() {
+            const tasks = loadTasks();
 
-            // Update progress line width
-            const totalSteps = steps.length - 1;
-            const progressPercent = (currentStep / totalSteps) * 100;
-            progressLine.style.width = `${progressPercent}%`;
-
-            // Update step states
-            steps.forEach((step, index) => {
-                step.classList.remove('completed', 'current');
-
-                if (index < currentStep) {
-                    step.classList.add('completed');
-                } else if (index === currentStep) {
-                    step.classList.add('current');
+            // Update checklist items
+            Object.keys(tasks).forEach(taskId => {
+                const item = document.getElementById(`task-${taskId}`);
+                if (item) {
+                    if (tasks[taskId]) {
+                        item.classList.add('done');
+                    } else {
+                        item.classList.remove('done');
+                    }
                 }
             });
 
-            // Update questionnaire CTA
-            const ctaSection = document.getElementById('questionnaireCta');
-            const ctaTitle = document.getElementById('ctaTitle');
-            const ctaDescription = document.getElementById('ctaDescription');
-            const ctaButton = document.getElementById('ctaButton');
-            const ctaButtonText = document.getElementById('ctaButtonText');
+            // Update progress
+            const completed = Object.values(tasks).filter(v => v).length;
+            const total = Object.keys(tasks).length;
+            document.getElementById('checklistProgress').textContent = `${completed}/${total}`;
 
-            if (progress.questionnaireCompleted) {
-                ctaSection.classList.add('completed');
-                ctaTitle.textContent = 'Questionnaire Complété';
-                ctaDescription.textContent = 'Merci ! Vos réponses ont été enregistrées. Vous pouvez modifier vos réponses si nécessaire.';
-                ctaButton.classList.add('completed');
-                ctaButtonText.textContent = 'Voir / Modifier le questionnaire';
-                ctaButton.querySelector('.material-icons').textContent = 'check_circle';
-            }
+            // Update action banner based on questionnaire status
+            const banner = document.getElementById('actionBanner');
+            const bannerTitle = document.getElementById('bannerTitle');
+            const bannerText = document.getElementById('bannerText');
+            const bannerBtn = document.getElementById('bannerBtn');
+            const bannerBtnIcon = document.getElementById('bannerBtnIcon');
+            const bannerBtnText = document.getElementById('bannerBtnText');
 
-            // Update card statuses
-            updateCardStatus('status-phase1', progress.currentPhase, 1);
-            updateCardStatus('status-phase2', progress.currentPhase, 2);
-            updateCardStatus('status-phase3', progress.currentPhase, 3);
-        }
-
-        function updateCardStatus(elementId, currentPhase, phaseNumber) {
-            const statusEl = document.getElementById(elementId);
-            if (!statusEl) return;
-
-            if (currentPhase > phaseNumber) {
-                statusEl.classList.add('completed');
-                statusEl.innerHTML = '<span class="material-icons">check_circle</span><span>Terminé</span>';
-            } else if (currentPhase === phaseNumber) {
-                statusEl.classList.add('current');
-                statusEl.innerHTML = '<span class="material-icons">play_circle</span><span>En cours</span>';
-            }
-        }
-
-        // Check if questionnaire was submitted (check localStorage)
-        function checkQuestionnaireStatus() {
+            // Check if questionnaire has data in localStorage
             const questionnaireData = localStorage.getItem('tunisian_campers_diagnostic');
-            const progress = loadProgress();
+            let questionnaireStarted = false;
+            let questionnaireComplete = false;
 
-            // If questionnaire data exists and has substantial content, mark as completed
             if (questionnaireData) {
                 const data = JSON.parse(questionnaireData);
-                // Check if at least some fields are filled
                 const filledFields = Object.values(data).filter(v => v && v.toString().trim() !== '').length;
-                if (filledFields > 5) {
-                    progress.questionnaireCompleted = true;
-                    saveProgress(progress);
+                questionnaireStarted = filledFields > 0;
+                questionnaireComplete = filledFields > 10;
+            }
+
+            if (tasks.questionnaire || questionnaireComplete) {
+                banner.classList.add('completed');
+                bannerTitle.textContent = 'Questionnaire complété';
+                bannerText.textContent = 'Merci ! Vos réponses ont été enregistrées. Vous pouvez les modifier si nécessaire.';
+                bannerBtnIcon.textContent = 'visibility';
+                bannerBtnText.textContent = 'Voir mes réponses';
+
+                // Auto-check questionnaire task
+                if (!tasks.questionnaire) {
+                    tasks.questionnaire = true;
+                    saveTasks(tasks);
+                    document.getElementById('task-questionnaire').classList.add('done');
                 }
+            } else if (questionnaireStarted) {
+                bannerTitle.textContent = 'Questionnaire en cours';
+                bannerText.textContent = 'Vous avez commencé le questionnaire. Merci de le compléter avant le 20 janvier.';
+                bannerBtnIcon.textContent = 'edit_note';
+                bannerBtnText.textContent = 'Continuer';
             }
         }
 
-        // Allow clicking on progress steps to update progress (for demo/admin purposes)
-        document.querySelectorAll('.progress-step').forEach(step => {
-            step.addEventListener('click', function() {
-                const stepNum = parseInt(this.dataset.step);
-                const progress = loadProgress();
+        // Calculate countdown
+        function updateCountdown() {
+            const meetingDate = new Date('2026-01-20');
+            const today = new Date('2026-01-17'); // Fixed date as per requirement
+            const diffTime = meetingDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                // Toggle: if clicking current step, go back; otherwise, advance
-                if (stepNum === 0) {
-                    progress.questionnaireCompleted = !progress.questionnaireCompleted;
-                } else if (stepNum <= 3) {
-                    progress.currentPhase = stepNum;
-                    if (stepNum >= 1) progress.questionnaireCompleted = true;
-                } else if (stepNum === 4) {
-                    progress.currentPhase = 4;
-                    progress.questionnaireCompleted = true;
-                }
-
-                saveProgress(progress);
-                updateProgressUI();
-            });
-        });
+            const countdownEl = document.getElementById('countdown');
+            if (diffDays === 0) {
+                countdownEl.textContent = "Aujourd'hui";
+                countdownEl.style.background = 'var(--error)';
+            } else if (diffDays === 1) {
+                countdownEl.textContent = 'Demain';
+                countdownEl.style.background = 'var(--error)';
+            } else if (diffDays > 0) {
+                countdownEl.textContent = `Dans ${diffDays} jours`;
+            } else {
+                countdownEl.textContent = 'Passé';
+                countdownEl.style.background = 'var(--gray-400)';
+            }
+        }
 
         // Initialize
-        checkQuestionnaireStatus();
-        updateProgressUI();
+        updateUI();
+        updateCountdown();
     </script>
 </body>
 </html>
