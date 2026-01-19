@@ -898,7 +898,7 @@
                 <span class="material-icons">assignment</span>
             </div>
             <div class="action-banner-content">
-                <div class="action-banner-title" id="bannerTitle">Action requise avant le 20 janvier</div>
+                <div class="action-banner-title" id="bannerTitle">Action requise avant le 21 janvier</div>
                 <div class="action-banner-text" id="bannerText">
                     Merci de compléter le questionnaire diagnostic pour préparer notre première réunion.
                 </div>
@@ -924,12 +924,12 @@
 
                     <div class="phase-meeting">
                         <div class="meeting-date-box">
-                            <div class="day">20</div>
+                            <div class="day">21</div>
                             <div class="month">Jan</div>
                         </div>
                         <div class="meeting-details">
                             <strong>Réunion Phase 1</strong>
-                            <span>Présentation du diagnostic et analyse des données</span>
+                            <span>Mercredi 15h00 - 17h00 | Diagnostic et analyse</span>
                         </div>
                         <div class="countdown-badge" id="countdown">Dans 3 jours</div>
                     </div>
@@ -981,7 +981,7 @@
                                 <span class="material-icons">circle</span>
                             </div>
                             <div class="timeline-content">
-                                <div class="timeline-date">20 Janvier 2026</div>
+                                <div class="timeline-date">21 Janvier 2026</div>
                                 <div class="timeline-title">Phase 1 : Découvrir & Diagnostiquer</div>
                             </div>
                         </div>
@@ -1220,7 +1220,7 @@
 
                 // Unlock Phase 1 presentation
                 phase1Link.classList.remove('locked');
-                phase1Status.textContent = 'Réunion du 20 janvier';
+                phase1Status.textContent = 'Réunion du 21 janvier - 15h00';
                 phase1Lock.style.display = 'none';
 
                 // Auto-check questionnaire task
@@ -1231,7 +1231,7 @@
                 }
             } else if (questionnaireStarted) {
                 bannerTitle.textContent = 'Questionnaire en cours';
-                bannerText.textContent = 'Vous avez commencé le questionnaire. Merci de le compléter avant le 20 janvier.';
+                bannerText.textContent = 'Vous avez commencé le questionnaire. Merci de le compléter avant le 21 janvier.';
                 bannerBtnIcon.textContent = 'edit_note';
                 bannerBtnText.textContent = 'Continuer';
             }
@@ -1239,7 +1239,7 @@
 
         // Calculate countdown dynamically
         function updateCountdown() {
-            const meetingDate = new Date('2026-01-20');
+            const meetingDate = new Date('2026-01-21');
             const today = new Date();
             // Reset time to midnight for accurate day calculation
             today.setHours(0, 0, 0, 0);
