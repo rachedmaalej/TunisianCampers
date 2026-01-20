@@ -1364,7 +1364,7 @@
                                 <span class="material-icons file-upload-icon">cloud_upload</span>
                                 <p class="file-upload-text">Sélectionnez vos fichiers pour les lister</p>
                                 <p class="file-upload-hint">PDF, Excel, Word, PowerPoint (max 10 Mo par fichier)</p>
-                                <input type="file" id="fileInput" name="documents" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv" class="file-input-hidden">
+                                <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv" class="file-input-hidden">
                             </div>
                         </div>
 
@@ -1680,13 +1680,10 @@
             updateStatus('Envoi en cours...');
             submitBtn.disabled = true;
 
-            // Collect form data as JSON (Formspree free tier doesn't support file attachments)
+            // Collect form data as JSON (file input has no name, won't be included)
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
-                // Skip file inputs
-                if (key === 'documents') return;
-
                 if (data[key]) {
                     if (Array.isArray(data[key])) {
                         data[key].push(value);
