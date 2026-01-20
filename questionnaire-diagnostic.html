@@ -756,6 +756,166 @@
         }
 
         /* ══════════════════════════════════════════════════════════
+           TOAST NOTIFICATION
+           ══════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: var(--spacing-5);
+            display: flex;
+            gap: var(--spacing-4);
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--error);
+        }
+
+        .toast.warning {
+            border-left-color: var(--accent);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .toast.closing {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .toast-icon.error {
+            background: #FFEBEE;
+            color: var(--error);
+        }
+
+        .toast-icon.warning {
+            background: #FFF3E0;
+            color: var(--accent);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            padding: 4px;
+            margin: -4px -4px -4px 0;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .toast-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .toast-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .toast-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .toast-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .toast-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .toast-btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .toast-btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        @media (max-width: 480px) {
+            .toast-container {
+                left: 12px;
+                right: 12px;
+                max-width: none;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════
            FOOTER
            ══════════════════════════════════════════════════════════ */
         .footer {
@@ -807,6 +967,9 @@
     </style>
 </head>
 <body>
+    <!-- Toast Container for Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -1429,6 +1592,84 @@
 
     <script>
         // ══════════════════════════════════════════════════════════
+        // TOAST NOTIFICATION SYSTEM
+        // ══════════════════════════════════════════════════════════
+
+        function showToast(options) {
+            const {
+                title = 'Notification',
+                message = '',
+                type = 'success', // success, error, warning, info
+                duration = 0, // 0 = manual dismiss only
+                showConfirmButton = true,
+                confirmText = 'OK',
+                onConfirm = null
+            } = options;
+
+            const container = document.getElementById('toastContainer');
+
+            // Icon mapping
+            const icons = {
+                success: 'check_circle',
+                error: 'error',
+                warning: 'warning',
+                info: 'info'
+            };
+
+            // Color mapping
+            const colors = {
+                success: 'var(--success)',
+                error: 'var(--error)',
+                warning: 'var(--warning)',
+                info: 'var(--primary)'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.borderLeftColor = colors[type];
+
+            toast.innerHTML = `
+                <div class="toast-icon" style="color: ${colors[type]}">
+                    <span class="material-icons">${icons[type]}</span>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                    ${showConfirmButton ? `<button class="toast-confirm-btn" style="background: ${colors[type]}">${confirmText}</button>` : ''}
+                </div>
+                <button class="toast-close" aria-label="Fermer">
+                    <span class="material-icons">close</span>
+                </button>
+            `;
+
+            // Add event listeners
+            const closeBtn = toast.querySelector('.toast-close');
+            const confirmBtn = toast.querySelector('.toast-confirm-btn');
+
+            const dismissToast = () => {
+                toast.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => toast.remove(), 300);
+            };
+
+            closeBtn.addEventListener('click', dismissToast);
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', () => {
+                    if (onConfirm) onConfirm();
+                    dismissToast();
+                });
+            }
+
+            // Auto-dismiss if duration > 0
+            if (duration > 0) {
+                setTimeout(dismissToast, duration);
+            }
+
+            container.appendChild(toast);
+            return toast;
+        }
+
+        // ══════════════════════════════════════════════════════════
         // AUTO-SAVE FUNCTIONALITY
         // ══════════════════════════════════════════════════════════
         const STORAGE_KEY = 'tunisian_campers_diagnostic';
@@ -1596,7 +1837,12 @@
             Array.from(files).forEach(file => {
                 // Check file size
                 if (file.size > maxSize) {
-                    alert(`Le fichier "${file.name}" dépasse la limite de 10 Mo.`);
+                    showToast({
+                        title: 'Fichier trop volumineux',
+                        message: `Le fichier "${file.name}" dépasse la limite de 10 Mo.`,
+                        type: 'warning',
+                        confirmText: 'Compris'
+                    });
                     return;
                 }
 
@@ -1691,20 +1937,26 @@
                 files: filesData
             };
 
+            console.log('Uploading to Google Drive:', filesData.map(f => f.name));
+
+            // Google Apps Script requires redirect: follow and specific headers
             const response = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
+                redirect: 'follow',
                 body: JSON.stringify(payload)
             });
 
+            console.log('Drive upload response status:', response.status);
+
             if (!response.ok) {
-                throw new Error(`Upload failed: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Drive upload error response:', errorText);
+                throw new Error(`Upload failed: ${response.status} - ${errorText}`);
             }
 
-            return await response.json();
+            const result = await response.json();
+            console.log('Drive upload result:', result);
+            return result;
         }
 
         form.addEventListener('submit', async function(e) {
@@ -1783,15 +2035,27 @@
                     // Clear saved form data after successful submission
                     localStorage.removeItem(STORAGE_KEY);
 
-                    // Show success message
-                    let successMessage = 'Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.';
+                    // Show success message as toast
+                    let toastMessage = 'Nous analyserons vos réponses avant notre première réunion.';
+                    let toastType = 'success';
 
                     if (uploadedFiles.length > 0 && driveUploadResult && driveUploadResult.success) {
-                        successMessage += `\n\n📎 ${uploadedFiles.length} document(s) téléchargé(s) vers Google Drive avec succès.`;
+                        toastMessage += `<br><br><strong>${uploadedFiles.length} document(s)</strong> téléchargé(s) avec succès.`;
                     } else if (uploadedFiles.length > 0) {
-                        successMessage += `\n\n⚠️ Les documents n'ont pas pu être envoyés automatiquement. Veuillez les envoyer par email à: ${EMAIL_TO}`;
+                        toastMessage += `<br><br><span style="color: var(--warning)">Les documents n'ont pas pu être envoyés automatiquement.</span><br>Veuillez les envoyer par email à: <strong>${EMAIL_TO}</strong>`;
+                        toastType = 'warning';
                     }
-                    alert(successMessage);
+
+                    showToast({
+                        title: 'Questionnaire envoyé !',
+                        message: toastMessage,
+                        type: toastType,
+                        confirmText: 'Parfait !',
+                        onConfirm: () => {
+                            // Redirect to index after confirmation
+                            window.location.href = 'index.html';
+                        }
+                    });
 
                     submitBtn.innerHTML = '<span class="material-icons">check</span> Envoyé !';
                     submitBtn.style.background = 'linear-gradient(135deg, var(--success) 0%, #357D23 100%)';
@@ -1802,7 +2066,12 @@
                 }
             } catch (error) {
                 console.error('Submission error:', error);
-                alert('Une erreur est survenue lors de l\'envoi. Vos réponses ont été sauvegardées localement.\n\nVeuillez réessayer ou contacter votre consultant.');
+                showToast({
+                    title: 'Erreur d\'envoi',
+                    message: 'Une erreur est survenue lors de l\'envoi.<br><br>Vos réponses ont été sauvegardées localement.<br>Veuillez réessayer ou contacter votre consultant.',
+                    type: 'error',
+                    confirmText: 'Réessayer'
+                });
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
