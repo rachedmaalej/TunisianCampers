@@ -1355,8 +1355,8 @@
                         </p>
 
                         <div style="background: #E8F5E9; border: 1px solid #81C784; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
-                            <span class="material-icons" style="color: #4CAF50;">email</span>
-                            <span style="font-size: 13px; color: #2E7D32;">Vos documents seront envoyés par email en pièces jointes lors de la soumission du questionnaire.</span>
+                            <span class="material-icons" style="color: #4CAF50;">cloud_upload</span>
+                            <span style="font-size: 13px; color: #2E7D32;">Vos documents seront automatiquement téléchargés vers Google Drive lors de la soumission.</span>
                         </div>
 
                         <div class="file-upload-area" id="fileUploadArea">
@@ -1661,11 +1661,51 @@
         }
 
         // ══════════════════════════════════════════════════════════
-        // FORM SUBMISSION - FORMSPREE
+        // FORM SUBMISSION - FORMSPREE + GOOGLE DRIVE (Apps Script)
         // ══════════════════════════════════════════════════════════
 
         const EMAIL_TO = 'rached@datasurf.co';
         const FORMSPREE_ID = 'xaqqnpkl';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvnrabXjpCgv6jHd8a_0K1Hd4l6v-3elDt_vn2bAKYgtMhkqk-pVBxlhS2x6K0fW8E/exec';
+
+        // Convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]); // Remove data:...;base64, prefix
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Upload all files to Google Drive via Apps Script (batch upload)
+        async function uploadAllFilesToGoogleDrive(files) {
+            // Convert all files to the format expected by Apps Script
+            const filesData = await Promise.all(files.map(async (file) => ({
+                name: file.name,
+                type: file.type || 'application/octet-stream',
+                content: await fileToBase64(file)
+            })));
+
+            const payload = {
+                files: filesData
+            };
+
+            const response = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Upload failed: ${response.status}`);
+            }
+
+            return await response.json();
+        }
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1680,7 +1720,7 @@
             updateStatus('Envoi en cours...');
             submitBtn.disabled = true;
 
-            // Collect form data as JSON (file input has no name, won't be included)
+            // Collect form data as JSON
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
@@ -1699,13 +1739,31 @@
             data._submittedAt = new Date().toISOString();
             data._formName = 'Questionnaire Diagnostic Simplifié - Tunisian Campers';
 
-            // Add file names if files were selected
-            if (uploadedFiles.length > 0) {
-                data._documentsToSend = uploadedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', ');
-                data._documentsNote = 'RAPPEL: Les fichiers doivent être envoyés par email à ' + EMAIL_TO;
-            }
-
             try {
+                // Upload files to Google Drive first (if any)
+                let driveUploadResult = null;
+                if (uploadedFiles.length > 0) {
+                    updateStatus(`Envoi de ${uploadedFiles.length} fichier(s) vers Google Drive...`);
+
+                    try {
+                        driveUploadResult = await uploadAllFilesToGoogleDrive(uploadedFiles);
+                        console.log('Drive upload result:', driveUploadResult);
+
+                        if (driveUploadResult.success) {
+                            // Add folder URL and file links to form data
+                            data._documentsFolderUrl = driveUploadResult.folderUrl;
+                            if (driveUploadResult.files && driveUploadResult.files.length > 0) {
+                                data._documentsUploaded = driveUploadResult.files.map(f => `${f.name}: ${f.url}`).join('\n');
+                            }
+                        }
+                    } catch (uploadError) {
+                        console.error('Drive upload error:', uploadError);
+                        // Continue with form submission even if file upload fails
+                        data._documentsUploadError = `Échec upload: ${uploadError.message}`;
+                        data._documentsToSendManually = uploadedFiles.map(f => f.name).join(', ');
+                    }
+                }
+
                 updateStatus('Envoi du questionnaire...');
 
                 // Submit to Formspree as JSON
@@ -1728,9 +1786,10 @@
                     // Show success message
                     let successMessage = 'Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.';
 
-                    // If files were selected, remind to send by email
-                    if (uploadedFiles.length > 0) {
-                        successMessage += '\n\n📎 IMPORTANT: Vos ' + uploadedFiles.length + ' document(s) doivent être envoyés par email à:\n' + EMAIL_TO;
+                    if (uploadedFiles.length > 0 && driveUploadResult && driveUploadResult.success) {
+                        successMessage += `\n\n📎 ${uploadedFiles.length} document(s) téléchargé(s) vers Google Drive avec succès.`;
+                    } else if (uploadedFiles.length > 0) {
+                        successMessage += `\n\n⚠️ Les documents n'ont pas pu être envoyés automatiquement. Veuillez les envoyer par email à: ${EMAIL_TO}`;
                     }
                     alert(successMessage);
 
