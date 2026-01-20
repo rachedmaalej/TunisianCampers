@@ -1354,10 +1354,15 @@
                             <strong>Cette section est entièrement optionnelle.</strong>
                         </p>
 
+                        <div style="background: #FFF3E0; border: 1px solid #FFB74D; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+                            <span class="material-icons" style="color: #F57C00;">info</span>
+                            <span style="font-size: 13px; color: #5D4037;">Les documents sélectionnés ci-dessous devront être envoyés par email à <strong>rached@datasurf.co</strong> après soumission du questionnaire.</span>
+                        </div>
+
                         <div class="file-upload-area" id="fileUploadArea">
                             <div class="file-upload-content">
                                 <span class="material-icons file-upload-icon">cloud_upload</span>
-                                <p class="file-upload-text">Glissez vos fichiers ici ou cliquez pour parcourir</p>
+                                <p class="file-upload-text">Sélectionnez vos fichiers pour les lister</p>
                                 <p class="file-upload-hint">PDF, Excel, Word, PowerPoint (max 10 Mo par fichier)</p>
                                 <input type="file" id="fileInput" name="documents" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv" class="file-input-hidden">
                             </div>
@@ -1649,7 +1654,8 @@
             return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
         }
 
-        function removeFile(index) {
+        // Make removeFile globally accessible for inline onclick
+        window.removeFile = function(index) {
             uploadedFiles.splice(index, 1);
             renderFileList();
         }
@@ -1693,6 +1699,12 @@
             data._submittedAt = new Date().toISOString();
             data._formName = 'Questionnaire Diagnostic Simplifié - Tunisian Campers';
 
+            // Add file names if files were selected (files need to be sent via email)
+            if (uploadedFiles.length > 0) {
+                data._documentsUploaded = uploadedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', ');
+                data._documentsNote = 'ATTENTION: Les fichiers doivent être envoyés par email à rached@datasurf.co';
+            }
+
             try {
                 // Submit form data to Formspree
                 const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
@@ -1705,10 +1717,18 @@
                 });
 
                 if (response.ok) {
-                    // Clear saved data after successful submission
+                    // Mark questionnaire as complete for index.html
+                    localStorage.setItem('questionnaireComplete', 'true');
+
+                    // Clear saved form data after successful submission
                     localStorage.removeItem(STORAGE_KEY);
 
-                    alert('Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.');
+                    // Show success message (with file reminder if applicable)
+                    let successMessage = 'Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.';
+                    if (uploadedFiles.length > 0) {
+                        successMessage += '\n\n📎 N\'oubliez pas d\'envoyer vos documents par email à rached@datasurf.co';
+                    }
+                    alert(successMessage);
 
                     submitBtn.innerHTML = '<span class="material-icons">check</span> Envoyé !';
                     submitBtn.style.background = 'linear-gradient(135deg, var(--success) 0%, #357D23 100%)';
