@@ -155,6 +155,7 @@
             display: flex;
             gap: var(--spacing-3);
             overflow-x: auto;
+            justify-content: center;
         }
 
         .nav-item {
@@ -242,7 +243,7 @@
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-2);
-            background: var(--warning);
+            background: var(--success);
             color: var(--white);
             padding: var(--spacing-2) var(--spacing-4);
             border-radius: var(--radius-xl);
@@ -317,10 +318,6 @@
 
         .section-header.accent {
             background: linear-gradient(135deg, var(--accent) 0%, #5a2d78 100%);
-        }
-
-        .section-header.success {
-            background: linear-gradient(135deg, var(--success) 0%, #357D23 100%);
         }
 
         .section-header.warning {
@@ -522,57 +519,6 @@
             flex: 1;
         }
 
-        /* Rating scale */
-        .rating-scale {
-            display: flex;
-            gap: var(--spacing-2);
-            flex-wrap: wrap;
-        }
-
-        .rating-option {
-            flex: 1;
-            min-width: 60px;
-        }
-
-        .rating-option input {
-            display: none;
-        }
-
-        .rating-option label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: var(--spacing-3);
-            background: var(--gray-50);
-            border: 2px solid var(--gray-100);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .rating-option label:hover {
-            border-color: var(--primary-light);
-            background: var(--primary-pale);
-        }
-
-        .rating-option input:checked + label {
-            border-color: var(--primary);
-            background: var(--primary-pale);
-        }
-
-        .rating-number {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .rating-label {
-            font-size: 11px;
-            color: var(--gray-400);
-            text-align: center;
-            margin-top: var(--spacing-1);
-        }
-
         /* Data table input */
         .data-table {
             width: 100%;
@@ -593,7 +539,8 @@
             font-size: 14px;
         }
 
-        .data-table td input {
+        .data-table td input,
+        .data-table td select {
             width: 100%;
             padding: var(--spacing-2);
             border: 1px solid var(--gray-200);
@@ -601,44 +548,10 @@
             font-size: 14px;
         }
 
-        .data-table td input:focus {
+        .data-table td input:focus,
+        .data-table td select:focus {
             outline: none;
             border-color: var(--primary);
-        }
-
-        /* File upload */
-        .file-upload {
-            border: 2px dashed var(--gray-200);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-8);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .file-upload:hover {
-            border-color: var(--primary);
-            background: var(--primary-pale);
-        }
-
-        .file-upload .material-icons {
-            font-size: 48px;
-            color: var(--gray-300);
-            margin-bottom: var(--spacing-3);
-        }
-
-        .file-upload p {
-            color: var(--gray-500);
-            margin-bottom: var(--spacing-2);
-        }
-
-        .file-upload span {
-            font-size: 14px;
-            color: var(--gray-400);
-        }
-
-        .file-upload input {
-            display: none;
         }
 
         /* Subsection */
@@ -647,6 +560,10 @@
             border-radius: var(--radius-md);
             padding: var(--spacing-5);
             margin-bottom: var(--spacing-6);
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
         }
 
         .subsection-title {
@@ -661,6 +578,131 @@
 
         .subsection-title .material-icons {
             font-size: 20px;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           FILE UPLOAD
+           ══════════════════════════════════════════════════════════ */
+        .file-upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-8);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.dragover {
+            border-color: var(--primary);
+            background: var(--primary-pale);
+        }
+
+        .file-upload-icon {
+            font-size: 48px;
+            color: var(--gray-300);
+            margin-bottom: var(--spacing-3);
+        }
+
+        .file-upload-area:hover .file-upload-icon,
+        .file-upload-area.dragover .file-upload-icon {
+            color: var(--primary);
+        }
+
+        .file-upload-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--gray-500);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .file-upload-hint {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .file-input-hidden {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        .file-list {
+            margin-top: var(--spacing-4);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-3) var(--spacing-4);
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .file-item .material-icons {
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .file-item-info {
+            flex: 1;
+        }
+
+        .file-item-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gray-900);
+        }
+
+        .file-item-size {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .file-item-remove {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            padding: var(--spacing-1);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .file-item-remove:hover {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .document-suggestions {
+            margin-top: var(--spacing-5);
+            padding: var(--spacing-4);
+            background: var(--accent-pale);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent);
+        }
+
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--spacing-3);
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .suggestion-item .material-icons {
+            font-size: 18px;
+            color: var(--accent);
         }
 
         /* ══════════════════════════════════════════════════════════
@@ -773,11 +815,11 @@
                 Tunisian Campers
             </div>
             <h1>Questionnaire Diagnostic</h1>
-            <p class="subtitle">Ce questionnaire nous permettra de mieux comprendre votre entreprise et de préparer efficacement notre première session stratégique.</p>
+            <p class="subtitle">Ce questionnaire court nous permettra de préparer efficacement notre première session stratégique.</p>
         </div>
     </header>
 
-    <!-- Navigation -->
+    <!-- Navigation - Simplified to 4 sections -->
     <nav class="nav-container">
         <div class="nav-content">
             <a href="#section-1" class="nav-item">
@@ -790,18 +832,14 @@
             </a>
             <a href="#section-3" class="nav-item">
                 <span class="material-icons">settings</span>
-                Opérations
+                Capacité
             </a>
             <a href="#section-4" class="nav-item">
-                <span class="material-icons">campaign</span>
-                Marketing
-            </a>
-            <a href="#section-5" class="nav-item">
                 <span class="material-icons">emoji_objects</span>
                 Vision
             </a>
-            <a href="#section-6" class="nav-item">
-                <span class="material-icons">upload_file</span>
+            <a href="#section-5" class="nav-item">
+                <span class="material-icons">folder_open</span>
                 Documents
             </a>
         </div>
@@ -812,19 +850,15 @@
         <!-- Introduction -->
         <div class="intro-section">
             <h2>Instructions</h2>
-            <p>Merci de prendre le temps de remplir ce questionnaire avant notre première réunion. Vos réponses nous aideront à :</p>
+            <p>Merci de prendre quelques minutes pour remplir ce questionnaire avant notre première réunion. Vos réponses nous aideront à :</p>
             <ul>
                 <li>
                     <span class="material-icons">check_circle</span>
-                    <span>Comprendre l'état actuel de Tunisian Campers et son évolution</span>
+                    <span>Comprendre les données clés de Tunisian Campers</span>
                 </li>
                 <li>
                     <span class="material-icons">check_circle</span>
-                    <span>Identifier les forces, défis et opportunités clés</span>
-                </li>
-                <li>
-                    <span class="material-icons">check_circle</span>
-                    <span>Préparer une analyse pertinente pour notre session de diagnostic</span>
+                    <span>Identifier vos priorités et défis stratégiques</span>
                 </li>
                 <li>
                     <span class="material-icons">check_circle</span>
@@ -833,7 +867,7 @@
             </ul>
             <div class="time-estimate">
                 <span class="material-icons">schedule</span>
-                Temps estimé : 30-40 minutes
+                Temps estimé : 10-15 minutes
             </div>
 
             <div class="save-controls">
@@ -849,20 +883,20 @@
         </div>
 
         <form id="diagnostic-form">
-            <!-- Section 1: Financial Data -->
+            <!-- Section 1: Financial Data (Simplified) -->
             <section class="form-section" id="section-1">
                 <div class="section-header">
                     <div class="section-icon">
                         <span class="material-icons">payments</span>
                     </div>
                     <div class="section-title">
-                        <h2>Partie A : Données Financières</h2>
-                        <p>Performance financière des 3-5 dernières années</p>
+                        <h2>Section 1 : Données Financières</h2>
+                        <p>Performance financière des 3 dernières années</p>
                     </div>
                 </div>
 
                 <div class="section-body">
-                    <!-- Revenue by Year -->
+                    <!-- Revenue by Year (Simplified - 3 years only, no comments) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">trending_up</span>
@@ -871,176 +905,80 @@
 
                         <div class="form-group">
                             <label class="form-label">Chiffre d'affaires par année (en TND)</label>
-                            <p class="form-hint">Indiquez le chiffre d'affaires total pour chaque année disponible</p>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Année</th>
-                                        <th>Chiffre d'Affaires (TND)</th>
-                                        <th>Commentaire</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2025</td>
-                                        <td><input type="number" name="revenue_2025" placeholder="Ex: 150000"></td>
-                                        <td><input type="text" name="revenue_2025_comment" placeholder="Notes..."></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024</td>
-                                        <td><input type="number" name="revenue_2024" placeholder="Ex: 120000"></td>
-                                        <td><input type="text" name="revenue_2024_comment" placeholder="Notes..."></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023</td>
-                                        <td><input type="number" name="revenue_2023" placeholder="Ex: 80000"></td>
-                                        <td><input type="text" name="revenue_2023_comment" placeholder="Notes..."></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">2023</label>
+                                    <input type="number" class="form-input" name="revenue_2023" placeholder="Ex: 80000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">2024</label>
+                                    <input type="number" class="form-input" name="revenue_2024" placeholder="Ex: 120000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">2025 (estimé)</label>
+                                    <input type="number" class="form-input" name="revenue_2025" placeholder="Ex: 150000">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Revenue by Service -->
+                    <!-- Revenue by Service (Simplified - name + % only) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">category</span>
-                            Répartition par Service/Produit
+                            Répartition par Service
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Quels sont vos principaux services/produits et leur part du CA ?</label>
-                            <p class="form-hint">Listez vos offres principales avec leur pourcentage approximatif du chiffre d'affaires</p>
+                            <label class="form-label">Vos principaux services et leur part du CA</label>
+                            <p class="form-hint">Listez vos 4 offres principales avec leur pourcentage du chiffre d'affaires</p>
                             <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>Service/Produit</th>
-                                        <th>% du CA</th>
-                                        <th>Tendance</th>
+                                        <th style="width: 100px;">% du CA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><input type="text" name="service_1_name" placeholder="Ex: Tours camping guidés"></td>
-                                        <td><input type="number" name="service_1_percent" placeholder="Ex: 40" min="0" max="100"></td>
-                                        <td>
-                                            <select name="service_1_trend">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="growth">En croissance</option>
-                                                <option value="stable">Stable</option>
-                                                <option value="decline">En baisse</option>
-                                            </select>
-                                        </td>
+                                        <td><input type="number" name="service_1_percent" placeholder="%" min="0" max="100"></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" name="service_2_name" placeholder="Ex: Location équipement"></td>
-                                        <td><input type="number" name="service_2_percent" placeholder="Ex: 25" min="0" max="100"></td>
-                                        <td>
-                                            <select name="service_2_trend">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="growth">En croissance</option>
-                                                <option value="stable">Stable</option>
-                                                <option value="decline">En baisse</option>
-                                            </select>
-                                        </td>
+                                        <td><input type="text" name="service_2_name" placeholder="Ex: Retraites bien-être"></td>
+                                        <td><input type="number" name="service_2_percent" placeholder="%" min="0" max="100"></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" name="service_3_name" placeholder="Ex: Expériences sur mesure"></td>
-                                        <td><input type="number" name="service_3_percent" placeholder="Ex: 20" min="0" max="100"></td>
-                                        <td>
-                                            <select name="service_3_trend">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="growth">En croissance</option>
-                                                <option value="stable">Stable</option>
-                                                <option value="decline">En baisse</option>
-                                            </select>
-                                        </td>
+                                        <td><input type="text" name="service_3_name" placeholder="Ex: Team building"></td>
+                                        <td><input type="number" name="service_3_percent" placeholder="%" min="0" max="100"></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" name="service_4_name" placeholder="Ex: Formations/Ateliers"></td>
-                                        <td><input type="number" name="service_4_percent" placeholder="Ex: 15" min="0" max="100"></td>
-                                        <td>
-                                            <select name="service_4_trend">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="growth">En croissance</option>
-                                                <option value="stable">Stable</option>
-                                                <option value="decline">En baisse</option>
-                                            </select>
-                                        </td>
+                                        <td><input type="text" name="service_4_name" placeholder="Ex: Expériences privées"></td>
+                                        <td><input type="number" name="service_4_percent" placeholder="%" min="0" max="100"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Profitability -->
+                    <!-- Profitability (Simplified - gross margin only) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">account_balance</span>
                             Rentabilité
                         </div>
 
-                        <div class="form-grid-2">
-                            <div class="form-group">
-                                <label class="form-label">Marge brute moyenne</label>
-                                <p class="form-hint">Pourcentage approximatif</p>
-                                <div class="input-with-unit">
-                                    <input type="number" class="form-input" name="gross_margin" placeholder="Ex: 45" min="0" max="100">
-                                    <span class="input-unit">%</span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Marge nette moyenne</label>
-                                <p class="form-hint">Pourcentage approximatif</p>
-                                <div class="input-with-unit">
-                                    <input type="number" class="form-input" name="net_margin" placeholder="Ex: 15" min="0" max="100">
-                                    <span class="input-unit">%</span>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group">
-                            <label class="form-label">Principaux postes de dépenses</label>
-                            <p class="form-hint">Sélectionnez les 3-5 postes les plus importants</p>
-                            <div class="checkbox-group checkbox-inline">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_staff" name="expenses" value="staff">
-                                    <label for="expense_staff">Personnel</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_equipment" name="expenses" value="equipment">
-                                    <label for="expense_equipment">Équipement</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_transport" name="expenses" value="transport">
-                                    <label for="expense_transport">Transport/Carburant</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_marketing" name="expenses" value="marketing">
-                                    <label for="expense_marketing">Marketing</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_insurance" name="expenses" value="insurance">
-                                    <label for="expense_insurance">Assurances</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_permits" name="expenses" value="permits">
-                                    <label for="expense_permits">Permis/Licences</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_maintenance" name="expenses" value="maintenance">
-                                    <label for="expense_maintenance">Maintenance</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="expense_other" name="expenses" value="other">
-                                    <label for="expense_other">Autre</label>
-                                </div>
+                            <label class="form-label">Marge brute moyenne</label>
+                            <p class="form-hint">Pourcentage approximatif (CA - coûts directs) / CA</p>
+                            <div class="input-with-unit" style="max-width: 200px;">
+                                <input type="number" class="form-input" name="gross_margin" placeholder="Ex: 45" min="0" max="100">
+                                <span class="input-unit">%</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seasonality -->
+                    <!-- Seasonality (Simplified - dropdowns only, no percentages) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">date_range</span>
@@ -1048,121 +986,84 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Comment se répartit votre activité sur l'année ?</label>
-                            <p class="form-hint">Indiquez le niveau d'activité pour chaque période</p>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Période</th>
-                                        <th>Niveau d'activité</th>
-                                        <th>% du CA annuel</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Janvier - Mars</td>
-                                        <td>
-                                            <select name="season_q1_level">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="very_low">Très faible</option>
-                                                <option value="low">Faible</option>
-                                                <option value="medium">Moyen</option>
-                                                <option value="high">Élevé</option>
-                                                <option value="very_high">Très élevé</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="number" name="season_q1_percent" placeholder="%" min="0" max="100"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Avril - Juin</td>
-                                        <td>
-                                            <select name="season_q2_level">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="very_low">Très faible</option>
-                                                <option value="low">Faible</option>
-                                                <option value="medium">Moyen</option>
-                                                <option value="high">Élevé</option>
-                                                <option value="very_high">Très élevé</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="number" name="season_q2_percent" placeholder="%" min="0" max="100"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Juillet - Septembre</td>
-                                        <td>
-                                            <select name="season_q3_level">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="very_low">Très faible</option>
-                                                <option value="low">Faible</option>
-                                                <option value="medium">Moyen</option>
-                                                <option value="high">Élevé</option>
-                                                <option value="very_high">Très élevé</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="number" name="season_q3_percent" placeholder="%" min="0" max="100"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Octobre - Décembre</td>
-                                        <td>
-                                            <select name="season_q4_level">
-                                                <option value="">Sélectionner...</option>
-                                                <option value="very_low">Très faible</option>
-                                                <option value="low">Faible</option>
-                                                <option value="medium">Moyen</option>
-                                                <option value="high">Élevé</option>
-                                                <option value="very_high">Très élevé</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="number" name="season_q4_percent" placeholder="%" min="0" max="100"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <label class="form-label">Niveau d'activité par trimestre</label>
+                            <div class="form-grid-4">
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">Jan-Mars</label>
+                                    <select class="form-select" name="season_q1_level">
+                                        <option value="">Sélectionner...</option>
+                                        <option value="very_low">Très faible</option>
+                                        <option value="low">Faible</option>
+                                        <option value="medium">Moyen</option>
+                                        <option value="high">Élevé</option>
+                                        <option value="very_high">Très élevé</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">Avr-Juin</label>
+                                    <select class="form-select" name="season_q2_level">
+                                        <option value="">Sélectionner...</option>
+                                        <option value="very_low">Très faible</option>
+                                        <option value="low">Faible</option>
+                                        <option value="medium">Moyen</option>
+                                        <option value="high">Élevé</option>
+                                        <option value="very_high">Très élevé</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">Jul-Sept</label>
+                                    <select class="form-select" name="season_q3_level">
+                                        <option value="">Sélectionner...</option>
+                                        <option value="very_low">Très faible</option>
+                                        <option value="low">Faible</option>
+                                        <option value="medium">Moyen</option>
+                                        <option value="high">Élevé</option>
+                                        <option value="very_high">Très élevé</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-weight: 400; font-size: 14px;">Oct-Déc</label>
+                                    <select class="form-select" name="season_q4_level">
+                                        <option value="">Sélectionner...</option>
+                                        <option value="very_low">Très faible</option>
+                                        <option value="low">Faible</option>
+                                        <option value="medium">Moyen</option>
+                                        <option value="high">Élevé</option>
+                                        <option value="very_high">Très élevé</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Section 2: Customer Data -->
+            <!-- Section 2: Customer Data (Simplified) -->
             <section class="form-section" id="section-2">
                 <div class="section-header secondary">
                     <div class="section-icon">
                         <span class="material-icons">groups</span>
                     </div>
                     <div class="section-title">
-                        <h2>Partie B : Données Clients</h2>
-                        <p>Comprendre votre base client et leur comportement</p>
+                        <h2>Section 2 : Vos Clients</h2>
+                        <p>Comprendre votre base client</p>
                     </div>
                 </div>
 
                 <div class="section-body">
-                    <!-- Customer Volume -->
+                    <!-- Customer Volume (Simplified) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">people</span>
-                            Volume et Évolution
+                            Volume et Valeur
                         </div>
 
-                        <div class="form-grid-2">
+                        <div class="form-grid-3">
                             <div class="form-group">
-                                <label class="form-label">Nombre de clients servis en 2025</label>
+                                <label class="form-label">Nombre de clients en 2025</label>
                                 <input type="number" class="form-input" name="customers_2025" placeholder="Ex: 500">
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Évolution par rapport à 2024</label>
-                                <select class="form-select" name="customer_growth">
-                                    <option value="">Sélectionner...</option>
-                                    <option value="strong_growth">Forte croissance (+20% ou plus)</option>
-                                    <option value="growth">Croissance (+5% à +20%)</option>
-                                    <option value="stable">Stable (-5% à +5%)</option>
-                                    <option value="decline">Baisse (-5% à -20%)</option>
-                                    <option value="strong_decline">Forte baisse (-20% ou plus)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-grid-2">
                             <div class="form-group">
                                 <label class="form-label">Panier moyen par client</label>
                                 <div class="input-with-unit">
@@ -1181,7 +1082,7 @@
                         </div>
                     </div>
 
-                    <!-- Customer Demographics -->
+                    <!-- Customer Demographics (Simplified) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">diversity_3</span>
@@ -1190,7 +1091,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Répartition par origine</label>
-                            <p class="form-hint">Pourcentages approximatifs</p>
+                            <p class="form-hint">Pourcentages approximatifs (total = 100%)</p>
                             <div class="form-grid-3">
                                 <div class="form-group">
                                     <label class="form-label" style="font-weight: 400; font-size: 14px;">Tunisiens</label>
@@ -1238,7 +1139,7 @@
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="group_corporate" name="customer_types" value="corporate">
-                                    <label for="group_corporate">Entreprises/Team building</label>
+                                    <label for="group_corporate">Entreprises</label>
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="group_schools" name="customer_types" value="schools">
@@ -1246,142 +1147,28 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Tranche d'âge dominante</label>
-                            <select class="form-select" name="age_group">
-                                <option value="">Sélectionner...</option>
-                                <option value="18-25">18-25 ans</option>
-                                <option value="26-35">26-35 ans</option>
-                                <option value="36-45">36-45 ans</option>
-                                <option value="46-55">46-55 ans</option>
-                                <option value="55+">55 ans et plus</option>
-                                <option value="mixed">Très varié</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Booking Behavior -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">book_online</span>
-                            Comportement de Réservation
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Principaux canaux de réservation</label>
-                            <p class="form-hint">Comment les clients vous trouvent et réservent-ils ?</p>
-                            <div class="checkbox-group checkbox-inline">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_direct" name="booking_channels" value="direct">
-                                    <label for="channel_direct">Téléphone/WhatsApp direct</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_website" name="booking_channels" value="website">
-                                    <label for="channel_website">Site web</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_social" name="booking_channels" value="social">
-                                    <label for="channel_social">Réseaux sociaux</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_agencies" name="booking_channels" value="agencies">
-                                    <label for="channel_agencies">Agences de voyage</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_platforms" name="booking_channels" value="platforms">
-                                    <label for="channel_platforms">Plateformes en ligne (Airbnb, etc.)</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="channel_referral" name="booking_channels" value="referral">
-                                    <label for="channel_referral">Bouche-à-oreille</label>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Customer Satisfaction -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">sentiment_satisfied</span>
-                            Satisfaction Client
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Note moyenne sur les plateformes d'avis</label>
-                            <p class="form-hint">Google, TripAdvisor, Facebook, etc.</p>
-                            <div class="rating-scale">
-                                <div class="rating-option">
-                                    <input type="radio" id="rating_1" name="avg_rating" value="1">
-                                    <label for="rating_1">
-                                        <span class="rating-number">1</span>
-                                        <span class="rating-label">Très faible</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="rating_2" name="avg_rating" value="2">
-                                    <label for="rating_2">
-                                        <span class="rating-number">2</span>
-                                        <span class="rating-label">Faible</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="rating_3" name="avg_rating" value="3">
-                                    <label for="rating_3">
-                                        <span class="rating-number">3</span>
-                                        <span class="rating-label">Moyen</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="rating_4" name="avg_rating" value="4">
-                                    <label for="rating_4">
-                                        <span class="rating-number">4</span>
-                                        <span class="rating-label">Bon</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="rating_5" name="avg_rating" value="5">
-                                    <label for="rating_5">
-                                        <span class="rating-number">5</span>
-                                        <span class="rating-label">Excellent</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Ce que les clients apprécient le plus</label>
-                            <textarea class="form-textarea" name="customer_likes" placeholder="Quels sont les retours positifs les plus fréquents ?"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Plaintes ou suggestions récurrentes</label>
-                            <textarea class="form-textarea" name="customer_complaints" placeholder="Quels sont les points d'amélioration mentionnés par les clients ?"></textarea>
-                        </div>
-
                     </div>
                 </div>
             </section>
 
-            <!-- Section 3: Operations Data -->
+            <!-- Section 3: Capacity & Team (Simplified) -->
             <section class="form-section" id="section-3">
                 <div class="section-header accent">
                     <div class="section-icon">
                         <span class="material-icons">settings</span>
                     </div>
                     <div class="section-title">
-                        <h2>Partie C : Données Opérationnelles</h2>
-                        <p>Capacité, ressources et fonctionnement quotidien</p>
+                        <h2>Section 3 : Capacité & Équipe</h2>
+                        <p>Vos ressources et contraintes</p>
                     </div>
                 </div>
 
                 <div class="section-body">
-                    <!-- Capacity -->
+                    <!-- Capacity (Simplified) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">speed</span>
-                            Capacité et Utilisation
+                            Capacité
                         </div>
 
                         <div class="form-grid-2">
@@ -1418,7 +1205,7 @@
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="limit_permits" name="capacity_limits" value="permits">
-                                    <label for="limit_permits">Autorisations/Permis</label>
+                                    <label for="limit_permits">Autorisations</label>
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="limit_demand" name="capacity_limits" value="demand">
@@ -1426,37 +1213,32 @@
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="limit_time" name="capacity_limits" value="time">
-                                    <label for="limit_time">Temps personnel (gestion)</label>
+                                    <label for="limit_time">Temps personnel</label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Team -->
+                    <!-- Team (Simplified) -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">badge</span>
-                            Équipe et Ressources Humaines
+                            Équipe
                         </div>
 
                         <div class="form-grid-3">
                             <div class="form-group">
-                                <label class="form-label">Employés temps plein</label>
+                                <label class="form-label">Temps plein</label>
                                 <input type="number" class="form-input" name="staff_fulltime" placeholder="Ex: 2">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Employés temps partiel</label>
+                                <label class="form-label">Temps partiel</label>
                                 <input type="number" class="form-input" name="staff_parttime" placeholder="Ex: 3">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Saisonniers</label>
                                 <input type="number" class="form-input" name="staff_seasonal" placeholder="Ex: 5">
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Rôles clés dans l'équipe</label>
-                            <textarea class="form-textarea" name="team_roles" placeholder="Décrivez les principaux rôles (ex: guides, chauffeurs, accueil, maintenance, marketing...)"></textarea>
                         </div>
 
                         <div class="form-group">
@@ -1480,279 +1262,28 @@
                                 </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="outsource_marketing" name="outsourced" value="marketing">
-                                    <label for="outsource_marketing">Marketing digital</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="outsource_maintenance" name="outsourced" value="maintenance">
-                                    <label for="outsource_maintenance">Maintenance équipement</label>
+                                    <label for="outsource_marketing">Marketing</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Equipment -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">inventory_2</span>
-                            Équipement et Actifs
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Inventaire des véhicules</label>
-                            <textarea class="form-textarea" name="vehicles_inventory" placeholder="Listez vos véhicules (type, nombre, état, âge...)"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Équipement de camping</label>
-                            <textarea class="form-textarea" name="camping_equipment" placeholder="Listez votre équipement principal (tentes, sacs de couchage, matériel cuisine, etc.)"></textarea>
-                        </div>
-
-                    </div>
-
-                    <!-- Offerings -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">map</span>
-                            Destinations et Offres
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Destinations/Circuits actuels</label>
-                            <textarea class="form-textarea" name="current_destinations" placeholder="Listez vos principales destinations et circuits (ex: Sahara, Cap Bon, Kroumirie, etc.)"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Quelle est votre offre la plus populaire ?</label>
-                            <input type="text" class="form-input" name="top_offering" placeholder="Ex: Circuit 3 jours Sahara">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Quelle est votre offre la plus rentable ?</label>
-                            <input type="text" class="form-input" name="most_profitable" placeholder="Ex: Expérience privée sur mesure">
-                        </div>
-
-                    </div>
                 </div>
             </section>
 
-            <!-- Section 4: Marketing & Sales -->
+            <!-- Section 4: Vision (Simplified) -->
             <section class="form-section" id="section-4">
-                <div class="section-header success">
-                    <div class="section-icon">
-                        <span class="material-icons">campaign</span>
-                    </div>
-                    <div class="section-title">
-                        <h2>Partie D : Marketing et Ventes</h2>
-                        <p>Présence digitale et acquisition client</p>
-                    </div>
-                </div>
-
-                <div class="section-body">
-                    <!-- Digital Presence -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">language</span>
-                            Présence Digitale
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Site web</label>
-                            <input type="url" class="form-input" name="website_url" placeholder="https://www.tunisiancampers.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Réseaux sociaux actifs</label>
-                            <p class="form-hint">Sélectionnez les plateformes où vous êtes présent</p>
-                            <div class="checkbox-group checkbox-inline">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_facebook" name="social_media" value="facebook">
-                                    <label for="social_facebook">Facebook</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_instagram" name="social_media" value="instagram">
-                                    <label for="social_instagram">Instagram</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_tiktok" name="social_media" value="tiktok">
-                                    <label for="social_tiktok">TikTok</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_youtube" name="social_media" value="youtube">
-                                    <label for="social_youtube">YouTube</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_linkedin" name="social_media" value="linkedin">
-                                    <label for="social_linkedin">LinkedIn</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social_other" name="social_media" value="other">
-                                    <label for="social_other">Autres</label>
-                                </div>
-                            </div>
-                            <div class="form-group" id="social_other_container" style="display: none; margin-top: var(--spacing-3);">
-                                <input type="text" class="form-input" id="social_other_text" name="social_media_other" placeholder="Ex: Twitter, Pinterest, Snapchat...">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Marketing Activities -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">ads_click</span>
-                            Activités Marketing
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Budget marketing annuel</label>
-                            <div class="input-with-unit">
-                                <input type="number" class="form-input" name="marketing_budget" placeholder="Ex: 5000">
-                                <span class="input-unit">TND/an</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Activités marketing actuelles</label>
-                            <div class="checkbox-group checkbox-inline">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_content" name="marketing_activities" value="content">
-                                    <label for="mkt_content">Contenu (photos/vidéos)</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_ads" name="marketing_activities" value="ads">
-                                    <label for="mkt_ads">Publicité payante</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_influencers" name="marketing_activities" value="influencers">
-                                    <label for="mkt_influencers">Influenceurs</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_email" name="marketing_activities" value="email">
-                                    <label for="mkt_email">Email marketing</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_events" name="marketing_activities" value="events">
-                                    <label for="mkt_events">Événements/Salons</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_pr" name="marketing_activities" value="pr">
-                                    <label for="mkt_pr">Relations presse</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_partnerships" name="marketing_activities" value="partnerships">
-                                    <label for="mkt_partnerships">Partenariats</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="mkt_none" name="marketing_activities" value="none">
-                                    <label for="mkt_none">Aucune actuellement</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Canal d'acquisition le plus efficace</label>
-                            <input type="text" class="form-input" name="best_channel" placeholder="Ex: Bouche-à-oreille, Instagram, etc.">
-                        </div>
-                    </div>
-
-                    <!-- Competitive Position -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">leaderboard</span>
-                            Position Concurrentielle
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Principaux concurrents en Tunisie</label>
-                            <textarea class="form-textarea" name="competitors" placeholder="Listez vos principaux concurrents directs (autres opérateurs de camping/aventure)"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Ce qui vous différencie de la concurrence</label>
-                            <textarea class="form-textarea" name="differentiators" placeholder="Quels sont vos avantages compétitifs uniques ?"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Comment vous positionnez-vous en termes de prix ?</label>
-                            <div class="rating-scale">
-                                <div class="rating-option">
-                                    <input type="radio" id="price_1" name="price_position" value="budget">
-                                    <label for="price_1">
-                                        <span class="rating-number">$</span>
-                                        <span class="rating-label">Budget</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="price_2" name="price_position" value="economy">
-                                    <label for="price_2">
-                                        <span class="rating-number">$$</span>
-                                        <span class="rating-label">Économique</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="price_3" name="price_position" value="mid">
-                                    <label for="price_3">
-                                        <span class="rating-number">$$$</span>
-                                        <span class="rating-label">Milieu de gamme</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="price_4" name="price_position" value="premium">
-                                    <label for="price_4">
-                                        <span class="rating-number">$$$$</span>
-                                        <span class="rating-label">Premium</span>
-                                    </label>
-                                </div>
-                                <div class="rating-option">
-                                    <input type="radio" id="price_5" name="price_position" value="luxury">
-                                    <label for="price_5">
-                                        <span class="rating-number">$$$$$</span>
-                                        <span class="rating-label">Luxe</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section 5: Vision & Strategy -->
-            <section class="form-section" id="section-5">
                 <div class="section-header warning">
                     <div class="section-icon">
                         <span class="material-icons">emoji_objects</span>
                     </div>
                     <div class="section-title">
-                        <h2>Partie E : Vision et Contexte Stratégique</h2>
-                        <p>Votre perspective en tant que fondateur</p>
+                        <h2>Section 4 : Votre Vision</h2>
+                        <p>Vos défis et aspirations</p>
                     </div>
                 </div>
 
                 <div class="section-body">
-                    <!-- Origin Story -->
-                    <div class="subsection">
-                        <div class="subsection-title">
-                            <span class="material-icons">auto_stories</span>
-                            L'Histoire de Tunisian Campers
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Année de création</label>
-                            <input type="number" class="form-input" name="founding_year" placeholder="Ex: 2018" min="1990" max="2025">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Pourquoi avez-vous créé Tunisian Campers ?</label>
-                            <p class="form-hint">Qu'est-ce qui vous a motivé à lancer cette entreprise ?</p>
-                            <textarea class="form-textarea" name="founding_story" placeholder="Racontez l'origine de votre projet..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Quels sont vos plus grands accomplissements jusqu'ici ?</label>
-                            <textarea class="form-textarea" name="achievements" placeholder="De quoi êtes-vous le plus fier ?"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Current Challenges -->
+                    <!-- Challenges -->
                     <div class="subsection">
                         <div class="subsection-title">
                             <span class="material-icons">report_problem</span>
@@ -1768,11 +1299,6 @@
                             <label class="form-label">Qu'est-ce qui vous empêche de dormir la nuit ?</label>
                             <p class="form-hint">Votre plus grande préoccupation business</p>
                             <textarea class="form-textarea" name="biggest_worry" placeholder="Soyez honnête - qu'est-ce qui vous inquiète le plus ?"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Qu'avez-vous essayé qui n'a pas fonctionné ?</label>
-                            <textarea class="form-textarea" name="failed_attempts" placeholder="Initiatives, projets ou investissements qui n'ont pas donné les résultats espérés..."></textarea>
                         </div>
                     </div>
 
@@ -1790,11 +1316,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Quelles opportunités voyez-vous mais n'avez pas encore exploitées ?</label>
-                            <textarea class="form-textarea" name="unexplored_opportunities" placeholder="Idées, marchés ou offres que vous aimeriez développer..."></textarea>
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label">Quel rôle voulez-vous jouer dans l'entreprise à l'avenir ?</label>
                             <select class="form-select" name="future_role">
                                 <option value="">Sélectionner...</option>
@@ -1806,49 +1327,79 @@
                             </select>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Section 6: Document Upload -->
-            <section class="form-section" id="section-6">
-                <div class="section-header">
+            <!-- Section 5: Documents (Optional) -->
+            <section class="form-section" id="section-5">
+                <div class="section-header accent">
                     <div class="section-icon">
-                        <span class="material-icons">upload_file</span>
+                        <span class="material-icons">folder_open</span>
                     </div>
                     <div class="section-title">
-                        <h2>Partie F : Documents à Fournir</h2>
-                        <p>Partagez les documents existants qui nous aideront</p>
+                        <h2>Section 5 : Documents (Optionnel)</h2>
+                        <p>Partagez vos documents pour enrichir notre analyse</p>
                     </div>
                 </div>
 
                 <div class="section-body">
-                    <div class="form-group">
-                        <label class="form-label">Documents financiers</label>
-                        <p class="form-hint">Bilans, compte de résultat, rapports comptables (si disponibles)</p>
-                        <div class="file-upload" onclick="document.getElementById('file_financial').click()">
-                            <span class="material-icons">cloud_upload</span>
-                            <p>Cliquez pour télécharger ou glissez vos fichiers ici</p>
-                            <span>PDF, Excel, images - Max 10MB par fichier</span>
-                            <input type="file" id="file_financial" name="file_financial" multiple accept=".pdf,.xlsx,.xls,.jpg,.png">
+                    <div class="subsection">
+                        <div class="subsection-title">
+                            <span class="material-icons">attach_file</span>
+                            Documents Utiles
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Autres documents pertinents</label>
-                        <p class="form-hint">Business plan, études de marché, contrats partenaires, etc.</p>
-                        <div class="file-upload" onclick="document.getElementById('file_other').click()">
-                            <span class="material-icons">cloud_upload</span>
-                            <p>Cliquez pour télécharger ou glissez vos fichiers ici</p>
-                            <span>Tous formats acceptés - Max 10MB par fichier</span>
-                            <input type="file" id="file_other" name="file_other" multiple>
+                        <p class="form-hint" style="margin-bottom: 16px;">
+                            Si vous disposez de documents existants, ils nous aideront à mieux comprendre votre situation.
+                            <strong>Cette section est entièrement optionnelle.</strong>
+                        </p>
+
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="file-upload-content">
+                                <span class="material-icons file-upload-icon">cloud_upload</span>
+                                <p class="file-upload-text">Glissez vos fichiers ici ou cliquez pour parcourir</p>
+                                <p class="file-upload-hint">PDF, Excel, Word, PowerPoint (max 10 Mo par fichier)</p>
+                                <input type="file" id="fileInput" name="documents" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv" class="file-input-hidden">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Liens utiles</label>
-                        <p class="form-hint">Partagez des liens vers des ressources en ligne (Google Drive, articles, etc.)</p>
-                        <textarea class="form-textarea" name="useful_links" placeholder="Collez vos liens ici, un par ligne..."></textarea>
+                        <div class="file-list" id="fileList"></div>
+
+                        <div class="document-suggestions">
+                            <p class="form-label" style="margin-bottom: 12px;">Documents suggérés (si disponibles) :</p>
+                            <div class="suggestion-grid">
+                                <div class="suggestion-item">
+                                    <span class="material-icons">description</span>
+                                    <span>Bilans financiers</span>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span class="material-icons">table_chart</span>
+                                    <span>Données clients (Excel)</span>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span class="material-icons">analytics</span>
+                                    <span>Rapports de performance</span>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span class="material-icons">business_center</span>
+                                    <span>Business plan existant</span>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span class="material-icons">slideshow</span>
+                                    <span>Présentations internes</span>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span class="material-icons">receipt_long</span>
+                                    <span>Tarifs / Grilles prix</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 24px;">
+                            <label class="form-label">Notes sur les documents</label>
+                            <p class="form-hint">Décrivez brièvement les documents que vous joignez</p>
+                            <textarea class="form-textarea" name="documents_notes" placeholder="Ex: J'ai joint le bilan 2024, les stats clients de notre CRM, et une présentation faite aux investisseurs..."></textarea>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1856,7 +1407,7 @@
             <!-- Submit Section -->
             <div class="submit-section">
                 <h2>Prêt à soumettre ?</h2>
-                <p>Vérifiez vos réponses avant de soumettre. Vous pouvez revenir modifier vos réponses à tout moment avant notre réunion.</p>
+                <p>Vérifiez vos réponses avant de soumettre. Vos données sont sauvegardées automatiquement.</p>
                 <button type="submit" class="btn-submit">
                     <span class="material-icons">send</span>
                     Soumettre le questionnaire
@@ -1991,98 +1542,124 @@
         });
 
         // ══════════════════════════════════════════════════════════
-        // FORM SUBMISSION - FORMSPREE + GOOGLE DRIVE FILE UPLOAD
+        // FILE UPLOAD HANDLING
+        // ══════════════════════════════════════════════════════════
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        let uploadedFiles = [];
+
+        if (fileUploadArea && fileInput) {
+            // Click to upload
+            fileUploadArea.addEventListener('click', () => fileInput.click());
+
+            // Drag and drop events
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.classList.remove('dragover');
+            });
+
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function handleFiles(files) {
+            const maxSize = 10 * 1024 * 1024; // 10 MB
+            const allowedTypes = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'text/csv'
+            ];
+
+            Array.from(files).forEach(file => {
+                // Check file size
+                if (file.size > maxSize) {
+                    alert(`Le fichier "${file.name}" dépasse la limite de 10 Mo.`);
+                    return;
+                }
+
+                // Check if already added
+                if (uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    return;
+                }
+
+                uploadedFiles.push(file);
+            });
+
+            renderFileList();
+        }
+
+        function renderFileList() {
+            if (!fileList) return;
+
+            if (uploadedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
+            }
+
+            fileList.innerHTML = uploadedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span class="material-icons">${getFileIcon(file.name)}</span>
+                    <div class="file-item-info">
+                        <div class="file-item-name">${file.name}</div>
+                        <div class="file-item-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button type="button" class="file-item-remove" onclick="removeFile(${index})">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'pdf': 'picture_as_pdf',
+                'doc': 'description',
+                'docx': 'description',
+                'xls': 'table_chart',
+                'xlsx': 'table_chart',
+                'csv': 'table_chart',
+                'ppt': 'slideshow',
+                'pptx': 'slideshow'
+            };
+            return icons[ext] || 'insert_drive_file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' o';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // FORM SUBMISSION - FORMSPREE
         // ══════════════════════════════════════════════════════════
 
         // Formspree form ID for text data submission
         const FORMSPREE_ID = 'xaqqnpkl';
-
-        // Google Apps Script Web App URL for file uploads
-        // INSTRUCTIONS: Replace with your deployed Web App URL from Google Apps Script
-        // See google-apps-script-file-upload.js for deployment instructions
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxHAtHTnV4gCAtJICM0FBjcSpnE3ECVQpb9udMSFZf2Cgpfr4324Hs1J7D5NUYWOiDQ/exec';
-
-        /**
-         * Convert a File object to base64 string
-         */
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    // Extract base64 data (remove "data:*/*;base64," prefix)
-                    const base64 = reader.result.split(',')[1];
-                    resolve({
-                        name: file.name,
-                        type: file.type || 'application/octet-stream',
-                        content: base64,
-                        size: file.size
-                    });
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        /**
-         * Collect all files from file inputs
-         */
-        function collectAllFiles() {
-            const files = [];
-            const fileInputs = form.querySelectorAll('input[type="file"]');
-            fileInputs.forEach(input => {
-                if (input.files && input.files.length > 0) {
-                    Array.from(input.files).forEach(file => {
-                        files.push(file);
-                    });
-                }
-            });
-            return files;
-        }
-
-        /**
-         * Upload files to Google Drive via Apps Script
-         */
-        async function uploadFilesToGoogleDrive(files, updateStatus) {
-            if (files.length === 0) {
-                return { success: true, message: 'Aucun fichier à télécharger', files: [] };
-            }
-
-            // Check if Google Script URL is configured
-            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
-                console.warn('Google Apps Script URL not configured. Files will not be uploaded.');
-                return {
-                    success: false,
-                    message: 'Configuration requise: URL Google Apps Script non configurée',
-                    files: []
-                };
-            }
-
-            updateStatus('Préparation des fichiers...');
-
-            // Convert all files to base64
-            const fileDataPromises = files.map(file => fileToBase64(file));
-            const fileDataArray = await Promise.all(fileDataPromises);
-
-            updateStatus(`Téléchargement de ${files.length} fichier(s) vers Google Drive...`);
-
-            // Send to Google Apps Script
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Required for Google Apps Script
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ files: fileDataArray })
-            });
-
-            // Note: With no-cors mode, we can't read the response
-            // We assume success if no error is thrown
-            return {
-                success: true,
-                message: `${files.length} fichier(s) envoyé(s) à Google Drive`,
-                files: fileDataArray.map(f => ({ name: f.name, size: f.size }))
-            };
-        }
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2097,13 +1674,10 @@
             updateStatus('Envoi en cours...');
             submitBtn.disabled = true;
 
-            // Collect form data (excluding file inputs)
+            // Collect form data
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
-                // Skip file inputs - they're handled separately
-                if (value instanceof File) return;
-
                 if (data[key]) {
                     if (Array.isArray(data[key])) {
                         data[key].push(value);
@@ -2117,31 +1691,10 @@
 
             // Add metadata
             data._submittedAt = new Date().toISOString();
-            data._formName = 'Questionnaire Diagnostic - Tunisian Campers';
+            data._formName = 'Questionnaire Diagnostic Simplifié - Tunisian Campers';
 
             try {
-                // Step 1: Upload files to Google Drive
-                const files = collectAllFiles();
-                let fileUploadResult = { success: true, files: [] };
-
-                if (files.length > 0) {
-                    try {
-                        fileUploadResult = await uploadFilesToGoogleDrive(files, updateStatus);
-                        if (fileUploadResult.success && fileUploadResult.files.length > 0) {
-                            // Add file info to form data
-                            data._uploadedFiles = fileUploadResult.files.map(f => f.name).join(', ');
-                            data._uploadedFilesCount = fileUploadResult.files.length;
-                        }
-                    } catch (fileError) {
-                        console.error('File upload error:', fileError);
-                        // Continue with form submission even if file upload fails
-                        data._fileUploadError = fileError.message;
-                    }
-                }
-
-                // Step 2: Submit form data to Formspree
-                updateStatus('Envoi du formulaire...');
-
+                // Submit form data to Formspree
                 const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
                     method: 'POST',
                     headers: {
@@ -2155,14 +1708,7 @@
                     // Clear saved data after successful submission
                     localStorage.removeItem(STORAGE_KEY);
 
-                    // Build success message
-                    let successMessage = 'Merci ! Votre questionnaire a été soumis avec succès.';
-                    if (fileUploadResult.files && fileUploadResult.files.length > 0) {
-                        successMessage += `\n\n${fileUploadResult.files.length} fichier(s) téléchargé(s) vers Google Drive.`;
-                    }
-                    successMessage += '\n\nNous analyserons vos réponses avant notre première réunion.';
-
-                    alert(successMessage);
+                    alert('Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.');
 
                     submitBtn.innerHTML = '<span class="material-icons">check</span> Envoyé !';
                     submitBtn.style.background = 'linear-gradient(135deg, var(--success) 0%, #357D23 100%)';
@@ -2175,54 +1721,6 @@
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
-        });
-
-        // ══════════════════════════════════════════════════════════
-        // SOCIAL MEDIA "AUTRES" TOGGLE
-        // ══════════════════════════════════════════════════════════
-        const socialOtherCheckbox = document.getElementById('social_other');
-        const socialOtherContainer = document.getElementById('social_other_container');
-
-        socialOtherCheckbox.addEventListener('change', function() {
-            socialOtherContainer.style.display = this.checked ? 'block' : 'none';
-            if (!this.checked) {
-                document.getElementById('social_other_text').value = '';
-            }
-        });
-
-        // ══════════════════════════════════════════════════════════
-        // FILE UPLOAD VISUAL FEEDBACK
-        // ══════════════════════════════════════════════════════════
-        document.querySelectorAll('.file-upload').forEach(upload => {
-            const input = upload.querySelector('input[type="file"]');
-
-            input.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    const fileNames = Array.from(this.files).map(f => f.name).join(', ');
-                    upload.querySelector('p').textContent = `${this.files.length} fichier(s) sélectionné(s): ${fileNames}`;
-                    upload.style.borderColor = 'var(--primary)';
-                    upload.style.background = 'var(--primary-pale)';
-                }
-            });
-
-            // Drag and drop
-            upload.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--primary)';
-                this.style.background = 'var(--primary-pale)';
-            });
-
-            upload.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '';
-                this.style.background = '';
-            });
-
-            upload.addEventListener('drop', function(e) {
-                e.preventDefault();
-                input.files = e.dataTransfer.files;
-                input.dispatchEvent(new Event('change'));
-            });
         });
     </script>
 </body>

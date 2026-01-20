@@ -439,6 +439,47 @@
             margin-top: 2px;
         }
 
+        /* Motivation Quote */
+        .motivation-quote {
+            margin-top: var(--spacing-5);
+            padding: var(--spacing-4);
+            background: linear-gradient(135deg, var(--primary-pale) 0%, var(--white) 100%);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+            text-align: center;
+            position: relative;
+        }
+
+        .motivation-quote .quote-icon {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--white);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .motivation-quote p {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--primary-dark);
+            font-style: italic;
+            margin: var(--spacing-2) 0 var(--spacing-1);
+        }
+
+        .motivation-quote .quote-author {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
         /* ══════════════════════════════════════════════════════════
            TIMELINE
            ══════════════════════════════════════════════════════════ */
@@ -898,9 +939,9 @@
                 <span class="material-icons">assignment</span>
             </div>
             <div class="action-banner-content">
-                <div class="action-banner-title" id="bannerTitle">Action requise avant le 21 janvier</div>
+                <div class="action-banner-title" id="bannerTitle">10-15 minutes pour démarrer l'aventure</div>
                 <div class="action-banner-text" id="bannerText">
-                    Merci de compléter le questionnaire diagnostic pour préparer notre première réunion.
+                    Votre vision mérite une stratégie à sa hauteur. Un questionnaire simple pour poser les bases des 10 prochaines années.
                 </div>
             </div>
             <a href="questionnaire-diagnostic.html" class="action-banner-btn" id="bannerBtn">
@@ -918,7 +959,7 @@
                         <div class="phase-number">1</div>
                         <div class="phase-info">
                             <h2>Découvrir & Diagnostiquer</h2>
-                            <p>Analyse approfondie de la situation actuelle</p>
+                            <p>Ensemble, posons les fondations de votre prochaine décennie</p>
                         </div>
                     </div>
 
@@ -955,6 +996,12 @@
                             </li>
                         </ul>
                     </div>
+
+                    <div class="motivation-quote">
+                        <span class="material-icons quote-icon">format_quote</span>
+                        <p>"Together matters"</p>
+                        <span class="quote-author">— Mohamed Temimi</span>
+                    </div>
                 </div>
             </div>
 
@@ -971,8 +1018,8 @@
                                 <span class="material-icons">radio_button_checked</span>
                             </div>
                             <div class="timeline-content">
-                                <div class="timeline-date">17 - 19 Janvier 2026</div>
-                                <div class="timeline-title">Préparation : Questionnaire diagnostic</div>
+                                <div class="timeline-date">17 - 20 Janvier 2026</div>
+                                <div class="timeline-title">Préparation : Questionnaire rapide (10-15 min)</div>
                             </div>
                         </div>
 
@@ -1029,7 +1076,7 @@
                         <span class="material-icons">checklist</span>
                         <h3 class="checklist-title">À faire avant la réunion</h3>
                     </div>
-                    <span class="checklist-progress" id="checklistProgress">0/3</span>
+                    <span class="checklist-progress" id="checklistProgress">0/2</span>
                 </div>
                 <div class="checklist-content">
                     <div class="checklist-item" id="task-intro" data-task="intro">
@@ -1051,22 +1098,13 @@
                         </div>
                         <div class="checklist-text">
                             <strong>Remplir le questionnaire</strong>
-                            <span>Données financières, clients, opérations</span>
+                            <span>10-15 min pour façonner les 10 prochaines années</span>
                             <a href="questionnaire-diagnostic.html" class="checklist-link">
-                                Accéder au questionnaire <span class="material-icons" style="font-size: 14px;">arrow_forward</span>
+                                Commencer <span class="material-icons" style="font-size: 14px;">arrow_forward</span>
                             </a>
                         </div>
                     </div>
 
-                    <div class="checklist-item" id="task-documents" data-task="documents">
-                        <div class="checklist-checkbox" onclick="toggleTask('documents')">
-                            <span class="material-icons">check</span>
-                        </div>
-                        <div class="checklist-text">
-                            <strong>Préparer les documents</strong>
-                            <span>Bilans, rapports, données clients si disponibles</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1150,8 +1188,7 @@
             }
             return {
                 intro: false,
-                questionnaire: false,
-                documents: false
+                questionnaire: false
             };
         }
 
@@ -1213,10 +1250,10 @@
 
             if (tasks.questionnaire || questionnaireComplete) {
                 banner.classList.add('completed');
-                bannerTitle.textContent = 'Questionnaire complété';
-                bannerText.textContent = 'Merci ! Vos réponses ont été enregistrées. Vous pouvez les modifier si nécessaire.';
+                bannerTitle.textContent = 'Prêt pour l\'aventure !';
+                bannerText.textContent = 'Parfait ! Vos réponses nous permettront de construire ensemble une stratégie à la hauteur de votre vision.';
                 bannerBtnIcon.textContent = 'visibility';
-                bannerBtnText.textContent = 'Voir mes réponses';
+                bannerBtnText.textContent = 'Revoir mes réponses';
 
                 // Unlock Phase 1 presentation
                 phase1Link.classList.remove('locked');
@@ -1230,8 +1267,8 @@
                     document.getElementById('task-questionnaire').classList.add('done');
                 }
             } else if (questionnaireStarted) {
-                bannerTitle.textContent = 'Questionnaire en cours';
-                bannerText.textContent = 'Vous avez commencé le questionnaire. Merci de le compléter avant le 21 janvier.';
+                bannerTitle.textContent = 'Vous y êtes presque !';
+                bannerText.textContent = 'Plus que quelques questions pour finaliser. On y va ensemble !';
                 bannerBtnIcon.textContent = 'edit_note';
                 bannerBtnText.textContent = 'Continuer';
             }
