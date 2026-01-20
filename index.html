@@ -1255,10 +1255,8 @@
                 bannerBtnIcon.textContent = 'visibility';
                 bannerBtnText.textContent = 'Revoir mes réponses';
 
-                // Unlock Phase 1 presentation
-                phase1Link.classList.remove('locked');
-                phase1Status.textContent = 'Réunion du 21 janvier - 15h00';
-                phase1Lock.style.display = 'none';
+                // Phase 1 presentation remains locked until manually enabled
+                // (link removed, status shows "Bientôt disponible")
 
                 // Auto-check questionnaire task
                 if (!tasks.questionnaire) {
