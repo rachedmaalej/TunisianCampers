@@ -1661,10 +1661,9 @@
         }
 
         // ══════════════════════════════════════════════════════════
-        // FORM SUBMISSION - EMAIL WITH ATTACHMENTS
+        // FORM SUBMISSION - FORMSPREE
         // ══════════════════════════════════════════════════════════
 
-        // Email configuration
         const EMAIL_TO = 'rached@datasurf.co';
         const FORMSPREE_ID = 'xaqqnpkl';
 
@@ -1681,37 +1680,45 @@
             updateStatus('Envoi en cours...');
             submitBtn.disabled = true;
 
-            // Create FormData with all form fields
+            // Collect form data as JSON (Formspree free tier doesn't support file attachments)
             const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                // Skip file inputs
+                if (key === 'documents') return;
+
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            });
 
             // Add metadata
-            formData.append('_submittedAt', new Date().toISOString());
-            formData.append('_formName', 'Questionnaire Diagnostic Simplifié - Tunisian Campers');
+            data._submittedAt = new Date().toISOString();
+            data._formName = 'Questionnaire Diagnostic Simplifié - Tunisian Campers';
 
-            // Add uploaded files to FormData
+            // Add file names if files were selected
             if (uploadedFiles.length > 0) {
-                // Clear any existing file input entries
-                formData.delete('documents');
-
-                // Add each file
-                uploadedFiles.forEach((file, index) => {
-                    formData.append('attachment', file, file.name);
-                });
-
-                // Add file list for reference
-                formData.append('_documentsUploaded', uploadedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', '));
+                data._documentsToSend = uploadedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', ');
+                data._documentsNote = 'RAPPEL: Les fichiers doivent être envoyés par email à ' + EMAIL_TO;
             }
 
             try {
                 updateStatus('Envoi du questionnaire...');
 
-                // Submit to Formspree with FormData (supports file attachments)
+                // Submit to Formspree as JSON
                 const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
                     method: 'POST',
-                    body: formData,
                     headers: {
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(data)
                 });
 
                 if (response.ok) {
@@ -1723,8 +1730,10 @@
 
                     // Show success message
                     let successMessage = 'Merci ! Votre questionnaire a été soumis avec succès.\n\nNous analyserons vos réponses avant notre première réunion.';
+
+                    // If files were selected, remind to send by email
                     if (uploadedFiles.length > 0) {
-                        successMessage += '\n\n✅ Vos ' + uploadedFiles.length + ' document(s) ont été envoyés.';
+                        successMessage += '\n\n📎 IMPORTANT: Vos ' + uploadedFiles.length + ' document(s) doivent être envoyés par email à:\n' + EMAIL_TO;
                     }
                     alert(successMessage);
 
