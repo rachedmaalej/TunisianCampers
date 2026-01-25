@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire Diagnostic Rapide | Tunisian Campers</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Noto+Sans+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* ══════════════════════════════════════════════════════════
+           CSS VARIABLES - Material Design 3 Tokens
+           ══════════════════════════════════════════════════════════ */
+        :root {
+            /* Primary Colors - Teal Theme */
+            --primary: #45998A;
+            --primary-light: #6DBBAA;
+            --primary-pale: #DAF3E0;
+            --primary-dark: #267675;
+
+            /* Secondary Colors */
+            --secondary: #4A8EBF;
+            --secondary-light: #8DC7DE;
+            --secondary-pale: #DBECF4;
+
+            /* Accent Colors */
+            --accent: #79409E;
+            --accent-light: #AF93C6;
+            --accent-pale: #F3E3FE;
+
+            /* Semantic Colors */
+            --success: #549F3A;
+            --warning: #F48E40;
+            --error: #E65655;
+
+            /* Neutrals */
+            --white: #FFFFFF;
+            --gray-50: #F8F9FA;
+            --gray-100: #E8E8E8;
+            --gray-200: #D1D1D1;
+            --gray-300: #A2A2A2;
+            --gray-400: #7E7E7E;
+            --gray-500: #5B5B5B;
+            --gray-900: #1C1B1F;
+
+            /* Typography */
+            --font-display: 'Noto Sans Display', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           BASE STYLES
+           ══════════════════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background-color: var(--gray-50);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           HEADER
+           ══════════════════════════════════════════════════════════ */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: var(--spacing-8) var(--spacing-6);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-2);
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--spacing-2) var(--spacing-4);
+            border-radius: var(--radius-xl);
+            font-size: 14px;
+            margin-top: var(--spacing-4);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           PROGRESS BAR
+           ══════════════════════════════════════════════════════════ */
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            padding: var(--spacing-4) var(--spacing-6);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-xl);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: var(--spacing-2);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           MAIN CONTENT
+           ══════════════════════════════════════════════════════════ */
+        .main-content {
+            max-width: 800px;
+            margin: var(--spacing-8) auto;
+            padding: 0 var(--spacing-6);
+        }
+
+        .intro-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-8);
+            margin-bottom: var(--spacing-8);
+            box-shadow: var(--shadow-md);
+        }
+
+        .intro-section h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-4);
+        }
+
+        .intro-section p {
+            color: var(--gray-500);
+            margin-bottom: var(--spacing-4);
+            line-height: 1.7;
+        }
+
+        .intro-section ul {
+            list-style: none;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .intro-section li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-3);
+        }
+
+        .intro-section li .material-icons {
+            color: var(--success);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .time-estimate {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            background: var(--primary-pale);
+            color: var(--primary-dark);
+            padding: var(--spacing-3) var(--spacing-4);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .save-controls {
+            margin-top: var(--spacing-6);
+            padding-top: var(--spacing-6);
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-4);
+        }
+
+        .save-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+
+        .btn-clear {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: var(--spacing-2) var(--spacing-4);
+            background: var(--white);
+            color: var(--gray-500);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-clear:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           FORM SECTIONS
+           ══════════════════════════════════════════════════════════ */
+        .form-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-8);
+            margin-bottom: var(--spacing-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            display: flex;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-8);
+            padding-bottom: var(--spacing-6);
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .section-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-pale), var(--primary-light));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-icon .material-icons {
+            font-size: 32px;
+            color: var(--primary-dark);
+        }
+
+        .section-title h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .section-title p {
+            color: var(--gray-500);
+            font-size: 15px;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           FORM ELEMENTS
+           ══════════════════════════════════════════════════════════ */
+        .form-group {
+            margin-bottom: var(--spacing-6);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-2);
+            font-size: 15px;
+        }
+
+        .form-hint {
+            display: block;
+            color: var(--gray-400);
+            font-size: 14px;
+            margin-top: var(--spacing-1);
+            margin-bottom: var(--spacing-3);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: var(--spacing-3) var(--spacing-4);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--gray-900);
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-pale);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+        }
+
+        .input-unit {
+            color: var(--gray-500);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           SUBMIT SECTION
+           ══════════════════════════════════════════════════════════ */
+        .submit-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-8);
+            margin-bottom: var(--spacing-8);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .submit-section h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-4);
+        }
+
+        .submit-section p {
+            color: var(--gray-500);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-4) var(--spacing-8);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-xl);
+            font-family: var(--font-body);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-submit .material-icons {
+            font-size: 24px;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           TOAST NOTIFICATION
+           ══════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: var(--spacing-5);
+            display: flex;
+            gap: var(--spacing-4);
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--error);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .toast.closing {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .toast-icon.error {
+            background: #FFEBEE;
+            color: var(--error);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           RESPONSIVE
+           ══════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header .subtitle {
+                font-size: 16px;
+            }
+
+            .main-content {
+                margin: var(--spacing-6) auto;
+                padding: 0 var(--spacing-4);
+            }
+
+            .form-section {
+                padding: var(--spacing-6);
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .save-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Questionnaire Diagnostic Rapide</h1>
+        <p class="subtitle">Préparer notre stratégie en 12 questions essentielles</p>
+        <div class="badge">
+            <span class="material-icons">bolt</span>
+            Version Rapide • 10 minutes
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">Question 0 sur 12</div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h2>Bienvenue Mohamed 👋</h2>
+            <p>Cette version simplifiée du questionnaire se concentre sur l'essentiel pour préparer notre première réunion stratégique. Vos réponses nous permettront de :</p>
+            <ul>
+                <li>
+                    <span class="material-icons">check_circle</span>
+                    <span>Comprendre rapidement votre situation actuelle</span>
+                </li>
+                <li>
+                    <span class="material-icons">check_circle</span>
+                    <span>Identifier vos aspirations pour les 10 prochaines années</span>
+                </li>
+                <li>
+                    <span class="material-icons">check_circle</span>
+                    <span>Cerner vos contraintes réelles (temps, budget)</span>
+                </li>
+            </ul>
+            <div class="time-estimate">
+                <span class="material-icons">schedule</span>
+                Temps estimé : 10 minutes maximum
+            </div>
+
+            <div class="save-controls">
+                <div id="save-indicator" class="save-indicator">
+                    <span class="material-icons" style="font-size: 16px;">cloud_done</span>
+                    Sauvegarde automatique activée
+                </div>
+                <button type="button" class="btn-clear" onclick="clearSavedData()">
+                    <span class="material-icons" style="font-size: 16px;">delete_outline</span>
+                    Effacer mes réponses
+                </button>
+            </div>
+        </div>
+
+        <form id="diagnostic-form">
+            <!-- SECTION 1: Current Situation (5 questions) -->
+            <section class="form-section" id="section-1">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <span class="material-icons">assessment</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Section 1 : Situation Actuelle</h2>
+                        <p>Comprendre où en est Tunisian Campers aujourd'hui</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">1. Chiffre d'affaires annuel (approximatif, dernière année complète)</label>
+                    <p class="form-hint">Donnez-nous une idée générale de votre CA en TND</p>
+                    <select class="form-select" name="revenue_range" required>
+                        <option value="">Sélectionner une tranche...</option>
+                        <option value="0-100k">Moins de 100 000 TND</option>
+                        <option value="100k-200k">100 000 - 200 000 TND</option>
+                        <option value="200k-300k">200 000 - 300 000 TND</option>
+                        <option value="300k-500k">300 000 - 500 000 TND</option>
+                        <option value="500k+">Plus de 500 000 TND</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">2. Qui sont vos 3 principaux types de clients ?</label>
+                    <p class="form-hint">Ex: Familles tunisiennes, jeunes couples expats, groupes d'entreprise...</p>
+                    <textarea class="form-textarea" name="customer_types" placeholder="Décrivez vos 3 types de clients principaux..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">3. Combien de personnes travaillent avec vous (incluant vous-même) ?</label>
+                    <p class="form-hint">Équipe permanente + saisonniers réguliers</p>
+                    <input type="number" class="form-input" name="team_size" placeholder="Ex: 7" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">4. Quel est votre plus gros blocage opérationnel aujourd'hui ?</label>
+                    <p class="form-hint">Ce qui vous ralentit le plus : réservations manuelles, manque d'équipement, process désorganisés...</p>
+                    <textarea class="form-textarea" name="biggest_bottleneck" placeholder="Décrivez votre principal point de friction..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">5. Comment qualifieriez-vous votre rentabilité actuelle ?</label>
+                    <select class="form-select" name="profitability_feeling" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="struggling">En difficulté (marges négatives ou très faibles)</option>
+                        <option value="tight">Juste équilibré (on couvre les coûts)</option>
+                        <option value="healthy">Saine (marges confortables de 30-50%)</option>
+                        <option value="excellent">Excellente (marges >50%)</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Aspirations (4 questions) -->
+            <section class="form-section" id="section-2">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <span class="material-icons">emoji_objects</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Section 2 : Aspirations</h2>
+                        <p>Votre vision pour les 10 prochaines années</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">6. Qu'est-ce qui vous frustre le PLUS dans votre business aujourd'hui ?</label>
+                    <p class="form-hint">Soyez franc : qu'est-ce qui vous empêche de dormir ou vous épuise le plus ?</p>
+                    <textarea class="form-textarea" name="biggest_frustration" placeholder="Ce qui me frustre le plus, c'est..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">7. Qu'est-ce qui vous EXCITE le plus pour les 10 prochaines années ?</label>
+                    <p class="form-hint">Quel aspect du futur de Tunisian Campers vous donne le plus d'énergie ?</p>
+                    <textarea class="form-textarea" name="biggest_excitement" placeholder="Ce qui m'excite le plus, c'est..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">8. Si vous ne pouviez vous concentrer que sur UNE chose, quelle transformation aurait le plus d'impact sur Tunisian Campers ?</label>
+                    <p class="form-hint">L'action unique qui changerait tout : digitalisation, nouveau service, nouveau marché, équipe...</p>
+                    <textarea class="form-textarea" name="one_thing_transformation" placeholder="La transformation qui changerait tout serait..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">9. En une phrase : à quoi ressemble le succès en 2036 ?</label>
+                    <p class="form-hint">Décrivez votre vision : que devient Tunisian Campers dans 10 ans ? Quelle est votre fierté ?</p>
+                    <textarea class="form-textarea" name="vision_2036" placeholder="En 2036, Tunisian Campers est..." required></textarea>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Constraints (3 questions) -->
+            <section class="form-section" id="section-3">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <span class="material-icons">settings</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Section 3 : Contraintes Réelles</h2>
+                        <p>Comprendre vos ressources disponibles</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">10. Combien de temps pouvez-vous consacrer au travail stratégique (hors opérations) par semaine ?</label>
+                    <p class="form-hint">Soyez réaliste : temps pour réfléchir, planifier, développer la stratégie</p>
+                    <select class="form-select" name="strategic_time_capacity" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="0-5h">0-5 heures/semaine (très limité)</option>
+                        <option value="5-10h">5-10 heures/semaine (quelques matinées)</option>
+                        <option value="10-15h">10-15 heures/semaine (2-3 jours)</option>
+                        <option value="15-20h">15-20 heures/semaine (mi-temps)</option>
+                        <option value="20h+">Plus de 20 heures/semaine (majoritaire)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">11. Quelle est votre capacité d'investissement pour la croissance (Année 1) ?</label>
+                    <p class="form-hint">Budget disponible pour équipement, marketing, recrutement, digital...</p>
+                    <select class="form-select" name="investment_capacity" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="0-20k">Moins de 20 000 TND (très limité)</option>
+                        <option value="20k-50k">20 000 - 50 000 TND (modéré)</option>
+                        <option value="50k-100k">50 000 - 100 000 TND (conséquent)</option>
+                        <option value="100k+">Plus de 100 000 TND (important)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">12. Qu'est-ce qui vous empêche de dormir la nuit concernant Tunisian Campers ?</label>
+                    <p class="form-hint">Votre plus grande inquiétude : cash flow, concurrence, dépendance à votre personne, croissance...</p>
+                    <textarea class="form-textarea" name="biggest_worry" placeholder="Ce qui me préoccupe le plus, c'est..." required></textarea>
+                </div>
+            </section>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <h2>C'est terminé ! 🎉</h2>
+                <p>Merci d'avoir pris le temps de remplir ce questionnaire. Vos réponses nous permettront de préparer une première réunion ultra-ciblée et productive.</p>
+                <button type="submit" class="btn-submit">
+                    <span class="material-icons">send</span>
+                    Envoyer mes réponses
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // ══════════════════════════════════════════════════════════
+        // CONFIGURATION
+        // ══════════════════════════════════════════════════════════
+        const STORAGE_KEY = 'tunisian_campers_diagnostic_light';
+        const FORMSPREE_ID = 'xdkoyjaj';
+        const EMAIL_TO = 'rached.maalej@gmail.com';
+
+        // ══════════════════════════════════════════════════════════
+        // AUTO-SAVE & RESTORE
+        // ══════════════════════════════════════════════════════════
+        const form = document.getElementById('diagnostic-form');
+        const totalQuestions = 12;
+
+        // Load saved data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    Object.keys(data.formData).forEach(name => {
+                        const input = form.elements[name];
+                        if (input) {
+                            input.value = data.formData[name];
+                        }
+                    });
+                    showToast('Vos réponses précédentes ont été restaurées', 'success');
+                    updateProgress();
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
+            }
+        });
+
+        // Auto-save on input change
+        form.addEventListener('input', () => {
+            saveFormData();
+            updateProgress();
+        });
+
+        form.addEventListener('change', () => {
+            saveFormData();
+            updateProgress();
+        });
+
+        function saveFormData() {
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            const saveObject = {
+                formData: data,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(saveObject));
+        }
+
+        function clearSavedData() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toutes vos réponses ?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                form.reset();
+                updateProgress();
+                showToast('Toutes vos réponses ont été effacées', 'success');
+            }
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // PROGRESS TRACKING
+        // ══════════════════════════════════════════════════════════
+        function updateProgress() {
+            const formData = new FormData(form);
+            let answeredCount = 0;
+
+            for (let [key, value] of formData.entries()) {
+                if (value && value.trim() !== '') {
+                    answeredCount++;
+                }
+            }
+
+            const percentage = Math.round((answeredCount / totalQuestions) * 100);
+
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Question ${answeredCount} sur ${totalQuestions} complétée${answeredCount > 1 ? 's' : ''}`;
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // FORM SUBMISSION
+        // ══════════════════════════════════════════════════════════
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitButton = e.target.querySelector('.btn-submit');
+            const originalContent = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="material-icons">hourglass_empty</span> Envoi en cours...';
+
+            try {
+                const formData = new FormData(form);
+
+                // Add metadata
+                formData.append('_subject', 'Nouveau Questionnaire Diagnostic Rapide - Tunisian Campers');
+                formData.append('_replyto', EMAIL_TO);
+                formData.append('_template', 'table');
+
+                const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showToast('Questionnaire envoyé avec succès ! Merci Mohamed.', 'success');
+                    localStorage.removeItem(STORAGE_KEY);
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showToast('Erreur lors de l\'envoi. Vérifiez votre connexion et réessayez.', 'error');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalContent;
+            }
+        });
+
+        // ══════════════════════════════════════════════════════════
+        // TOAST NOTIFICATIONS
+        // ══════════════════════════════════════════════════════════
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const iconClass = type === 'error' ? 'error' : 'success';
+            const iconName = type === 'error' ? 'error_outline' : 'check_circle';
+            const title = type === 'error' ? 'Erreur' : 'Succès';
+
+            toast.innerHTML = `
+                <div class="toast-icon ${iconClass}">
+                    <span class="material-icons">${iconName}</span>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('closing');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize progress on load
+        updateProgress();
+    </script>
+</body>
+</html>
