@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 1: Découvrir & Diagnostiquer - Tunisian Campers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Color palette - Teal theme for Phase 1 */
+            --primary: #45998A;
+            --primary-light: #6DBBAA;
+            --primary-pale: #D4EBE7;
+            --accent: #F48E40;
+            --accent-light: #FBAC54;
+
+            /* Other phase colors for reference */
+            --phase-2: #E15720;
+            --phase-3: #357D23;
+
+            /* Neutrals */
+            --gray-900: #2C2C2C;
+            --gray-700: #4B4B4B;
+            --gray-600: #5B5B5B;
+            --gray-500: #7A7A7A;
+            --gray-400: #9A9A9A;
+            --gray-300: #D1D1D1;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+
+            /* SWOT colors */
+            --swot-strength: #357D23;
+            --swot-weakness: #E15720;
+            --swot-opportunity: #4A8EBF;
+            --swot-threat: #CE2B26;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            line-height: 1.6;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            color: var(--gray-700);
+        }
+
+        /* Slides Container */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 56px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            color: var(--white);
+        }
+
+        .title-slide .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .meeting-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .meeting-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .meeting-info-item .material-icons {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Content Slide */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            font-weight: 400;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-primary {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .card .icon-wrapper .material-icons {
+            font-size: 26px;
+            color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        /* Pillar Card */
+        .pillar-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .pillar-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .pillar-card .pillar-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .pillar-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .pillar-card p {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        /* Agenda Item */
+        .agenda-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .agenda-time {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 60px;
+        }
+
+        .agenda-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .agenda-content p {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        /* Rules Box */
+        .rules-box {
+            background: var(--primary-pale);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .rules-box h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rules-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .rule-item .material-icons {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        /* BMC Grid - 9 block canvas */
+        .bmc-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 8px;
+            height: 450px;
+        }
+
+        .bmc-block {
+            background: var(--white);
+            border: 2px dashed var(--gray-300);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bmc-block h4 {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bmc-block h4 .material-icons {
+            font-size: 16px;
+        }
+
+        .bmc-block .fill-area {
+            flex: 1;
+            background: var(--gray-100);
+            border-radius: 8px;
+            border: 1px dashed var(--gray-300);
+        }
+
+        .bmc-partners { grid-column: 1; grid-row: 1 / 3; }
+        .bmc-activities { grid-column: 2; grid-row: 1; }
+        .bmc-resources { grid-column: 2; grid-row: 2; }
+        .bmc-value { grid-column: 3; grid-row: 1 / 3; background: var(--primary-pale) !important; border-style: solid !important; border-color: var(--primary) !important; }
+        .bmc-relationships { grid-column: 4; grid-row: 1; }
+        .bmc-channels { grid-column: 4; grid-row: 2; }
+        .bmc-segments { grid-column: 5; grid-row: 1 / 3; }
+
+        /* SWOT Grid */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 16px;
+            height: 420px;
+        }
+
+        .swot-quadrant {
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .swot-quadrant h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .swot-quadrant .fill-area {
+            flex: 1;
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
+            border: 2px dashed rgba(255,255,255,0.7);
+        }
+
+        .swot-strengths { background: linear-gradient(135deg, #E6F4DD 0%, #D0EABF 100%); }
+        .swot-strengths h3 { color: var(--swot-strength); }
+
+        .swot-weaknesses { background: linear-gradient(135deg, #FCEADE 0%, #F9D4C0 100%); }
+        .swot-weaknesses h3 { color: var(--swot-weakness); }
+
+        .swot-opportunities { background: linear-gradient(135deg, #DBECF4 0%, #C5DEF0 100%); }
+        .swot-opportunities h3 { color: var(--swot-opportunity); }
+
+        .swot-threats { background: linear-gradient(135deg, #FFDDDE 0%, #FFC8C9 100%); }
+        .swot-threats h3 { color: var(--swot-threat); }
+
+        .swot-instruction {
+            text-align: center;
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .swot-instruction .material-icons {
+            vertical-align: middle;
+            margin-right: 8px;
+            color: var(--primary);
+        }
+
+        /* Questions Template */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-slot {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .question-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .question-content {
+            flex: 1;
+            min-height: 24px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            border: 1px dashed var(--gray-300);
+        }
+
+        .question-hint {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-style: italic;
+        }
+
+        /* Quick Wins */
+        .quick-wins-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .quick-win-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            border-top: 4px solid var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-win-card .win-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .quick-win-card .fill-area {
+            height: 80px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            border: 1px dashed var(--gray-300);
+        }
+
+        /* Next Meeting Box */
+        .next-meeting-box {
+            background: linear-gradient(135deg, var(--primary-pale) 0%, #C2E5DE 100%);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .next-meeting-box .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .next-meeting-box .icon-wrapper .material-icons {
+            font-size: 40px;
+            color: var(--phase-2);
+        }
+
+        .next-meeting-box h3 {
+            font-size: 20px;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .next-meeting-box p {
+            font-size: 15px;
+            color: var(--gray-600);
+            margin: 0;
+        }
+
+        .next-meeting-box .badge {
+            display: inline-block;
+            margin-top: 12px;
+            background: var(--phase-2);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-5 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .bmc-grid {
+                height: auto;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: auto;
+            }
+
+            .bmc-partners { grid-column: 1; grid-row: 1; }
+            .bmc-activities { grid-column: 2; grid-row: 1; }
+            .bmc-value { grid-column: 3; grid-row: 1 / 3; }
+            .bmc-resources { grid-column: 1; grid-row: 2; }
+            .bmc-relationships { grid-column: 2; grid-row: 2; }
+            .bmc-channels { grid-column: 1; grid-row: 3; }
+            .bmc-segments { grid-column: 2 / 4; grid-row: 3; }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+
+            .title-slide h1 {
+                font-size: 36px;
+            }
+
+            .title-slide .subtitle {
+                font-size: 18px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-5 {
+                grid-template-columns: 1fr;
+            }
+
+            .meeting-info {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .rules-list {
+                grid-template-columns: 1fr;
+            }
+
+            .swot-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .swot-quadrant {
+                min-height: 150px;
+            }
+
+            .quick-wins-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .next-meeting-box {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .slide-counter {
+                top: 16px;
+                right: 16px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+    </div>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" id="slide-1">
+            <div class="slide-content">
+                <div class="phase-badge">Phase 1</div>
+                <h1>Découvrir & Diagnostiquer</h1>
+                <p class="subtitle" style="color: var(--white);">Où en sommes-nous aujourd'hui ?</p>
+
+                <div class="meeting-info">
+                    <div class="meeting-info-item">
+                        <span class="material-icons">schedule</span>
+                        1h30
+                    </div>
+                    <div class="meeting-info-item">
+                        <span class="material-icons">people</span>
+                        Mohamed + Rached
+                    </div>
+                    <div class="meeting-info-item">
+                        <span class="material-icons">event</span>
+                        21 Janvier 2026
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Agenda & Rules -->
+        <section class="slide" id="slide-2">
+            <div class="slide-content">
+                <span class="badge badge-primary">Agenda</span>
+                <h1>Notre Programme Simplifié</h1>
+                <h2>1h30 pour comprendre l'essentiel de votre situation actuelle</h2>
+
+                <div class="grid-2">
+                    <div class="agenda-list">
+                        <div class="agenda-item">
+                            <span class="agenda-time">0-10'</span>
+                            <div class="agenda-content">
+                                <h4>Accueil & Contexte</h4>
+                                <p>Bienvenue, objectifs, règles du jeu</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <span class="agenda-time">10-60'</span>
+                            <div class="agenda-content">
+                                <h4>Diagnostic 5 Piliers</h4>
+                                <p>Financier, Opérationnel, Client, Concurrentiel, Équipe</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <span class="agenda-time">60-75'</span>
+                            <div class="agenda-content">
+                                <h4>Analyse SWOT Rapide</h4>
+                                <p>Forces, Faiblesses, Opportunités, Menaces</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <span class="agenda-time">75-85'</span>
+                            <div class="agenda-content">
+                                <h4>Quick Wins</h4>
+                                <p>3-5 actions immédiates (30 jours)</p>
+                            </div>
+                        </div>
+                        <div class="agenda-item">
+                            <span class="agenda-time">85-90'</span>
+                            <div class="agenda-content">
+                                <h4>Prochaines Étapes</h4>
+                                <p>Questions stratégiques pour Phase 2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rules-box">
+                        <h3>
+                            <span class="material-icons">handshake</span>
+                            Nos Règles du Jeu
+                        </h3>
+                        <div class="rules-list">
+                            <div class="rule-item">
+                                <span class="material-icons">phone_disabled</span>
+                                Téléphones silencieux
+                            </div>
+                            <div class="rule-item">
+                                <span class="material-icons">record_voice_over</span>
+                                Participation active
+                            </div>
+                            <div class="rule-item">
+                                <span class="material-icons">favorite</span>
+                                Honnêteté bienveillante
+                            </div>
+                            <div class="rule-item">
+                                <span class="material-icons">lightbulb</span>
+                                Pas de mauvaise réponse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: 5 Pillars Overview -->
+        <section class="slide" id="slide-3">
+            <div class="slide-content">
+                <span class="badge badge-primary">Diagnostic</span>
+                <h1>Les 5 Piliers d'Évaluation</h1>
+                <h2>Nous allons explorer chaque dimension de votre entreprise - 10 minutes par pilier</h2>
+
+                <div class="grid-5">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><span class="material-icons" style="font-size: 36px; color: var(--primary);">payments</span></div>
+                        <h3>Financier</h3>
+                        <p>Revenus, marges, trésorerie</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><span class="material-icons" style="font-size: 36px; color: var(--primary);">settings</span></div>
+                        <h3>Opérationnel</h3>
+                        <p>Capacité, équipement, process</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><span class="material-icons" style="font-size: 36px; color: var(--primary);">groups</span></div>
+                        <h3>Client</h3>
+                        <p>Segments, acquisition, fidélité</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><span class="material-icons" style="font-size: 36px; color: var(--primary);">emoji_events</span></div>
+                        <h3>Concurrentiel</h3>
+                        <p>Positionnement, avantages</p>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><span class="material-icons" style="font-size: 36px; color: var(--primary);">diversity_3</span></div>
+                        <h3>Équipe</h3>
+                        <p>Rôles, compétences, culture</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; padding: 20px; background: var(--primary-pale); border-radius: 12px;">
+                    <p style="font-size: 16px; color: var(--primary); font-weight: 600; margin: 0;">
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">timer</span>
+                        Total: 60 minutes de discussion approfondie
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Pillar Discussion Template -->
+        <section class="slide" id="slide-4">
+            <div class="slide-content">
+                <span class="badge badge-primary">Discussion</span>
+                <h1>Questions Clés par Pilier</h1>
+                <h2>Les questions que nous allons explorer ensemble</h2>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">payments</span>
+                        </div>
+                        <h3>Financier</h3>
+                        <p>• Évolution CA 2023-2025 ?</p>
+                        <p>• Service le plus rentable ?</p>
+                        <p>• Principales charges ?</p>
+                        <p>• Saisonnalité trésorerie ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #E6F4DD;">
+                            <span class="material-icons" style="color: var(--phase-3);">settings</span>
+                        </div>
+                        <h3>Opérationnel</h3>
+                        <p>• Capacité max par saison ?</p>
+                        <p>• Goulot d'étranglement ?</p>
+                        <p>• Qualité équipement ?</p>
+                        <p>• Partenaires critiques ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #DBECF4;">
+                            <span class="material-icons" style="color: #4A8EBF;">groups</span>
+                        </div>
+                        <h3>Client</h3>
+                        <p>• Client idéal ?</p>
+                        <p>• Canaux d'acquisition ?</p>
+                        <p>• Taux de récurrence ?</p>
+                        <p>• Pourquoi vous choisir ?</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--phase-2);">emoji_events</span>
+                        </div>
+                        <h3>Concurrentiel</h3>
+                        <p>• Principaux concurrents ?</p>
+                        <p>• Votre différence ?</p>
+                        <p>• Nouveaux entrants ?</p>
+                        <p>• Avantage injuste ?</p>
+                    </div>
+
+                    <div class="card" style="grid-column: span 2;">
+                        <div class="icon-wrapper" style="background: #F3E3FE;">
+                            <span class="material-icons" style="color: #79409E;">diversity_3</span>
+                        </div>
+                        <h3>Équipe</h3>
+                        <p style="display: flex; gap: 40px;">
+                            <span>• Qui fait quoi ?<br>• Compétences clés ?</span>
+                            <span>• Besoins en renfort ?<br>• Dépendance au fondateur ?</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: SWOT Analysis -->
+        <section class="slide" id="slide-5">
+            <div class="slide-content">
+                <span class="badge badge-primary">Analyse SWOT</span>
+                <h1>SWOT Rapide</h1>
+                <h2>Forces, Faiblesses, Opportunités, Menaces - 15 minutes de synthèse</h2>
+
+                <div class="swot-grid">
+                    <div class="swot-quadrant swot-strengths">
+                        <h3><span class="material-icons">thumb_up</span> Forces (Strengths)</h3>
+                        <div class="fill-area"></div>
+                    </div>
+                    <div class="swot-quadrant swot-weaknesses">
+                        <h3><span class="material-icons">thumb_down</span> Faiblesses (Weaknesses)</h3>
+                        <div class="fill-area"></div>
+                    </div>
+                    <div class="swot-quadrant swot-opportunities">
+                        <h3><span class="material-icons">trending_up</span> Opportunités</h3>
+                        <div class="fill-area"></div>
+                    </div>
+                    <div class="swot-quadrant swot-threats">
+                        <h3><span class="material-icons">warning</span> Menaces (Threats)</h3>
+                        <div class="fill-area"></div>
+                    </div>
+                </div>
+
+                <div class="swot-instruction">
+                    <span class="material-icons">note_add</span>
+                    Utiliser les post-its de couleur : <span style="color: var(--swot-strength);">&#9679;</span> Vert (Forces) • <span style="color: #F48E40;">&#9679;</span> Orange (Faiblesses) • <span style="color: var(--swot-opportunity);">&#9679;</span> Bleu (Opportunités) • <span style="color: var(--swot-threat);">&#9679;</span> Rouge (Menaces)
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Strategic Questions -->
+        <section class="slide" id="slide-6">
+            <div class="slide-content">
+                <span class="badge badge-primary">Synthèse</span>
+                <h1>Questions Stratégiques</h1>
+                <h2>Quelles sont les 3-5 questions auxquelles notre stratégie 10 ans doit répondre ?</h2>
+
+                <div class="questions-list">
+                    <div class="question-slot">
+                        <div class="question-number">1</div>
+                        <div class="question-content"></div>
+                        <span class="question-hint">ex: Comment scaler sans perdre l'authenticité ?</span>
+                    </div>
+                    <div class="question-slot">
+                        <div class="question-number">2</div>
+                        <div class="question-content"></div>
+                        <span class="question-hint">ex: Wellness ou aventure ?</span>
+                    </div>
+                    <div class="question-slot">
+                        <div class="question-number">3</div>
+                        <div class="question-content"></div>
+                        <span class="question-hint">ex: Quel rôle pour le digital ?</span>
+                    </div>
+                    <div class="question-slot">
+                        <div class="question-number">4</div>
+                        <div class="question-content"></div>
+                        <span class="question-hint">ex: Tunisie ou international ?</span>
+                    </div>
+                    <div class="question-slot">
+                        <div class="question-number">5</div>
+                        <div class="question-content"></div>
+                        <span class="question-hint">ex: Réduire la dépendance au fondateur ?</span>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--gray-500);">
+                    Ces questions guideront notre exploration des options stratégiques en Phase 2
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 7: Quick Wins & Next Steps -->
+        <section class="slide" id="slide-7">
+            <div class="slide-content">
+                <span class="badge badge-primary">Clôture</span>
+                <h1>Quick Wins & Prochaines Étapes</h1>
+                <h2>Victoires rapides identifiées aujourd'hui + préparation Meeting 2</h2>
+
+                <h3 style="margin-bottom: 16px; color: var(--accent);">
+                    <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">flash_on</span>
+                    Quick Wins (30 jours)
+                </h3>
+
+                <div class="quick-wins-grid">
+                    <div class="quick-win-card">
+                        <div class="win-number">Quick Win #1</div>
+                        <div class="fill-area"></div>
+                    </div>
+                    <div class="quick-win-card">
+                        <div class="win-number">Quick Win #2</div>
+                        <div class="fill-area"></div>
+                    </div>
+                    <div class="quick-win-card">
+                        <div class="win-number">Quick Win #3</div>
+                        <div class="fill-area"></div>
+                    </div>
+                </div>
+
+                <div class="next-meeting-box">
+                    <div class="icon-wrapper">
+                        <span class="material-icons">event_available</span>
+                    </div>
+                    <div>
+                        <h3>Meeting 2 : Explorer & Décider</h3>
+                        <p>Je vais analyser nos discussions et préparer 3 options stratégiques pour votre avenir.</p>
+                        <p>Nous les évaluerons ensemble et ferons un choix stratégique clair.</p>
+                        <span class="badge">Semaine 2 • 2 heures</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Total slides
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        // Slide elements
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+
+        // Intersection Observer for slide tracking
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const slideNumber = parseInt(slideId.split('-')[1]);
+                    currentSlideEl.textContent = slideNumber;
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0
+        });
+
+        slides.forEach(slide => slideObserver.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+            let targetSlide;
+
+            switch(e.key) {
+                case 'ArrowDown':
+                case ' ':
+                case 'PageDown':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    targetSlide = Math.min(currentSlide + 1, totalSlides);
+                    break;
+                case 'ArrowUp':
+                case 'PageUp':
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    targetSlide = Math.max(currentSlide - 1, 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    targetSlide = 1;
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    targetSlide = totalSlides;
+                    break;
+            }
+
+            if (targetSlide) {
+                document.getElementById(`slide-${targetSlide}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

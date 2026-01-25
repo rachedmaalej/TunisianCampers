@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construisons Ensemble Votre Stratégie - Tunisian Campers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Color palette - Purple theme */
+            --primary: #79409E;
+            --primary-light: #AF93C6;
+            --primary-pale: #E8DFF2;
+            --accent: #F48E40;
+            --accent-light: #FBAC54;
+
+            /* Phase colors */
+            --phase-1: #79409E;
+            --phase-2: #E15720;
+            --phase-3: #357D23;
+
+            /* Neutrals */
+            --gray-900: #2C2C2C;
+            --gray-700: #4B4B4B;
+            --gray-600: #5B5B5B;
+            --gray-500: #7A7A7A;
+            --gray-300: #D1D1D1;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            line-height: 1.6;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            color: var(--gray-700);
+        }
+
+        /* Slides Container */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.2;
+            color: var(--white);
+        }
+
+        .title-slide .subtitle {
+            font-size: 22px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .company-badge .material-icons {
+            font-size: 20px;
+        }
+
+        /* Content Slide */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            font-weight: 400;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-primary {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .card .icon-wrapper {
+            width: 52px;
+            height: 52px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .card .icon-wrapper .material-icons {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* Phase Box */
+        .phase-box {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border-top: 4px solid var(--primary);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .phase-box:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .phase-box .phase-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .phase-box h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--gray-900);
+        }
+
+        .phase-box p {
+            font-size: 14px;
+            margin: 0;
+            color: var(--gray-600);
+        }
+
+        .phase-box.phase-2 {
+            border-top-color: var(--phase-2);
+        }
+
+        .phase-box.phase-2 .phase-number {
+            color: var(--phase-2);
+        }
+
+        .phase-box.phase-3 {
+            border-top-color: var(--phase-3);
+        }
+
+        .phase-box.phase-3 .phase-number {
+            color: var(--phase-3);
+        }
+
+        /* Quote */
+        .quote {
+            margin-top: 40px;
+            padding: 24px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .quote p {
+            font-size: 18px;
+            font-style: italic;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .quote .author {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding: 24px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-item .stat-label {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* CTA Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Action Card */
+        .action-card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .action-card .icon-wrapper {
+            width: 64px;
+            height: 64px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .action-card .icon-wrapper .material-icons {
+            font-size: 32px;
+            color: var(--white);
+        }
+
+        .action-card h3 {
+            color: var(--white);
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .action-card p {
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+
+            .title-slide h1 {
+                font-size: 36px;
+            }
+
+            .title-slide .subtitle {
+                font-size: 18px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .slide-counter {
+                top: 16px;
+                right: 16px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+    </div>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" id="slide-1">
+            <div class="slide-content">
+                <div class="company-badge">
+                    <span class="material-icons">eco</span>
+                    Tunisian Campers
+                </div>
+                <h1>Construisons Ensemble Votre Stratégie pour les 10 Prochaines Années</h1>
+                <p class="subtitle" style="color: var(--white);">3 réunions (5h30 total) • 5 livrables • 1 vision claire</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Why This Matters -->
+        <section class="slide" id="slide-2">
+            <div class="slide-content">
+                <span class="badge badge-primary">Pourquoi ?</span>
+                <h1>10 Ans d'Aventure Méritent une Vision Claire</h1>
+                <h2>Votre expertise mérite une stratégie à sa hauteur</h2>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">history</span>
+                        </div>
+                        <h3>Ce que vous avez accompli</h3>
+                        <p>10 ans d'aventures inoubliables</p>
+                        <p>112K+ followers engagés</p>
+                        <p>Une communauté qui vous fait confiance</p>
+                        <p>7 régions de Tunisie explorées</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--accent);">rocket_launch</span>
+                        </div>
+                        <h3>Ce que nous allons construire</h3>
+                        <p>Une vision claire pour 2035</p>
+                        <p>Un plan d'action concret</p>
+                        <p>Des objectifs mesurables</p>
+                        <p>Une feuille de route détaillée</p>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    <p>"Together matters"</p>
+                    <span class="author">— Mohamed Temimi, Fondateur</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: The 3-Step Process -->
+        <section class="slide" id="slide-3">
+            <div class="slide-content">
+                <span class="badge badge-primary">Le Processus</span>
+                <h1>3 Semaines, 3 Rencontres</h1>
+                <h2>Un processus simple et collaboratif pour définir votre avenir</h2>
+
+                <div class="grid-3">
+                    <div class="phase-box">
+                        <div class="phase-number">Semaine 1</div>
+                        <h3>Découvrir</h3>
+                        <p>Où en êtes-vous aujourd'hui ?</p>
+                        <p style="margin-top: 12px; font-size: 13px; color: var(--gray-500);">Diagnostic • Forces • Défis</p>
+                    </div>
+
+                    <div class="phase-box phase-2">
+                        <div class="phase-number">Semaine 2</div>
+                        <h3>Décider</h3>
+                        <p>Quelle direction prendre ?</p>
+                        <p style="margin-top: 12px; font-size: 13px; color: var(--gray-500);">Options • Évaluation • Choix</p>
+                    </div>
+
+                    <div class="phase-box phase-3">
+                        <div class="phase-number">Semaine 3</div>
+                        <h3>Planifier</h3>
+                        <p>Comment y arriver ?</p>
+                        <p style="margin-top: 12px; font-size: 13px; color: var(--gray-500);">Roadmap • Actions • KPIs</p>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">semaines</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5h30</span>
+                        <span class="stat-label">de travail ensemble</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10</span>
+                        <span class="stat-label">ans de vision</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: What You Get -->
+        <section class="slide" id="slide-4">
+            <div class="slide-content">
+                <span class="badge badge-primary">Les Livrables</span>
+                <h1>5 Livrables Essentiels</h1>
+                <h2>Des outils concrets et simples pour piloter votre croissance</h2>
+
+                <div class="grid-3" style="margin-bottom: 40px;">
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">assessment</span>
+                        </div>
+                        <h3>Diagnostic Une-Page</h3>
+                        <p>État actuel en un coup d'œil : 5 piliers + top défis + opportunités.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #FCEADE;">
+                            <span class="material-icons" style="color: var(--phase-2);">explore</span>
+                        </div>
+                        <h3>Choix Stratégique</h3>
+                        <p>Direction claire : ce qu'on FAIT et ce qu'on NE FAIT PAS + vision 10 ans.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #E6F4DD;">
+                            <span class="material-icons" style="color: var(--phase-3);">map</span>
+                        </div>
+                        <h3>Roadmap Année 1</h3>
+                        <p>OKRs trimestriels + Top 10 initiatives avec propriétaires et budget.</p>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="max-width: 700px; margin: 0 auto;">
+                    <div class="card">
+                        <div class="icon-wrapper" style="background: #DBECF4;">
+                            <span class="material-icons" style="color: #4A8EBF;">dashboard</span>
+                        </div>
+                        <h3>Dashboard Lite</h3>
+                        <p>5 KPIs critiques (vs 30+) que vous suivrez réellement chaque mois.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">menu_book</span>
+                        </div>
+                        <h3>Guide d'Exécution</h3>
+                        <p>Playbook de 15 pages : vision, roadmap, dashboard, cadence, risques.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Next Steps -->
+        <section class="slide title-slide" id="slide-5" style="background: linear-gradient(135deg, var(--primary) 0%, #4A8EBF 100%);">
+            <div class="slide-content">
+                <h1 style="margin-bottom: 40px;">Prêt à Démarrer ?</h1>
+
+                <div class="grid-2" style="max-width: 800px; margin: 0 auto;">
+                    <div class="action-card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">edit_note</span>
+                        </div>
+                        <h3>Étape 1 : Questionnaire</h3>
+                        <p>Deux options : Version complète (25 min - recommandée) ou version rapide (10 min - Plan B).</p>
+                        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
+                            <a href="questionnaire-diagnostic.html" class="btn btn-primary" style="font-size: 14px;">
+                                <span class="material-icons">edit_note</span>
+                                Complète
+                            </a>
+                            <a href="questionnaire-diagnostic-light.html" class="btn btn-outline" style="font-size: 14px;">
+                                <span class="material-icons">bolt</span>
+                                Rapide
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="icon-wrapper">
+                            <span class="material-icons">event</span>
+                        </div>
+                        <h3>Étape 2 : Rencontre</h3>
+                        <p>Notre première session de travail est prévue pour discuter de votre diagnostic.</p>
+                        <span class="btn btn-outline">
+                            <span class="material-icons">calendar_today</span>
+                            Mercredi 21 Janvier
+                        </span>
+                    </div>
+                </div>
+
+                <p style="margin-top: 60px; font-size: 20px; opacity: 0.95; color: var(--white);">
+                    Ensemble, nous allons construire l'avenir de Tunisian Campers.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Total slides
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        // Slide elements
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+
+        // Intersection Observer for slide tracking
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideId = entry.target.id;
+                    const slideNumber = parseInt(slideId.split('-')[1]);
+                    currentSlideEl.textContent = slideNumber;
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0
+        });
+
+        slides.forEach(slide => slideObserver.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = parseInt(currentSlideEl.textContent);
+            let targetSlide;
+
+            switch(e.key) {
+                case 'ArrowDown':
+                case ' ':
+                case 'PageDown':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    targetSlide = Math.min(currentSlide + 1, totalSlides);
+                    break;
+                case 'ArrowUp':
+                case 'PageUp':
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    targetSlide = Math.max(currentSlide - 1, 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    targetSlide = 1;
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    targetSlide = totalSlides;
+                    break;
+            }
+
+            if (targetSlide) {
+                document.getElementById(`slide-${targetSlide}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunisian Campers | Atelier d'Options Stratégiques</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--green-dark:#357D23;--green-mid:#549F3A;--green-light:#80C261;--green-pale:#DEF5B7;--blue-dark:#34659F;--blue-mid:#4A8EBF;--blue-light:#76AED9;--blue-pale:#DBECF4;--orange-dark:#E15720;--orange-mid:#F48E40;--orange-light:#FBAC54;--orange-pale:#FFE9B7;--purple-dark:#79409E;--purple-mid:#8E6FBF;--purple-light:#AF93C6;--purple-pale:#F3E3FE;--teal-dark:#267675;--teal-mid:#45998A;--teal-light:#6DBBAA;--teal-pale:#DAF3E0;--pink-dark:#A12B9B;--pink-mid:#CF51AC;--pink-light:#EB76C2;--pink-pale:#FBD8E7;--red-dark:#CE2B26;--red-mid:#E65655;--red-light:#FB807B;--gray-dark:#5B5B5B;--gray-mid:#7E7E7E;--gray-light:#A2A2A2;--gray-pale:#E8E8E8;--white:#FFFFFF;--surface:#FAFAFA}
+        html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+        body{font-family:'Noto Sans',sans-serif;background:var(--surface);color:var(--gray-dark);line-height:1.5;overflow-x:hidden}
+        .nav-sidebar{position:fixed;left:0;top:0;width:220px;height:100vh;background:var(--white);box-shadow:0 1px 3px rgba(0,0,0,0.12);z-index:1000;padding:16px 0;overflow-y:auto;transition:transform 0.3s ease}
+        .nav-logo{padding:0 14px 16px;border-bottom:1px solid var(--gray-pale);margin-bottom:10px}
+        .nav-logo h2{font-size:12px;font-weight:600;color:var(--green-dark);display:flex;align-items:center;gap:6px}
+        .nav-logo h2 .material-icons{font-size:16px}
+        .nav-logo span{font-size:10px;color:var(--gray-mid);display:block;margin-top:3px}
+        .nav-chapter{padding:8px 14px;font-size:11px;color:var(--gray-mid);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;border-left:3px solid transparent}
+        .nav-chapter:hover{background:var(--green-pale);color:var(--green-dark)}
+        .nav-chapter.active{background:var(--green-pale);color:var(--green-dark);border-left-color:var(--green-mid);font-weight:500}
+        .nav-chapter .material-icons{font-size:14px}
+        .nav-chapter .chapter-number{width:16px;height:16px;border-radius:50%;background:var(--gray-pale);font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:600}
+        .nav-chapter.active .chapter-number{background:var(--green-mid);color:var(--white)}
+        .slide-counter{position:fixed;top:16px;right:20px;background:var(--white);padding:5px 12px;border-radius:14px;font-size:12px;font-weight:500;color:var(--gray-dark);box-shadow:0 2px 8px rgba(0,0,0,0.1);z-index:1000}
+        .main-content{margin-left:220px;min-height:100vh}
+        .slide{min-height:100vh;padding:40px 50px;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center}
+        .slide-title{font-size:32px;font-weight:700;margin-bottom:24px;color:var(--gray-dark);line-height:1.2}
+        .slide-subtitle{font-size:16px;color:var(--gray-mid);margin-bottom:32px;max-width:600px}
+        .slide-hero{background:linear-gradient(135deg,var(--green-pale) 0%,var(--teal-pale) 100%);text-align:center;align-items:center}
+        .slide-hero .slide-title{font-size:42px;color:var(--green-dark)}
+        .hero-icon{width:88px;height:88px;background:var(--green-mid);border-radius:24px;display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+        .hero-icon .material-icons{font-size:44px;color:var(--white)}
+        .hero-meta{display:flex;gap:32px;margin-top:36px}
+        .hero-meta-item{text-align:center}
+        .hero-meta-item .number{font-size:38px;font-weight:700;color:var(--green-dark)}
+        .hero-meta-item .label{font-size:12px;color:var(--gray-mid)}
+        .card{background:var(--white);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.05)}
+        .card-elevated{box-shadow:0 2px 6px rgba(0,0,0,0.08),0 8px 24px rgba(0,0,0,0.08)}
+        .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+        .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+        .diagnostic-card{text-align:center;padding:24px 16px}
+        .diagnostic-card .icon-wrapper{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+        .diagnostic-card .icon-wrapper .material-icons{font-size:22px;color:var(--white)}
+        .diagnostic-card .placeholder{font-size:28px;font-weight:700;color:var(--gray-dark);margin-bottom:4px}
+        .diagnostic-card .label{font-size:12px;color:var(--gray-mid)}
+        .option-header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+        .option-number{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--white)}
+        .option-title-group h2{font-size:28px;font-weight:700;color:var(--gray-dark)}
+        .option-title-group p{font-size:14px;color:var(--gray-mid);margin-top:2px}
+        .info-block{padding:16px;border-radius:10px;margin-bottom:12px}
+        .info-block h4{font-size:12px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+        .info-block h4 .material-icons{font-size:14px}
+        .info-block p,.info-block ul{font-size:13px;color:var(--gray-dark)}
+        .info-block ul{padding-left:16px}
+        .info-block li{margin-bottom:4px}
+        .timeline{display:flex;align-items:center;gap:2px;margin-top:12px}
+        .timeline-segment{height:5px;border-radius:2px;flex:1}
+        .timeline-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--gray-mid)}
+        .risk-indicator{display:flex;align-items:center;gap:5px;margin-top:8px}
+        .risk-dot{width:8px;height:8px;border-radius:50%}
+        .risk-low{background:var(--green-mid)}.risk-medium{background:var(--orange-mid)}.risk-high{background:var(--red-mid)}
+        .example-company{display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-pale);border-radius:8px;margin-top:12px}
+        .example-company .company-icon{width:36px;height:36px;background:var(--white);border-radius:8px;display:flex;align-items:center;justify-content:center}
+        .example-company .company-icon .material-icons{font-size:18px;color:var(--gray-dark)}
+        .example-company .company-info h5{font-size:12px;font-weight:600;color:var(--gray-dark)}
+        .example-company .company-info p{font-size:10px;color:var(--gray-mid)}
+        .comparison-table{width:100%;border-collapse:collapse;margin-top:16px}
+        .comparison-table th{padding:12px 8px;text-align:left;font-size:11px;font-weight:600;color:var(--gray-mid);border-bottom:2px solid var(--gray-pale)}
+        .comparison-table td{padding:12px 8px;font-size:12px;border-bottom:1px solid var(--gray-pale)}
+        .comparison-table tr:hover{background:var(--surface)}
+        .score-dots{display:flex;gap:2px}
+        .score-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-pale)}
+        .score-dot.filled{background:var(--green-mid)}
+        .score-dot.filled.orange{background:var(--orange-mid)}
+        .score-dot.filled.red{background:var(--red-mid)}
+        .exercise-card{border:2px dashed var(--purple-light);background:var(--purple-pale);padding:24px;border-radius:14px}
+        .exercise-card h3{color:var(--purple-dark);font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+        .exercise-card h3 .material-icons{font-size:20px}
+        .exercise-prompt{background:var(--white);padding:14px;border-radius:8px;margin-top:12px;font-style:italic;color:var(--gray-dark);font-size:13px}
+        .matrix-container{position:relative;width:100%;max-width:380px;aspect-ratio:1;margin:16px auto}
+        .matrix-grid{width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;background:var(--gray-pale);border-radius:12px;overflow:hidden}
+        .matrix-quadrant{background:var(--white);padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+        .matrix-quadrant h4{font-size:11px;font-weight:600;margin-bottom:4px}
+        .matrix-quadrant p{font-size:9px;color:var(--gray-mid)}
+        .matrix-label{position:absolute;font-size:10px;font-weight:600;color:var(--gray-mid)}
+        .matrix-label.top{top:-16px;left:50%;transform:translateX(-50%)}
+        .matrix-label.bottom{bottom:-16px;left:50%;transform:translateX(-50%)}
+        .matrix-label.left{left:-36px;top:50%;transform:translateY(-50%) rotate(-90deg)}
+        .matrix-label.right{right:-36px;top:50%;transform:translateY(-50%) rotate(90deg)}
+        .checklist{list-style:none}
+        .checklist li{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--gray-pale);font-size:12px}
+        .checklist li:last-child{border-bottom:none}
+        .checklist .check-box{width:18px;height:18px;border:2px solid var(--gray-light);border-radius:4px;flex-shrink:0}
+        .section-divider{background:linear-gradient(135deg,var(--blue-pale) 0%,var(--teal-pale) 100%);text-align:center;align-items:center}
+        .section-divider .slide-title{color:var(--blue-dark)}
+        .section-icon{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+        .section-icon .material-icons{font-size:38px;color:var(--white)}
+        .founder-input{background:var(--orange-pale);border-left:3px solid var(--orange-mid);padding:14px 16px;border-radius:0 8px 8px 0;margin-top:16px}
+        .founder-input h4{font-size:12px;font-weight:600;color:var(--orange-dark);display:flex;align-items:center;gap:5px;margin-bottom:4px}
+        .founder-input p{font-size:12px;color:var(--gray-dark)}
+        .tag{display:inline-block;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:500}
+        .tag-green{background:var(--green-pale);color:var(--green-dark)}
+        .tag-blue{background:var(--blue-pale);color:var(--blue-dark)}
+        .tag-orange{background:var(--orange-pale);color:var(--orange-dark)}
+        .tag-purple{background:var(--purple-pale);color:var(--purple-dark)}
+        .tag-teal{background:var(--teal-pale);color:var(--teal-dark)}
+        .tag-pink{background:var(--pink-pale);color:var(--pink-dark)}
+        .resource-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+        .resource-pill{display:flex;align-items:center;gap:4px;padding:5px 10px;background:var(--surface);border-radius:14px;font-size:11px}
+        .resource-pill .material-icons{font-size:12px;color:var(--gray-mid)}
+        .wwhbt-item{display:flex;gap:12px;padding:14px;background:var(--white);border-radius:8px;margin-bottom:8px;align-items:flex-start}
+        .wwhbt-item .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .wwhbt-item .icon .material-icons{font-size:16px;color:var(--white)}
+        .wwhbt-item h5{font-size:13px;font-weight:600;margin-bottom:2px}
+        .wwhbt-item p{font-size:11px;color:var(--gray-mid)}
+        @media(max-width:1024px){.nav-sidebar{transform:translateX(-100%)}.nav-sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.slide{padding:28px 20px}.slide-title{font-size:24px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.hero-meta{flex-direction:column;gap:16px}}
+        .menu-toggle{display:none;position:fixed;top:10px;left:10px;z-index:1001;width:40px;height:40px;background:var(--white);border:none;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer}
+        .menu-toggle .material-icons{font-size:20px;color:var(--gray-dark)}
+        @media(max-width:1024px){.menu-toggle{display:flex;align-items:center;justify-content:center}}
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleNav()"><span class="material-icons">menu</span></button>
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-logo"><h2><span class="material-icons">terrain</span> Tunisian Campers</h2><span>Atelier d'Options Stratégiques</span></div>
+        <div class="nav-chapter active" data-chapter="intro" onclick="scrollToChapter('intro')"><span class="material-icons">home</span> Introduction</div>
+        <div class="nav-chapter" data-chapter="diagnostic" onclick="scrollToChapter('diagnostic')"><span class="material-icons">analytics</span> Diagnostic</div>
+        <div class="nav-chapter" data-chapter="option1" onclick="scrollToChapter('option1')"><span class="chapter-number">1</span> Géographique</div>
+        <div class="nav-chapter" data-chapter="option2" onclick="scrollToChapter('option2')"><span class="chapter-number">2</span> Pivot B2B</div>
+        <div class="nav-chapter" data-chapter="option3" onclick="scrollToChapter('option3')"><span class="chapter-number">3</span> Vertical</div>
+        <div class="nav-chapter" data-chapter="option4" onclick="scrollToChapter('option4')"><span class="chapter-number">4</span> Plateforme</div>
+        <div class="nav-chapter" data-chapter="option5" onclick="scrollToChapter('option5')"><span class="chapter-number">5</span> Productiser</div>
+        <div class="nav-chapter" data-chapter="option6" onclick="scrollToChapter('option6')"><span class="chapter-number">6</span> Niche</div>
+        <div class="nav-chapter" data-chapter="comparison" onclick="scrollToChapter('comparison')"><span class="material-icons">compare_arrows</span> Comparer</div>
+        <div class="nav-chapter" data-chapter="workshop" onclick="scrollToChapter('workshop')"><span class="material-icons">edit_note</span> Atelier</div>
+    </nav>
+    <div class="slide-counter" id="slideCounter">1 / 20</div>
+    <main class="main-content">
+        <!-- Slide 1: Title -->
+        <section class="slide slide-hero" id="intro" data-slide="1">
+            <div class="hero-icon"><span class="material-icons">explore</span></div>
+            <h1 class="slide-title">Atelier d'Options Stratégiques</h1>
+            <p class="slide-subtitle">Tracer le prochain chapitre de Tunisian Campers</p>
+            <div class="hero-meta">
+                <div class="hero-meta-item"><div class="number">10</div><div class="label">Années d'Activité</div></div>
+                <div class="hero-meta-item"><div class="number">7</div><div class="label">Membres de l'Équipe</div></div>
+                <div class="hero-meta-item"><div class="number">6</div><div class="label">Options Stratégiques</div></div>
+            </div>
+        </section>
+        <!-- Slide 2: Objectives -->
+        <section class="slide" data-slide="2">
+            <h1 class="slide-title">Objectifs du Jour</h1>
+            <p class="slide-subtitle">Une session collaborative pour explorer, évaluer et prioriser les voies de croissance</p>
+            <div class="grid-3">
+                <div class="card card-elevated"><div class="diagnostic-card"><div class="icon-wrapper" style="background:var(--blue-mid)"><span class="material-icons">search</span></div><div class="label" style="font-size:14px;color:var(--gray-dark);font-weight:500">Explorer</div><p style="font-size:12px;color:var(--gray-mid);margin-top:4px">Six voies stratégiques</p></div></div>
+                <div class="card card-elevated"><div class="diagnostic-card"><div class="icon-wrapper" style="background:var(--green-mid)"><span class="material-icons">assessment</span></div><div class="label" style="font-size:14px;color:var(--gray-dark);font-weight:500">Évaluer</div><p style="font-size:12px;color:var(--gray-mid);margin-top:4px">Selon des critères clés</p></div></div>
+                <div class="card card-elevated"><div class="diagnostic-card"><div class="icon-wrapper" style="background:var(--purple-mid)"><span class="material-icons">flag</span></div><div class="label" style="font-size:14px;color:var(--gray-dark);font-weight:500">Prioriser</div><p style="font-size:12px;color:var(--gray-mid);margin-top:4px">Sélectionner 1-2 options</p></div></div>
+            </div>
+            <div class="founder-input" style="margin-top:28px"><h4><span class="material-icons">record_voice_over</span> Point Fondateur</h4><p>Qu'est-ce qui vous préoccupe le plus aujourd'hui ?</p></div>
+        </section>
+        <!-- Slide 3: Diagnostic Section -->
+        <section class="slide section-divider" id="diagnostic" data-slide="3">
+            <div class="section-icon" style="background:var(--blue-mid)"><span class="material-icons">analytics</span></div>
+            <h1 class="slide-title" style="color:var(--blue-dark)">Notre Position Actuelle</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Résultats clés du diagnostic</p>
+        </section>
+        <!-- Slide 4: KPIs -->
+        <section class="slide" data-slide="4">
+            <h1 class="slide-title">Indicateurs Clés de Performance</h1>
+            <div class="grid-4">
+                <div class="card diagnostic-card"><div class="icon-wrapper" style="background:var(--green-mid)"><span class="material-icons">groups</span></div><div class="placeholder">[XXX]</div><div class="label">Participants Annuels</div></div>
+                <div class="card diagnostic-card"><div class="icon-wrapper" style="background:var(--blue-mid)"><span class="material-icons">payments</span></div><div class="placeholder">[XXX] TND</div><div class="label">Chiffre d'Affaires Annuel</div></div>
+                <div class="card diagnostic-card"><div class="icon-wrapper" style="background:var(--orange-mid)"><span class="material-icons">business</span></div><div class="placeholder">[XX]%</div><div class="label">Part B2B</div></div>
+                <div class="card diagnostic-card"><div class="icon-wrapper" style="background:var(--purple-mid)"><span class="material-icons">repeat</span></div><div class="placeholder">[XX]%</div><div class="label">Taux de Récurrence</div></div>
+            </div>
+            <div class="grid-2" style="margin-top:16px">
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:5px"><span class="material-icons" style="color:var(--green-mid)">thumb_up</span> Forces</h4><ul style="padding-left:16px;font-size:12px"><li>10 ans d'expérience éprouvée</li><li>Positionnement écologique fort</li><li>Succès de l'expansion au Maroc</li><li>[À compléter]</li></ul></div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:5px"><span class="material-icons" style="color:var(--orange-mid)">warning</span> Défis</h4><ul style="padding-left:16px;font-size:12px"><li>Petite équipe (7)</li><li>Contraintes d'actifs légers</li><li>Fluctuations saisonnières</li><li>[À compléter]</li></ul></div>
+            </div>
+        </section>
+        <!-- Slide 5: Strategic Question -->
+        <section class="slide" data-slide="5">
+            <h1 class="slide-title">La Question Stratégique</h1>
+            <div class="card card-elevated" style="max-width:600px;margin:0 auto;padding:36px;text-align:center">
+                <span class="material-icons" style="font-size:48px;color:var(--teal-mid);margin-bottom:16px">help_outline</span>
+                <p style="font-size:20px;line-height:1.6">« Comment Tunisian Campers doit-elle <strong style="color:var(--green-dark)">augmenter son impact</strong> tout en préservant ce qui la rend unique ? »</p>
+            </div>
+            <div class="founder-input" style="max-width:600px;margin:24px auto 0"><h4><span class="material-icons">record_voice_over</span> Discussion</h4><p>Est-ce que cela reflète vos préoccupations ?</p></div>
+        </section>
+        <!-- Option 1: Geographic -->
+        <section class="slide section-divider" id="option1" data-slide="6" style="background:linear-gradient(135deg,var(--green-pale) 0%,var(--teal-pale) 100%)">
+            <div class="section-icon" style="background:var(--green-mid)"><span class="material-icons">public</span></div>
+            <h1 class="slide-title" style="color:var(--green-dark)">Option 1 : Expansion Géographique</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Répliquer le modèle sur de nouveaux marchés</p>
+            <span class="tag tag-green">Stratégie de Croissance</span>
+        </section>
+        <section class="slide" data-slide="7">
+            <div class="option-header"><div class="option-number" style="background:var(--green-mid)">1</div><div class="option-title-group"><h2>Expansion Géographique</h2><p>S'appuyer sur le succès au Maroc</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Se développer en Algérie, Libye, Afrique subsaharienne en utilisant le modèle éprouvé.</p></div>
+                    <div class="info-block" style="background:var(--blue-pale)"><h4 style="color:var(--blue-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Le Maroc prouve la réplicabilité</li><li>Culture régionale similaire</li><li>Avantage du pionnier</li></ul></div>
+                    <div class="card" style="margin-top:12px"><div class="resource-pills"><div class="resource-pill"><span class="material-icons">payments</span> 50-100K/marché</div><div class="resource-pill"><span class="material-icons">person</span> 1-2 employés</div></div><div class="risk-indicator"><div class="risk-dot risk-medium"></div><span style="font-size:11px">Risque Moyen</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 18-24 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--green-mid)"><span class="material-icons">handshake</span></div><div><h5>Partenaires Locaux</h5><p>Partenaires fiables disponibles</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--blue-mid)"><span class="material-icons">gavel</span></div><div><h5>Clarté Réglementaire</h5><p>Cadre juridique clair</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--teal-mid)"><span class="material-icons">trending_up</span></div><div><h5>Demande du Marché</h5><p>Appétit pour le tourisme d'aventure</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>Intrepid Travel</h5><p>100+ pays via partenariats</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Option 2: B2B -->
+        <section class="slide section-divider" id="option2" data-slide="8" style="background:linear-gradient(135deg,var(--blue-pale) 0%,var(--purple-pale) 100%)">
+            <div class="section-icon" style="background:var(--blue-mid)"><span class="material-icons">business_center</span></div>
+            <h1 class="slide-title" style="color:var(--blue-dark)">Option 2 : Pivot B2B</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Se concentrer sur les clients d'entreprise</p>
+            <span class="tag tag-blue">Transformation des Revenus</span>
+        </section>
+        <section class="slide" data-slide="9">
+            <div class="option-header"><div class="option-number" style="background:var(--blue-mid)">2</div><div class="option-title-group"><h2>Pivot B2B</h2><p>Partenaire d'aventure d'entreprise de référence</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--blue-pale)"><h4 style="color:var(--blue-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Passer au team-building d'entreprise, retraites, partenariats institutionnels.</p></div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Tarifs 5-10x plus élevés</li><li>Revenus prévisibles</li><li>Moins saisonnier</li></ul></div>
+                    <div class="card" style="margin-top:12px"><div class="resource-pills"><div class="resource-pill"><span class="material-icons">person</span> Recrutement commercial</div><div class="resource-pill"><span class="material-icons">payments</span> 20-40K TND</div></div><div class="risk-indicator"><div class="risk-dot risk-low"></div><span style="font-size:11px">Risque Faible-Moyen</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 12-18 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--blue-mid)"><span class="material-icons">corporate_fare</span></div><div><h5>Budgets d'Entreprise</h5><p>Les entreprises investissent dans les équipes</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--purple-mid)"><span class="material-icons">workspace_premium</span></div><div><h5>Position Premium</h5><p>Commander la tarification B2B</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--teal-mid)"><span class="material-icons">sync</span></div><div><h5>Évolutivité</h5><p>Gérer de plus grands groupes</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>TeamBonding</h5><p>40+ villes US, 100% B2B</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Option 3: Vertical -->
+        <section class="slide section-divider" id="option3" data-slide="10" style="background:linear-gradient(135deg,var(--orange-pale) 0%,var(--pink-pale) 100%)">
+            <div class="section-icon" style="background:var(--orange-mid)"><span class="material-icons">domain</span></div>
+            <h1 class="slide-title" style="color:var(--orange-dark)">Option 3 : Intégration Verticale</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Posséder l'infrastructure</p>
+            <span class="tag tag-orange">Stratégie d'Actifs</span>
+        </section>
+        <section class="slide" data-slide="11">
+            <div class="option-header"><div class="option-number" style="background:var(--orange-mid)">3</div><div class="option-title-group"><h2>Intégration Verticale</h2><p>D'opérateur à propriétaire d'actifs</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--orange-pale)"><h4 style="color:var(--orange-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Investir dans un éco-camp permanent, parc d'équipements, centre de formation.</p></div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Qualité de bout en bout</li><li>Appréciation des actifs</li><li>Flux de revenus multiples</li></ul></div>
+                    <div class="card" style="margin-top:12px"><div class="resource-pills"><div class="resource-pill"><span class="material-icons">payments</span> 200-500K TND</div><div class="resource-pill"><span class="material-icons">groups</span> Équipe opérationnelle</div></div><div class="risk-indicator"><div class="risk-dot risk-high"></div><span style="font-size:11px">Risque/Rendement Élevé</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 24-36 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--orange-mid)"><span class="material-icons">account_balance</span></div><div><h5>Accès au Capital</h5><p>Financement disponible</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--blue-mid)"><span class="material-icons">location_on</span></div><div><h5>Emplacement de Choix</h5><p>Site unique et accessible</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--red-light)"><span class="material-icons">trending_up</span></div><div><h5>Occupation 60%+</h5><p>Utilisation au point mort</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>Under Canvas</h5><p>Camps de luxe près des parcs US</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Option 4: Platform -->
+        <section class="slide section-divider" id="option4" data-slide="12" style="background:linear-gradient(135deg,var(--purple-pale) 0%,var(--pink-pale) 100%)">
+            <div class="section-icon" style="background:var(--purple-mid)"><span class="material-icons">hub</span></div>
+            <h1 class="slide-title" style="color:var(--purple-dark)">Option 4 : Modèle de Plateforme</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Marketplace d'aventures</p>
+            <span class="tag tag-purple">Innovation du Modèle d'Affaires</span>
+        </section>
+        <section class="slide" data-slide="13">
+            <div class="option-header"><div class="option-number" style="background:var(--purple-mid)">4</div><div class="option-title-group"><h2>Plateforme / Agrégateur</h2><p>« Airbnb pour les aventures »</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--purple-pale)"><h4 style="color:var(--purple-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Connecter les voyageurs avec des guides et opérateurs locaux vérifiés.</p></div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Modèle évolutif</li><li>Connaissance de l'industrie</li><li>Marges élevées</li></ul></div>
+                    <div class="card" style="margin-top:12px"><div class="resource-pills"><div class="resource-pill"><span class="material-icons">payments</span> 80-150K TND</div><div class="resource-pill"><span class="material-icons">computer</span> Dév. tech</div></div><div class="risk-indicator"><div class="risk-dot risk-high"></div><span style="font-size:11px">Risque Élevé</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 24-36 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--purple-mid)"><span class="material-icons">diversity_3</span></div><div><h5>L'Offre Existe</h5><p>Des opérateurs de qualité adhèrent</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--blue-mid)"><span class="material-icons">code</span></div><div><h5>Capacité Technique</h5><p>Construire/acheter la plateforme</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--teal-mid)"><span class="material-icons">campaign</span></div><div><h5>Génération de Demande</h5><p>Marketing pour générer du trafic</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>GetYourGuide</h5><p>D'opérateur à marketplace</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Option 5: Productization -->
+        <section class="slide section-divider" id="option5" data-slide="14" style="background:linear-gradient(135deg,var(--teal-pale) 0%,var(--green-pale) 100%)">
+            <div class="section-icon" style="background:var(--teal-mid)"><span class="material-icons">inventory_2</span></div>
+            <h1 class="slide-title" style="color:var(--teal-dark)">Option 5 : Productisation</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Packager votre méthodologie</p>
+            <span class="tag tag-teal">Monétisation du Savoir</span>
+        </section>
+        <section class="slide" data-slide="15">
+            <div class="option-header"><div class="option-number" style="background:var(--teal-mid)">5</div><div class="option-title-group"><h2>Productisation & Licence</h2><p>Transformer l'expertise en produits</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--teal-pale)"><h4 style="color:var(--teal-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Packager 10 ans d'expérience en formations, playbooks, certifications, franchise.</p></div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Monétiser le savoir</li><li>Licences récurrentes</li><li>Leadership d'opinion</li></ul></div>
+                    <div class="card" style="margin-top:12px"><div class="resource-pills"><div class="resource-pill"><span class="material-icons">payments</span> 30-60K TND</div><div class="resource-pill"><span class="material-icons">create</span> Contenu</div></div><div class="risk-indicator"><div class="risk-dot risk-low"></div><span style="font-size:11px">Risque Faible</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 12-18 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--teal-mid)"><span class="material-icons">edit_document</span></div><div><h5>Codifiable</h5><p>Peut être documenté et enseigné</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--blue-mid)"><span class="material-icons">groups</span></div><div><h5>Marché d'Acheteurs</h5><p>Les opérateurs veulent de la formation</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--purple-mid)"><span class="material-icons">workspace_premium</span></div><div><h5>Autorité de Marque</h5><p>Reconnaissance de l'industrie</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>NOLS</h5><p>Certifications wilderness mondiales</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Option 6: Niche -->
+        <section class="slide section-divider" id="option6" data-slide="16" style="background:linear-gradient(135deg,var(--pink-pale) 0%,var(--purple-pale) 100%)">
+            <div class="section-icon" style="background:var(--pink-mid)"><span class="material-icons">star</span></div>
+            <h1 class="slide-title" style="color:var(--pink-dark)">Option 6 : Spécialisation de Niche</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Devenir le meilleur dans un domaine</p>
+            <span class="tag tag-pink">Stratégie de Focalisation</span>
+        </section>
+        <section class="slide" data-slide="17">
+            <div class="option-header"><div class="option-number" style="background:var(--pink-mid)">6</div><div class="option-title-group"><h2>Spécialisation de Niche</h2><p>Excellence ciblée</p></div></div>
+            <div class="grid-2">
+                <div>
+                    <div class="info-block" style="background:var(--pink-pale)"><h4 style="color:var(--pink-dark)"><span class="material-icons">lightbulb</span> Ce Que Cela Signifie</h4><p>Cesser d'être généraliste—devenir le meilleur absolu dans un type d'expérience.</p></div>
+                    <div class="info-block" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)"><span class="material-icons">check_circle</span> Pourquoi Ça Fonctionne</h4><ul><li>Tarification premium</li><li>Positionnement clair</li><li>Bouche-à-oreille communautaire</li></ul></div>
+                    <div class="card" style="margin-top:12px"><h4 style="font-size:12px;margin-bottom:8px">Niches Potentielles</h4><div class="resource-pills"><div class="resource-pill"><span class="material-icons">wb_sunny</span> Sahara</div><div class="resource-pill"><span class="material-icons">female</span> Femmes</div><div class="resource-pill"><span class="material-icons">family_restroom</span> Famille</div></div><div class="risk-indicator" style="margin-top:12px"><div class="risk-dot risk-low"></div><span style="font-size:11px">Risque Faible</span></div><p style="font-size:11px;color:var(--gray-mid);margin-top:8px">Délai : 6-12 mois</p></div>
+                </div>
+                <div class="card"><h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Ce Qui Devrait Être Vrai</h4>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--pink-mid)"><span class="material-icons">group</span></div><div><h5>Taille de Niche</h5><p>Segment suffisamment large</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--purple-mid)"><span class="material-icons">emoji_events</span></div><div><h5>Excellence</h5><p>Peut être meilleur de sa catégorie</p></div></div>
+                    <div class="wwhbt-item"><div class="icon" style="background:var(--teal-mid)"><span class="material-icons">favorite</span></div><div><h5>Passion</h5><p>Enthousiasme du fondateur</p></div></div>
+                    <div class="example-company"><div class="company-icon"><span class="material-icons">business</span></div><div class="company-info"><h5>Wild Women Expeditions</h5><p>Aventures pour femmes uniquement</p></div></div>
+                </div>
+            </div>
+        </section>
+        <!-- Comparison -->
+        <section class="slide section-divider" id="comparison" data-slide="18" style="background:linear-gradient(135deg,var(--gray-pale) 0%,var(--blue-pale) 100%)">
+            <div class="section-icon" style="background:var(--gray-mid)"><span class="material-icons">compare_arrows</span></div>
+            <h1 class="slide-title" style="color:var(--gray-dark)">Analyse Comparative</h1>
+            <p class="slide-subtitle" style="color:var(--gray-mid)">Comment se comparent les options ?</p>
+        </section>
+        <section class="slide" data-slide="19">
+            <h1 class="slide-title" style="font-size:24px">Tableau de Bord des Options Stratégiques</h1>
+            <div class="card" style="overflow-x:auto">
+                <table class="comparison-table">
+                    <thead><tr><th style="width:100px">Option</th><th>Faisabilité</th><th>Adéquation</th><th>Marché</th><th>Avantage</th><th>Risque</th><th>Rapidité</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="tag tag-green">Géographique</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled orange"></div><div class="score-dot filled orange"></div><div class="score-dot filled orange"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td></tr>
+                        <tr><td><span class="tag tag-blue">B2B</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td></tr>
+                        <tr><td><span class="tag tag-orange">Vertical</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td><td><div class="score-dots"><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td></tr>
+                        <tr><td><span class="tag tag-purple">Plateforme</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot filled red"></div><div class="score-dot filled red"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td></tr>
+                        <tr><td><span class="tag tag-teal">Productiser</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div></div></td></tr>
+                        <tr><td><span class="tag tag-pink">Niche</span></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div></td><td><div class="score-dots"><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div><div class="score-dot filled"></div></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="founder-input" style="margin-top:20px"><h4><span class="material-icons">record_voice_over</span> Discussion</h4><p>Quelles 2-3 options vous semblent les plus alignées avec votre vision ?</p></div>
+        </section>
+        <!-- Workshop -->
+        <section class="slide section-divider" id="workshop" data-slide="20" style="background:linear-gradient(135deg,var(--purple-pale) 0%,var(--teal-pale) 100%)">
+            <div class="section-icon" style="background:var(--purple-mid)"><span class="material-icons">edit_note</span></div>
+            <h1 class="slide-title" style="color:var(--purple-dark)">Atelier Interactif</h1>
+            <p class="slide-subtitle" style="color:var(--gray-dark)">Temps d'approfondir ensemble</p>
+        </section>
+        <section class="slide" data-slide="21">
+            <h1 class="slide-title" style="font-size:24px">Exercice 1 : Matrice de Priorisation</h1>
+            <div class="grid-2">
+                <div class="matrix-container">
+                    <span class="matrix-label top">Impact Élevé</span><span class="matrix-label bottom">Impact Faible</span><span class="matrix-label left">Facile</span><span class="matrix-label right">Difficile</span>
+                    <div class="matrix-grid">
+                        <div class="matrix-quadrant" style="background:var(--green-pale)"><h4 style="color:var(--green-dark)">Gains Rapides</h4><p>À faire en premier</p><span class="material-icons" style="font-size:20px;color:var(--green-mid);margin-top:4px">rocket_launch</span></div>
+                        <div class="matrix-quadrant" style="background:var(--blue-pale)"><h4 style="color:var(--blue-dark)">Paris Stratégiques</h4><p>Planifier soigneusement</p><span class="material-icons" style="font-size:20px;color:var(--blue-mid);margin-top:4px">trending_up</span></div>
+                        <div class="matrix-quadrant" style="background:var(--gray-pale)"><h4 style="color:var(--gray-dark)">Faible Priorité</h4><p>Peut-être à ignorer</p><span class="material-icons" style="font-size:20px;color:var(--gray-mid);margin-top:4px">remove_circle_outline</span></div>
+                        <div class="matrix-quadrant" style="background:var(--orange-pale)"><h4 style="color:var(--orange-dark)">Pièges à Ressources</h4><p>Être prudent</p><span class="material-icons" style="font-size:20px;color:var(--orange-mid);margin-top:4px">warning</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="exercise-card"><h3><span class="material-icons">assignment</span> Votre Tâche</h3><p style="font-size:13px">Placer chaque option selon l'impact et la difficulté.</p><div class="exercise-prompt"><p>« Où placeriez-vous chaque option ? »</p></div></div>
+                    <div class="resource-pills" style="margin-top:12px"><div class="resource-pill" style="background:var(--green-pale)"><span class="material-icons" style="color:var(--green-mid)">place</span> Géographique</div><div class="resource-pill" style="background:var(--blue-pale)"><span class="material-icons" style="color:var(--blue-mid)">place</span> B2B</div><div class="resource-pill" style="background:var(--orange-pale)"><span class="material-icons" style="color:var(--orange-mid)">place</span> Vertical</div><div class="resource-pill" style="background:var(--purple-pale)"><span class="material-icons" style="color:var(--purple-mid)">place</span> Plateforme</div><div class="resource-pill" style="background:var(--teal-pale)"><span class="material-icons" style="color:var(--teal-mid)">place</span> Productiser</div><div class="resource-pill" style="background:var(--pink-pale)"><span class="material-icons" style="color:var(--pink-mid)">place</span> Niche</div></div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" data-slide="22">
+            <h1 class="slide-title" style="font-size:24px">Exercice 2 : « Ce Qui Devrait Être Vrai »</h1>
+            <div class="grid-2">
+                <div class="exercise-card" style="background:var(--green-pale);border-color:var(--green-mid)"><h3 style="color:var(--green-dark)"><span class="material-icons">looks_one</span> Option Principale : ___________</h3><p style="font-size:13px;margin-top:12px">Pour réussir :</p><ul class="checklist" style="margin-top:8px"><li><div class="check-box"></div><span>Marché : ___________</span></li><li><div class="check-box"></div><span>Capacité : ___________</span></li><li><div class="check-box"></div><span>Ressource : ___________</span></li><li><div class="check-box"></div><span>Timing : ___________</span></li></ul><div class="exercise-prompt"><p>« Quelle hypothèse vous semble la plus incertaine ? »</p></div></div>
+                <div class="exercise-card" style="background:var(--blue-pale);border-color:var(--blue-mid)"><h3 style="color:var(--blue-dark)"><span class="material-icons">looks_two</span> Deuxième Option : ___________</h3><p style="font-size:13px;margin-top:12px">Pour réussir :</p><ul class="checklist" style="margin-top:8px"><li><div class="check-box"></div><span>Marché : ___________</span></li><li><div class="check-box"></div><span>Capacité : ___________</span></li><li><div class="check-box"></div><span>Ressource : ___________</span></li><li><div class="check-box"></div><span>Timing : ___________</span></li></ul><div class="exercise-prompt"><p>« Quelle est l'hypothèse la plus risquée ? »</p></div></div>
+            </div>
+        </section>
+        <section class="slide" data-slide="23">
+            <h1 class="slide-title" style="font-size:24px">Exercice 3 : Alignement Personnel</h1>
+            <div class="grid-2">
+                <div class="card card-elevated">
+                    <h4 style="font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons" style="color:var(--purple-mid)">psychology</span> Questions de Réflexion</h4>
+                    <div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px"><p style="font-weight:500;font-size:13px;margin-bottom:4px">1. Dans 5 ans, à quoi ressemble le succès ?</p><p style="font-size:11px;color:var(--gray-mid)">Liberté financière ? Reconnaissance ? Équilibre ?</p></div>
+                    <div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px"><p style="font-weight:500;font-size:13px;margin-bottom:4px">2. Qu'est-ce qui vous donne le plus d'énergie ?</p><p style="font-size:11px;color:var(--gray-mid)">Mener des voyages ? Stratégie ? Former les autres ?</p></div>
+                    <div style="padding:12px;background:var(--surface);border-radius:8px"><p style="font-weight:500;font-size:13px;margin-bottom:4px">3. À quoi ne renonceriez-vous jamais ?</p><p style="font-size:11px;color:var(--gray-mid)">Pratique sur le terrain ? Indépendance ? Mission écologique ?</p></div>
+                </div>
+                <div>
+                    <div class="exercise-card" style="background:var(--teal-pale);border-color:var(--teal-mid)"><h3 style="color:var(--teal-dark)"><span class="material-icons">favorite</span> Test Instinctif (1-10)</h3>
+                        <div style="margin-top:12px;font-size:12px">
+                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--teal-light)"><span>Géographique</span><span>__ /10</span></div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--teal-light)"><span>Pivot B2B</span><span>__ /10</span></div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--teal-light)"><span>Vertical</span><span>__ /10</span></div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--teal-light)"><span>Plateforme</span><span>__ /10</span></div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--teal-light)"><span>Productiser</span><span>__ /10</span></div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Niche</span><span>__ /10</span></div>
+                        </div>
+                    </div>
+                    <div class="founder-input" style="margin-top:12px"><h4><span class="material-icons">record_voice_over</span> Insight</h4><p>La « bonne » stratégie sur papier n'est peut-être pas la bonne pour vous.</p></div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" data-slide="24">
+            <h1 class="slide-title">Prochaines Étapes</h1>
+            <div class="grid-3">
+                <div class="card card-elevated" style="text-align:center;padding:24px"><div style="width:48px;height:48px;background:var(--green-mid);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><span class="material-icons" style="font-size:24px;color:var(--white)">today</span></div><h3 style="font-size:15px;margin-bottom:4px">Cette Semaine</h3><p style="font-size:12px;color:var(--gray-mid)">Réfléchir & partager avec les parties prenantes</p></div>
+                <div class="card card-elevated" style="text-align:center;padding:24px"><div style="width:48px;height:48px;background:var(--blue-mid);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><span class="material-icons" style="font-size:24px;color:var(--white)">science</span></div><h3 style="font-size:15px;margin-bottom:4px">30 Prochains Jours</h3><p style="font-size:12px;color:var(--gray-mid)">Tester les hypothèses critiques</p></div>
+                <div class="card card-elevated" style="text-align:center;padding:24px"><div style="width:48px;height:48px;background:var(--purple-mid);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><span class="material-icons" style="font-size:24px;color:var(--white)">route</span></div><h3 style="font-size:15px;margin-bottom:4px">Plan 90 Jours</h3><p style="font-size:12px;color:var(--gray-mid)">S'engager dans une direction</p></div>
+            </div>
+            <div class="card" style="margin-top:24px;padding:24px;background:linear-gradient(135deg,var(--green-pale) 0%,var(--teal-pale) 100%)">
+                <div style="display:flex;align-items:center;gap:16px"><span class="material-icons" style="font-size:36px;color:var(--green-dark)">lightbulb</span><div><h4 style="font-size:15px;color:var(--green-dark);margin-bottom:4px">N'oubliez pas</h4><p style="font-size:14px">L'objectif n'est pas de choisir la « perfection »—c'est de choisir une direction qui vous enthousiasme et que vous pouvez bien exécuter.</p></div></div>
+            </div>
+        </section>
+        <section class="slide slide-hero" data-slide="25" style="background:linear-gradient(135deg,var(--green-mid) 0%,var(--teal-mid) 100%)">
+            <div class="hero-icon" style="background:var(--white)"><span class="material-icons" style="color:var(--green-mid)">handshake</span></div>
+            <h1 class="slide-title" style="color:var(--white)">Merci</h1>
+            <p class="slide-subtitle" style="color:rgba(255,255,255,0.9)">Au prochain chapitre de Tunisian Campers</p>
+            <div style="margin-top:32px;padding:16px 32px;background:rgba(255,255,255,0.15);border-radius:12px"><p style="color:var(--white);font-size:15px">Des questions ? Discutons-en.</p></div>
+        </section>
+    </main>
+    <script>
+        const slides=document.querySelectorAll('.slide'),totalSlides=slides.length,slideCounter=document.getElementById('slideCounter'),navChapters=document.querySelectorAll('.nav-chapter');
+        const chapterSlides={intro:1,diagnostic:3,option1:6,option2:8,option3:10,option4:12,option5:14,option6:16,comparison:18,workshop:20};
+        function updateSlideIndicator(){let current=1;slides.forEach((s,i)=>{const r=s.getBoundingClientRect();if(r.top<=window.innerHeight/2&&r.bottom>=window.innerHeight/2)current=i+1});slideCounter.textContent=`${current} / ${totalSlides}`;let active='intro';for(const[c,n]of Object.entries(chapterSlides))if(current>=n)active=c;navChapters.forEach(n=>{n.classList.remove('active');if(n.dataset.chapter===active)n.classList.add('active')})}
+        function scrollToChapter(c){const n=chapterSlides[c],t=document.querySelector(`[data-slide="${n}"]`);if(t)t.scrollIntoView({behavior:'smooth'});if(window.innerWidth<=1024)document.getElementById('navSidebar').classList.remove('open')}
+        function toggleNav(){document.getElementById('navSidebar').classList.toggle('open')}
+        window.addEventListener('scroll',updateSlideIndicator);window.addEventListener('resize',updateSlideIndicator);updateSlideIndicator();
+        document.addEventListener('click',e=>{const nav=document.getElementById('navSidebar'),toggle=document.querySelector('.menu-toggle');if(window.innerWidth<=1024&&!nav.contains(e.target)&&!toggle.contains(e.target))nav.classList.remove('open')});
+    </script>
+</body>
+</html>

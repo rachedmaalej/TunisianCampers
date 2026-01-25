@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélection de Stratégie | Tunisian Campers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --blue-light: #DBECF4;
+            --blue-medium: #76AED9;
+            --blue-primary: #4A8EBF;
+            --blue-dark: #34659F;
+
+            --green-light: #DEF5B7;
+            --green-medium: #9FD775;
+            --green-primary: #80C261;
+            --green-dark: #549F3A;
+
+            --orange-light: #FFE9B7;
+            --orange-medium: #FBAC54;
+            --orange-primary: #F48E40;
+            --orange-dark: #E15720;
+
+            --purple-light: #F3E3FE;
+            --purple-medium: #C3ADDD;
+            --purple-primary: #AF93C6;
+            --purple-dark: #79409E;
+
+            --teal-light: #DAF3E0;
+            --teal-medium: #85D9BF;
+            --teal-primary: #6DBBAA;
+            --teal-dark: #267675;
+
+            --pink-light: #FBD8E7;
+            --pink-medium: #E49CCE;
+            --pink-primary: #EB76C2;
+            --pink-dark: #A12B9B;
+
+            --red-light: #FFDDDE;
+            --red-medium: #FF9895;
+            --red-primary: #E65655;
+            --red-dark: #CE2B26;
+
+            --gray-100: #E8E8E8;
+            --gray-200: #D1D1D1;
+            --gray-300: #BABABA;
+            --gray-400: #A2A2A2;
+            --gray-500: #7E7E7E;
+            --gray-600: #5B5B5B;
+
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-elevated: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: #FAFAFA;
+            color: var(--gray-600);
+            overflow-x: hidden;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-500);
+            box-shadow: var(--shadow-elevated);
+            z-index: 1000;
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 16px 12px;
+            border-radius: 0 16px 16px 0;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .chapter-nav ul {
+            list-style: none;
+        }
+
+        .chapter-nav li {
+            margin: 8px 0;
+        }
+
+        .chapter-nav a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: var(--gray-500);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .chapter-nav a:hover {
+            background: var(--blue-light);
+            color: var(--blue-dark);
+        }
+
+        .chapter-nav a.active {
+            background: var(--blue-primary);
+            color: white;
+        }
+
+        .chapter-nav .material-icons {
+            font-size: 18px;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            margin-left: 200px;
+            padding: 0 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .chapter-nav {
+                display: none;
+            }
+            .slides-container {
+                margin-left: 0;
+                padding: 0 20px;
+            }
+        }
+
+        /* Individual Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* MD3 Elevated Card */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-elevated);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Typography */
+        .slide-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .slide-subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--gray-500);
+            margin-bottom: 40px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* Hero Slide */
+        .hero-slide {
+            background: linear-gradient(135deg, var(--blue-light) 0%, var(--teal-light) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-icon .material-icons {
+            font-size: 48px;
+            color: var(--blue-primary);
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        .hero-company {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--blue-dark);
+            margin-bottom: 8px;
+        }
+
+        .hero-tagline {
+            font-size: 20px;
+            color: var(--gray-500);
+        }
+
+        /* Big Numbers */
+        .big-number {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .big-number-label {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--gray-500);
+            margin-top: 8px;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-6 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-6 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Option Cards */
+        .option-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-elevated);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-card.eliminated {
+            opacity: 0.5;
+            border: 2px dashed var(--gray-300);
+        }
+
+        .option-card.selected {
+            border: 2px solid var(--green-primary);
+        }
+
+        .option-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .option-icon .material-icons {
+            font-size: 32px;
+            color: white;
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-200);
+            color: var(--gray-500);
+            z-index: 2;
+        }
+
+        .timeline-dot.completed {
+            background: var(--green-primary);
+            color: white;
+        }
+
+        .timeline-dot.current {
+            background: var(--blue-primary);
+            color: white;
+            box-shadow: 0 0 0 4px var(--blue-light);
+        }
+
+        .timeline-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-500);
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .timeline-line {
+            width: 80px;
+            height: 4px;
+            background: var(--gray-200);
+        }
+
+        .timeline-line.completed {
+            background: var(--green-primary);
+        }
+
+        /* Frameworks & Matrices */
+        .matrix-2x2 {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 4px;
+            background: var(--gray-100);
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .matrix-header {
+            background: var(--gray-200);
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .matrix-corner {
+            background: var(--gray-100);
+        }
+
+        .matrix-cell {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Score Bar */
+        .score-bar-container {
+            margin: 12px 0;
+        }
+
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .score-bar {
+            height: 12px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        /* Door Comparison */
+        .door-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 40px 0;
+        }
+
+        .door-item {
+            text-align: center;
+        }
+
+        .door-visual {
+            width: 120px;
+            height: 200px;
+            border-radius: 8px 8px 0 0;
+            margin: 0 auto 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .door-visual.one-way {
+            background: linear-gradient(135deg, var(--orange-light) 0%, var(--orange-medium) 100%);
+            border: 3px solid var(--orange-primary);
+        }
+
+        .door-visual.two-way {
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--green-medium) 100%);
+            border: 3px solid var(--green-primary);
+        }
+
+        .door-visual .material-icons {
+            font-size: 48px;
+        }
+
+        .door-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .door-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            max-width: 200px;
+        }
+
+        /* Scenario Cards */
+        .scenario-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-elevated);
+            text-align: center;
+        }
+
+        .scenario-card.best {
+            border-top: 4px solid var(--green-primary);
+        }
+
+        .scenario-card.base {
+            border-top: 4px solid var(--blue-primary);
+        }
+
+        .scenario-card.worst {
+            border-top: 4px solid var(--red-primary);
+        }
+
+        .scenario-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .scenario-card.best .scenario-icon {
+            background: var(--green-light);
+            color: var(--green-dark);
+        }
+
+        .scenario-card.base .scenario-icon {
+            background: var(--blue-light);
+            color: var(--blue-dark);
+        }
+
+        .scenario-card.worst .scenario-icon {
+            background: var(--red-light);
+            color: var(--red-dark);
+        }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-check {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checklist-check.checked {
+            background: var(--green-primary);
+            border-color: var(--green-primary);
+            color: white;
+        }
+
+        .checklist-text {
+            flex: 1;
+        }
+
+        .checklist-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .checklist-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Concern Card */
+        .concern-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow-elevated);
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .concern-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .concern-icon .material-icons {
+            font-size: 28px;
+            color: white;
+        }
+
+        .concern-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .concern-text {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* Decision Template */
+        .template-section {
+            background: var(--blue-light);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .template-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blue-dark);
+            margin-bottom: 8px;
+        }
+
+        .template-input {
+            font-size: 16px;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        /* Flex utilities */
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .mt-32 { margin-top: 32px; }
+        .mt-40 { margin-top: 40px; }
+        .mb-16 { margin-bottom: 16px; }
+        .mb-24 { margin-bottom: 24px; }
+        .mb-32 { margin-bottom: 32px; }
+        .gap-16 { gap: 16px; }
+        .gap-24 { gap: 24px; }
+
+        /* Color utilities */
+        .bg-blue { background: var(--blue-primary); }
+        .bg-green { background: var(--green-primary); }
+        .bg-orange { background: var(--orange-primary); }
+        .bg-purple { background: var(--purple-primary); }
+        .bg-teal { background: var(--teal-primary); }
+        .bg-pink { background: var(--pink-primary); }
+
+        .text-blue { color: var(--blue-primary); }
+        .text-green { color: var(--green-primary); }
+        .text-orange { color: var(--orange-primary); }
+        .text-red { color: var(--red-primary); }
+
+        .label-blue { background: var(--blue-light); color: var(--blue-dark); }
+        .label-green { background: var(--green-light); color: var(--green-dark); }
+        .label-orange { background: var(--orange-light); color: var(--orange-dark); }
+        .label-purple { background: var(--purple-light); color: var(--purple-dark); }
+
+        /* Status badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success { background: var(--green-light); color: var(--green-dark); }
+        .badge-warning { background: var(--orange-light); color: var(--orange-dark); }
+        .badge-danger { background: var(--red-light); color: var(--red-dark); }
+
+        /* Quote block */
+        .quote-block {
+            background: linear-gradient(135deg, var(--purple-light) 0%, var(--blue-light) 100%);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--gray-600);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .quote-icon {
+            font-size: 48px;
+            color: var(--purple-medium);
+            opacity: 0.5;
+            margin-bottom: 16px;
+        }
+
+        /* Analysis Table */
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .analysis-table th {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-500);
+            background: var(--gray-100);
+        }
+
+        .analysis-table td {
+            font-size: 15px;
+        }
+
+        /* Risk Matrix */
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: auto repeat(3, 1fr);
+            grid-template-rows: auto repeat(3, 80px);
+            gap: 4px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .risk-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .risk-low { background: var(--green-light); color: var(--green-dark); }
+        .risk-medium { background: var(--orange-light); color: var(--orange-dark); }
+        .risk-high { background: var(--red-light); color: var(--red-dark); }
+        .risk-header { background: var(--gray-100); font-weight: 600; font-size: 12px; }
+
+        /* Progress indicator */
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: var(--gray-100);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Closing slide */
+        .closing-slide {
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--teal-light) 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span>/<span id="totalSlides">20</span>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <nav class="chapter-nav">
+        <ul>
+            <li><a href="#intro" class="active"><span class="material-icons">home</span>Introduction</a></li>
+            <li><a href="#recap"><span class="material-icons">replay</span>Récapitulatif</a></li>
+            <li><a href="#analysis"><span class="material-icons">analytics</span>Analyse</a></li>
+            <li><a href="#framework"><span class="material-icons">account_tree</span>Cadre</a></li>
+            <li><a href="#commitment"><span class="material-icons">check_circle</span>Engagement</a></li>
+            <li><a href="#mindset"><span class="material-icons">psychology</span>État d'esprit</a></li>
+            <li><a href="#decision"><span class="material-icons">task_alt</span>Décision</a></li>
+        </ul>
+    </nav>
+
+    <!-- Slides Container -->
+    <div class="slides-container">
+
+        <!-- SLIDE 1: Title -->
+        <section id="intro" class="slide hero-slide" data-chapter="intro">
+            <div class="slide-content hero-content">
+                <div class="hero-icon">
+                    <span class="material-icons">explore</span>
+                </div>
+                <div class="hero-company">Tunisian Campers</div>
+                <h1 class="hero-title">Sélection de Stratégie</h1>
+                <p class="hero-tagline">Des Options à l'Action</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Journey -->
+        <section class="slide" data-chapter="intro">
+            <div class="slide-content text-center">
+                <span class="section-label label-blue">
+                    <span class="material-icons" style="font-size: 14px;">route</span>
+                    Notre Parcours
+                </span>
+                <h2 class="slide-title">Où Nous en Sommes Aujourd'hui</h2>
+                <p class="slide-subtitle">10 ans de construction. Maintenant, le moment de choisir.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed">
+                            <span class="material-icons">search</span>
+                        </div>
+                        <span class="timeline-label">Diagnostic</span>
+                    </div>
+                    <div class="timeline-line completed"></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed">
+                            <span class="material-icons">lightbulb</span>
+                        </div>
+                        <span class="timeline-label">Options</span>
+                    </div>
+                    <div class="timeline-line completed"></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot current">
+                            <span class="material-icons">check_circle</span>
+                        </div>
+                        <span class="timeline-label">Sélection</span>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">
+                            <span class="material-icons">rocket_launch</span>
+                        </div>
+                        <span class="timeline-label">Exécution</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Session Objectives -->
+        <section class="slide" data-chapter="intro">
+            <div class="slide-content">
+                <span class="section-label label-blue">
+                    <span class="material-icons" style="font-size: 14px;">flag</span>
+                    Session d'Aujourd'hui
+                </span>
+                <h2 class="slide-title">Ce Que Nous Allons Accomplir</h2>
+
+                <div class="grid-2 mt-40">
+                    <div class="card">
+                        <div class="option-icon bg-blue">
+                            <span class="material-icons">visibility</span>
+                        </div>
+                        <h3 class="option-title">Réviser et Affiner</h3>
+                        <p class="option-desc">Récapituler les 6 options stratégiques et réduire aux principales candidates</p>
+                    </div>
+                    <div class="card">
+                        <div class="option-icon bg-green">
+                            <span class="material-icons">analytics</span>
+                        </div>
+                        <h3 class="option-title">Analyse Approfondie</h3>
+                        <p class="option-desc">Appliquer des cadres rigoureux aux options présélectionnées</p>
+                    </div>
+                    <div class="card">
+                        <div class="option-icon bg-purple">
+                            <span class="material-icons">balance</span>
+                        </div>
+                        <h3 class="option-title">Clarté des Compromis</h3>
+                        <p class="option-desc">Comprendre ce que chaque choix signifie—et ne signifie pas</p>
+                    </div>
+                    <div class="card">
+                        <div class="option-icon bg-orange">
+                            <span class="material-icons">task_alt</span>
+                        </div>
+                        <h3 class="option-title">S'Engager avec Confiance</h3>
+                        <p class="option-desc">Repartir avec une direction stratégique claire</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Workshop Recap Header -->
+        <section id="recap" class="slide" data-chapter="recap">
+            <div class="slide-content text-center">
+                <span class="section-label label-green">
+                    <span class="material-icons" style="font-size: 14px;">replay</span>
+                    Récapitulatif de l'Atelier
+                </span>
+                <h2 class="slide-title">Les 6 Options Stratégiques</h2>
+                <p class="slide-subtitle">Explorées lors de notre session précédente</p>
+
+                <div class="grid-6 mt-40">
+                    <div class="option-card">
+                        <div class="option-icon bg-blue">
+                            <span class="material-icons">store</span>
+                        </div>
+                        <h4 class="option-title">Expansion Retail</h4>
+                        <p class="option-desc">Ouvrir des magasins physiques dans les villes clés</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-icon bg-green">
+                            <span class="material-icons">public</span>
+                        </div>
+                        <h4 class="option-title">Croissance Régionale</h4>
+                        <p class="option-desc">Expansion en Algérie et au Maroc</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-icon bg-purple">
+                            <span class="material-icons">devices</span>
+                        </div>
+                        <h4 class="option-title">Plateforme Digitale</h4>
+                        <p class="option-desc">E-commerce et hub communautaire</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-icon bg-orange">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h4 class="option-title">Modèle d'Expérience</h4>
+                        <p class="option-desc">Circuits guidés et aventures</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-icon bg-teal">
+                            <span class="material-icons">handshake</span>
+                        </div>
+                        <h4 class="option-title">Partenariats B2B</h4>
+                        <p class="option-desc">Hôtels, écoles, entreprises</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-icon bg-pink">
+                            <span class="material-icons">inventory_2</span>
+                        </div>
+                        <h4 class="option-title">Licence de Marque</h4>
+                        <p class="option-desc">Marque blanche et partenariats</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Initial Reactions -->
+        <section class="slide" data-chapter="recap">
+            <div class="slide-content">
+                <span class="section-label label-green">
+                    <span class="material-icons" style="font-size: 14px;">favorite</span>
+                    Vos Réactions Initiales
+                </span>
+                <h2 class="slide-title">Qu'est-ce qui a le Plus Résonné ?</h2>
+
+                <div class="card mt-32">
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Votre Ressenti Initial</th>
+                                <th>Préoccupation Principale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Expansion Retail</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Croissance Régionale</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plateforme Digitale</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Modèle d'Expérience</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Partenariats B2B</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Licence de Marque</strong></td>
+                                <td><em>[Espace réservé : Vos notes]</em></td>
+                                <td><em>[Espace réservé]</em></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Eliminated Options -->
+        <section class="slide" data-chapter="recap">
+            <div class="slide-content text-center">
+                <span class="section-label label-orange">
+                    <span class="material-icons" style="font-size: 14px;">remove_circle</span>
+                    Options Éliminées
+                </span>
+                <h2 class="slide-title">Réduction des Choix</h2>
+
+                <div class="grid-3 mt-40">
+                    <div class="option-card eliminated">
+                        <div class="option-icon" style="background: var(--gray-300);">
+                            <span class="material-icons">close</span>
+                        </div>
+                        <h4 class="option-title">[Nom de l'option]</h4>
+                        <p class="option-desc" style="color: var(--red-primary);">Raison de l'élimination</p>
+                    </div>
+                    <div class="option-card eliminated">
+                        <div class="option-icon" style="background: var(--gray-300);">
+                            <span class="material-icons">close</span>
+                        </div>
+                        <h4 class="option-title">[Nom de l'option]</h4>
+                        <p class="option-desc" style="color: var(--red-primary);">Raison de l'élimination</p>
+                    </div>
+                    <div class="option-card eliminated">
+                        <div class="option-icon" style="background: var(--gray-300);">
+                            <span class="material-icons">close</span>
+                        </div>
+                        <h4 class="option-title">[Nom de l'option]</h4>
+                        <p class="option-desc" style="color: var(--red-primary);">Raison de l'élimination</p>
+                    </div>
+                </div>
+
+                <div class="quote-block mt-40" style="max-width: 700px; margin: 40px auto 0;">
+                    <p style="font-size: 18px; color: var(--gray-600);">Dire non est aussi stratégique que dire oui. Ces options ne correspondent pas à vos ressources, calendrier ou vision actuels.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Top 3 Options -->
+        <section class="slide" data-chapter="recap">
+            <div class="slide-content text-center">
+                <span class="section-label label-green">
+                    <span class="material-icons" style="font-size: 14px;">star</span>
+                    Principaux Candidats
+                </span>
+                <h2 class="slide-title">3 Options Retenues</h2>
+
+                <div class="grid-3 mt-40">
+                    <div class="option-card selected">
+                        <span class="badge badge-success mb-16">Très Compatible</span>
+                        <div class="option-icon bg-blue">
+                            <span class="material-icons">store</span>
+                        </div>
+                        <h4 class="option-title">Option A</h4>
+                        <p class="option-desc">[Espace réservé : Brève description]</p>
+                    </div>
+                    <div class="option-card selected">
+                        <span class="badge badge-success mb-16">Fort Potentiel</span>
+                        <div class="option-icon bg-green">
+                            <span class="material-icons">devices</span>
+                        </div>
+                        <h4 class="option-title">Option B</h4>
+                        <p class="option-desc">[Espace réservé : Brève description]</p>
+                    </div>
+                    <div class="option-card selected">
+                        <span class="badge badge-warning mb-16">À Explorer</span>
+                        <div class="option-icon bg-purple">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h4 class="option-title">Option C</h4>
+                        <p class="option-desc">[Espace réservé : Brève description]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Analysis Framework Intro -->
+        <section id="analysis" class="slide" data-chapter="analysis">
+            <div class="slide-content text-center">
+                <span class="section-label label-purple">
+                    <span class="material-icons" style="font-size: 14px;">analytics</span>
+                    Analyse Approfondie
+                </span>
+                <h2 class="slide-title">5 Axes d'Évaluation</h2>
+                <p class="slide-subtitle">Comment nous allons analyser chaque option présélectionnée</p>
+
+                <div class="grid-3 mt-40" style="max-width: 900px; margin: 40px auto 0;">
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 48px; color: var(--blue-primary);">trending_up</span>
+                        <h4 class="option-title mt-16">Taille du Marché</h4>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 48px; color: var(--green-primary);">groups</span>
+                        <h4 class="option-title mt-16">Concurrence</h4>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 48px; color: var(--orange-primary);">payments</span>
+                        <h4 class="option-title mt-16">Finances</h4>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 48px; color: var(--purple-primary);">engineering</span>
+                        <h4 class="option-title mt-16">Capacités</h4>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 48px; color: var(--red-primary);">warning</span>
+                        <h4 class="option-title mt-16">Risque</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Market Sizing -->
+        <section class="slide" data-chapter="analysis">
+            <div class="slide-content">
+                <span class="section-label label-blue">
+                    <span class="material-icons" style="font-size: 14px;">trending_up</span>
+                    Opportunité de Marché
+                </span>
+                <h2 class="slide-title">Dimensionnement du Potentiel</h2>
+
+                <div class="grid-3 mt-32">
+                    <div class="card text-center">
+                        <h4 style="color: var(--gray-500); font-size: 14px; margin-bottom: 8px;">Option A</h4>
+                        <div class="big-number text-blue">[X]M</div>
+                        <p class="big-number-label">Taille du Marché TND</p>
+                        <div class="score-bar-container mt-24">
+                            <div class="score-label">
+                                <span>Adressable</span>
+                                <span>[Y]%</span>
+                            </div>
+                            <div class="score-bar">
+                                <div class="score-fill bg-blue" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-center">
+                        <h4 style="color: var(--gray-500); font-size: 14px; margin-bottom: 8px;">Option B</h4>
+                        <div class="big-number text-green">[X]M</div>
+                        <p class="big-number-label">Taille du Marché TND</p>
+                        <div class="score-bar-container mt-24">
+                            <div class="score-label">
+                                <span>Adressable</span>
+                                <span>[Y]%</span>
+                            </div>
+                            <div class="score-bar">
+                                <div class="score-fill bg-green" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-center">
+                        <h4 style="color: var(--gray-500); font-size: 14px; margin-bottom: 8px;">Option C</h4>
+                        <div class="big-number text-purple">[X]M</div>
+                        <p class="big-number-label">Taille du Marché TND</p>
+                        <div class="score-bar-container mt-24">
+                            <div class="score-label">
+                                <span>Adressable</span>
+                                <span>[Y]%</span>
+                            </div>
+                            <div class="score-bar">
+                                <div class="score-fill bg-purple" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Financial Template -->
+        <section class="slide" data-chapter="analysis">
+            <div class="slide-content">
+                <span class="section-label label-orange">
+                    <span class="material-icons" style="font-size: 14px;">payments</span>
+                    Projections Financières
+                </span>
+                <h2 class="slide-title">Investissement vs. Rendement</h2>
+
+                <div class="card mt-32">
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Métrique</th>
+                                <th style="text-align: center;">Option A</th>
+                                <th style="text-align: center;">Option B</th>
+                                <th style="text-align: center;">Option C</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">account_balance_wallet</span>Investissement Requis</td>
+                                <td style="text-align: center;">[X] TND</td>
+                                <td style="text-align: center;">[X] TND</td>
+                                <td style="text-align: center;">[X] TND</td>
+                            </tr>
+                            <tr>
+                                <td><span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">trending_up</span>Chiffre d'Affaires An 3</td>
+                                <td style="text-align: center;">[X] TND</td>
+                                <td style="text-align: center;">[X] TND</td>
+                                <td style="text-align: center;">[X] TND</td>
+                            </tr>
+                            <tr>
+                                <td><span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">schedule</span>Période de Retour</td>
+                                <td style="text-align: center;">[X] mois</td>
+                                <td style="text-align: center;">[X] mois</td>
+                                <td style="text-align: center;">[X] mois</td>
+                            </tr>
+                            <tr>
+                                <td><span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">percent</span>Marge Brute</td>
+                                <td style="text-align: center;">[X]%</td>
+                                <td style="text-align: center;">[X]%</td>
+                                <td style="text-align: center;">[X]%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Capability Gaps -->
+        <section class="slide" data-chapter="analysis">
+            <div class="slide-content">
+                <span class="section-label label-purple">
+                    <span class="material-icons" style="font-size: 14px;">engineering</span>
+                    Analyse des Capacités
+                </span>
+                <h2 class="slide-title">Ce dont Nous Avons Besoin vs. Ce que Nous Avons</h2>
+
+                <div class="grid-2 mt-32">
+                    <div class="card">
+                        <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: var(--green-primary);">check_circle</span>
+                            Forces Actuelles
+                        </h4>
+                        <div class="checklist-item">
+                            <div class="checklist-check checked"><span class="material-icons" style="font-size: 16px;">check</span></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">10 Ans de Capital Marque</div>
+                                <div class="checklist-desc">Forte reconnaissance dans la communauté outdoor</div>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-check checked"><span class="material-icons" style="font-size: 16px;">check</span></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">Relations Fournisseurs</div>
+                                <div class="checklist-desc">Réseau établi, conditions favorables</div>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-check checked"><span class="material-icons" style="font-size: 16px;">check</span></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">Communauté Engagée</div>
+                                <div class="checklist-desc">Base de clients fidèles</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: var(--orange-primary);">build</span>
+                            Lacunes en Capacités
+                        </h4>
+                        <div class="checklist-item">
+                            <div class="checklist-check"></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">[Lacune 1]</div>
+                                <div class="checklist-desc">Requis pour l'Option X</div>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-check"></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">[Lacune 2]</div>
+                                <div class="checklist-desc">Requis pour l'Option Y</div>
+                            </div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-check"></div>
+                            <div class="checklist-text">
+                                <div class="checklist-title">[Lacune 3]</div>
+                                <div class="checklist-desc">Critique pour toutes les options</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: Risk Assessment -->
+        <section class="slide" data-chapter="analysis">
+            <div class="slide-content">
+                <span class="section-label label-orange">
+                    <span class="material-icons" style="font-size: 14px;">warning</span>
+                    Évaluation des Risques
+                </span>
+                <h2 class="slide-title">Comprendre les Inconvénients</h2>
+
+                <div class="risk-matrix mt-40">
+                    <div class="risk-cell"></div>
+                    <div class="risk-cell risk-header">Impact Faible</div>
+                    <div class="risk-cell risk-header">Impact Moyen</div>
+                    <div class="risk-cell risk-header">Impact Élevé</div>
+
+                    <div class="risk-cell risk-header">Probabilité Élevée</div>
+                    <div class="risk-cell risk-medium">Surveiller</div>
+                    <div class="risk-cell risk-high">Atténuer</div>
+                    <div class="risk-cell risk-high">Éviter/Transférer</div>
+
+                    <div class="risk-cell risk-header">Probabilité Moyenne</div>
+                    <div class="risk-cell risk-low">Accepter</div>
+                    <div class="risk-cell risk-medium">Surveiller</div>
+                    <div class="risk-cell risk-high">Atténuer</div>
+
+                    <div class="risk-cell risk-header">Probabilité Faible</div>
+                    <div class="risk-cell risk-low">Accepter</div>
+                    <div class="risk-cell risk-low">Accepter</div>
+                    <div class="risk-cell risk-medium">Surveiller</div>
+                </div>
+
+                <p class="text-center mt-32" style="color: var(--gray-500); font-size: 14px;">Placer les principaux risques de chaque option dans la matrice ci-dessus</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: Decision Framework Intro -->
+        <section id="framework" class="slide" data-chapter="framework">
+            <div class="slide-content text-center">
+                <span class="section-label label-purple">
+                    <span class="material-icons" style="font-size: 14px;">account_tree</span>
+                    Cadre Décisionnel
+                </span>
+                <h2 class="slide-title">Comment Choisir</h2>
+                <p class="slide-subtitle">Une approche structurée pour la prise de décision stratégique</p>
+
+                <div class="grid-2 mt-40" style="max-width: 800px; margin: 40px auto 0;">
+                    <div class="card" style="border-left: 4px solid var(--blue-primary);">
+                        <span class="material-icons" style="font-size: 36px; color: var(--blue-primary);">scale</span>
+                        <h4 class="option-title mt-16">Notation Pondérée</h4>
+                        <p class="option-desc">Critères qui comptent le plus pour VOUS</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--green-primary);">
+                        <span class="material-icons" style="font-size: 36px; color: var(--green-primary);">swap_horiz</span>
+                        <h4 class="option-title mt-16">Clarté des Compromis</h4>
+                        <p class="option-desc">Ce que vous gagnez vs. ce que vous abandonnez</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--orange-primary);">
+                        <span class="material-icons" style="font-size: 36px; color: var(--orange-primary);">door_front</span>
+                        <h4 class="option-title mt-16">Réversibilité</h4>
+                        <p class="option-desc">Portes à sens unique vs. à double sens</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--purple-primary);">
+                        <span class="material-icons" style="font-size: 36px; color: var(--purple-primary);">auto_graph</span>
+                        <h4 class="option-title mt-16">Planification par Scénarios</h4>
+                        <p class="option-desc">Meilleurs, moyens et pires cas</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14: Weighted Scoring -->
+        <section class="slide" data-chapter="framework">
+            <div class="slide-content">
+                <span class="section-label label-blue">
+                    <span class="material-icons" style="font-size: 14px;">scale</span>
+                    Critères Pondérés
+                </span>
+                <h2 class="slide-title">Qu'est-ce qui Compte le Plus ?</h2>
+
+                <div class="card mt-32">
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Critères</th>
+                                <th style="text-align: center;">Poids</th>
+                                <th style="text-align: center;">Option A</th>
+                                <th style="text-align: center;">Option B</th>
+                                <th style="text-align: center;">Option C</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Potentiel de Revenus</td>
+                                <td style="text-align: center;"><strong>25%</strong></td>
+                                <td style="text-align: center;">⬤⬤⬤⬤○</td>
+                                <td style="text-align: center;">⬤⬤⬤○○</td>
+                                <td style="text-align: center;">⬤⬤⬤⬤⬤</td>
+                            </tr>
+                            <tr>
+                                <td>Capital Requis</td>
+                                <td style="text-align: center;"><strong>20%</strong></td>
+                                <td style="text-align: center;">⬤⬤○○○</td>
+                                <td style="text-align: center;">⬤⬤⬤⬤○</td>
+                                <td style="text-align: center;">⬤⬤⬤○○</td>
+                            </tr>
+                            <tr>
+                                <td>Rapidité de Mise sur Marché</td>
+                                <td style="text-align: center;"><strong>20%</strong></td>
+                                <td style="text-align: center;">⬤⬤⬤○○</td>
+                                <td style="text-align: center;">⬤⬤⬤⬤⬤</td>
+                                <td style="text-align: center;">⬤⬤○○○</td>
+                            </tr>
+                            <tr>
+                                <td>Adéquation aux Capacités</td>
+                                <td style="text-align: center;"><strong>20%</strong></td>
+                                <td style="text-align: center;">⬤⬤⬤⬤○</td>
+                                <td style="text-align: center;">⬤⬤⬤○○</td>
+                                <td style="text-align: center;">⬤⬤⬤⬤○</td>
+                            </tr>
+                            <tr>
+                                <td>Enthousiasme Personnel</td>
+                                <td style="text-align: center;"><strong>15%</strong></td>
+                                <td style="text-align: center;">[Évaluer]</td>
+                                <td style="text-align: center;">[Évaluer]</td>
+                                <td style="text-align: center;">[Évaluer]</td>
+                            </tr>
+                            <tr style="background: var(--blue-light);">
+                                <td><strong>Score Pondéré</strong></td>
+                                <td style="text-align: center;"><strong>100%</strong></td>
+                                <td style="text-align: center;"><strong>[X.X]</strong></td>
+                                <td style="text-align: center;"><strong>[X.X]</strong></td>
+                                <td style="text-align: center;"><strong>[X.X]</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 15: Reversibility -->
+        <section class="slide" data-chapter="framework">
+            <div class="slide-content text-center">
+                <span class="section-label label-orange">
+                    <span class="material-icons" style="font-size: 14px;">door_front</span>
+                    Évaluation de la Réversibilité
+                </span>
+                <h2 class="slide-title">Portes à Sens Unique vs. à Double Sens</h2>
+
+                <div class="door-container">
+                    <div class="door-item">
+                        <div class="door-visual one-way">
+                            <span class="material-icons" style="color: var(--orange-dark);">arrow_forward</span>
+                            <span class="material-icons" style="color: var(--orange-dark); opacity: 0.3; text-decoration: line-through;">arrow_back</span>
+                        </div>
+                        <div class="door-label" style="color: var(--orange-dark);">Porte à Sens Unique</div>
+                        <p class="door-desc">Difficile à inverser. Nécessite une forte conviction. Prenez votre temps.</p>
+                    </div>
+                    <div class="door-item">
+                        <div class="door-visual two-way">
+                            <span class="material-icons" style="color: var(--green-dark);">swap_horiz</span>
+                        </div>
+                        <div class="door-label" style="color: var(--green-dark);">Porte à Double Sens</div>
+                        <p class="door-desc">Facile à inverser. Orientation vers l'action. Apprendre en faisant.</p>
+                    </div>
+                </div>
+
+                <div class="card mt-32" style="max-width: 700px; margin: 32px auto 0;">
+                    <p style="font-size: 16px; color: var(--gray-600); text-align: left;">
+                        <strong>Question à poser :</strong> Si cette stratégie ne fonctionne pas dans 18 mois, à quoi ressemble le retour en arrière ? Quel est le coût ?
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: Scenario Planning -->
+        <section class="slide" data-chapter="framework">
+            <div class="slide-content">
+                <span class="section-label label-purple">
+                    <span class="material-icons" style="font-size: 14px;">auto_graph</span>
+                    Planification par Scénarios
+                </span>
+                <h2 class="slide-title">Meilleur Cas, Cas de Base, Pire Cas</h2>
+
+                <div class="grid-3 mt-40">
+                    <div class="scenario-card best">
+                        <div class="scenario-icon">
+                            <span class="material-icons">rocket_launch</span>
+                        </div>
+                        <h4 style="color: var(--green-dark); margin-bottom: 12px;">Meilleur Cas</h4>
+                        <div class="big-number text-green" style="font-size: 36px;">[X]M TND</div>
+                        <p style="color: var(--gray-500); font-size: 14px; margin-top: 8px;">Chiffre d'Affaires An 3</p>
+                        <p style="font-size: 13px; color: var(--gray-500); margin-top: 16px; text-align: left;">
+                            Ce qui devrait réussir :<br>
+                            • [Hypothèse clé 1]<br>
+                            • [Hypothèse clé 2]
+                        </p>
+                    </div>
+                    <div class="scenario-card base">
+                        <div class="scenario-icon">
+                            <span class="material-icons">trending_flat</span>
+                        </div>
+                        <h4 style="color: var(--blue-dark); margin-bottom: 12px;">Cas de Base</h4>
+                        <div class="big-number text-blue" style="font-size: 36px;">[X]M TND</div>
+                        <p style="color: var(--gray-500); font-size: 14px; margin-top: 8px;">Chiffre d'Affaires An 3</p>
+                        <p style="font-size: 13px; color: var(--gray-500); margin-top: 16px; text-align: left;">
+                            Trajectoire la plus probable :<br>
+                            • [Résultat attendu 1]<br>
+                            • [Résultat attendu 2]
+                        </p>
+                    </div>
+                    <div class="scenario-card worst">
+                        <div class="scenario-icon">
+                            <span class="material-icons">trending_down</span>
+                        </div>
+                        <h4 style="color: var(--red-dark); margin-bottom: 12px;">Pire Cas</h4>
+                        <div class="big-number text-red" style="font-size: 36px;">[X]M TND</div>
+                        <p style="color: var(--gray-500); font-size: 14px; margin-top: 8px;">Chiffre d'Affaires An 3</p>
+                        <p style="font-size: 13px; color: var(--gray-500); margin-top: 16px; text-align: left;">
+                            Ce qui pourrait mal tourner :<br>
+                            • [Risque 1]<br>
+                            • [Risque 2]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 17: Strategic Commitment -->
+        <section id="commitment" class="slide" data-chapter="commitment">
+            <div class="slide-content text-center">
+                <span class="section-label label-green">
+                    <span class="material-icons" style="font-size: 14px;">check_circle</span>
+                    Engagement Stratégique
+                </span>
+                <h2 class="slide-title">Ce que Signifie Vraiment l'Engagement</h2>
+
+                <div class="quote-block mt-40" style="max-width: 800px; margin: 40px auto 0;">
+                    <span class="material-icons quote-icon">format_quote</span>
+                    <p class="quote-text">« La stratégie consiste à faire des choix, des compromis ; il s'agit de choisir délibérément d'être différent. »</p>
+                    <p style="margin-top: 16px; font-size: 14px; color: var(--gray-500);">— Michael Porter</p>
+                </div>
+
+                <div class="grid-2 mt-40" style="max-width: 700px; margin: 40px auto 0;">
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 40px; color: var(--green-primary);">check</span>
+                        <h4 class="option-title mt-16">L'Engagement EST</h4>
+                        <p class="option-desc">Ressources concentrées, priorités claires, effort soutenu</p>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 40px; color: var(--red-primary);">close</span>
+                        <h4 class="option-title mt-16">L'Engagement N'EST PAS</h4>
+                        <p class="option-desc">Rigidité, ignorer les nouvelles données, engagement perpétuel</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 18: Opportunity Cost -->
+        <section class="slide" data-chapter="commitment">
+            <div class="slide-content">
+                <span class="section-label label-orange">
+                    <span class="material-icons" style="font-size: 14px;">block</span>
+                    La Liste des « Non »
+                </span>
+                <h2 class="slide-title">Ce que Vous Choisissez de NE PAS Faire</h2>
+                <p class="slide-subtitle">Chaque oui implique de nombreux non</p>
+
+                <div class="card mt-32">
+                    <div class="checklist-item">
+                        <div class="checklist-check" style="border-color: var(--red-primary);">
+                            <span class="material-icons" style="font-size: 16px; color: var(--red-primary);">close</span>
+                        </div>
+                        <div class="checklist-text">
+                            <div class="checklist-title">[Option Éliminée 1]</div>
+                            <div class="checklist-desc">Pourquoi nous ne la poursuivons pas maintenant, et quand la reconsidérer</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-check" style="border-color: var(--red-primary);">
+                            <span class="material-icons" style="font-size: 16px; color: var(--red-primary);">close</span>
+                        </div>
+                        <div class="checklist-text">
+                            <div class="checklist-title">[Option Éliminée 2]</div>
+                            <div class="checklist-desc">Pourquoi nous ne la poursuivons pas maintenant, et quand la reconsidérer</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-check" style="border-color: var(--red-primary);">
+                            <span class="material-icons" style="font-size: 16px; color: var(--red-primary);">close</span>
+                        </div>
+                        <div class="checklist-text">
+                            <div class="checklist-title">[Option Éliminée 3]</div>
+                            <div class="checklist-desc">Pourquoi nous ne la poursuivons pas maintenant, et quand la reconsidérer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center mt-24" style="color: var(--gray-500); font-size: 14px;">
+                    <span class="material-icons" style="font-size: 16px; vertical-align: middle;">lightbulb</span>
+                    Mettre ces options en attente ne signifie pas pour toujours—cela signifie « pas maintenant »
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 19: Founder Concerns -->
+        <section id="mindset" class="slide" data-chapter="mindset">
+            <div class="slide-content">
+                <span class="section-label label-purple">
+                    <span class="material-icons" style="font-size: 14px;">psychology</span>
+                    État d'Esprit du Fondateur
+                </span>
+                <h2 class="slide-title">Répondre aux Préoccupations Courantes</h2>
+
+                <div class="grid-2 mt-32 gap-24">
+                    <div class="concern-card">
+                        <div class="concern-icon bg-orange">
+                            <span class="material-icons">local_fire_department</span>
+                        </div>
+                        <div>
+                            <div class="concern-title">Peur de Rater Quelque Chose</div>
+                            <p class="concern-text">« Et si l'autre option était en fait meilleure ? »<br><br><strong>Recadrage :</strong> L'information parfaite n'existe pas. La meilleure stratégie est celle que vous exécutez bien.</p>
+                        </div>
+                    </div>
+                    <div class="concern-card">
+                        <div class="concern-icon bg-blue">
+                            <span class="material-icons">help_outline</span>
+                        </div>
+                        <div>
+                            <div class="concern-title">Incertitude</div>
+                            <p class="concern-text">« Je n'ai pas assez de données pour décider. »<br><br><strong>Recadrage :</strong> Vous n'aurez jamais de données parfaites. La question est : en avez-vous assez pour agir ?</p>
+                        </div>
+                    </div>
+                    <div class="concern-card">
+                        <div class="concern-icon bg-purple">
+                            <span class="material-icons">balance</span>
+                        </div>
+                        <div>
+                            <div class="concern-title">Ambition vs. Réalisme</div>
+                            <p class="concern-text">« Est-ce que je vois trop petit ? Trop grand ? »<br><br><strong>Recadrage :</strong> Les meilleures stratégies sont audacieuses mais réalisables. Visez haut sans vous briser.</p>
+                        </div>
+                    </div>
+                    <div class="concern-card">
+                        <div class="concern-icon bg-green">
+                            <span class="material-icons">favorite</span>
+                        </div>
+                        <div>
+                            <div class="concern-title">Alignement Personnel</div>
+                            <p class="concern-text">« Est-ce que cela m'enthousiasme encore après 10 ans ? »<br><br><strong>Recadrage :</strong> Votre énergie compte. Une bonne stratégie qui vous passionne vaut mieux qu'une excellente qui ne vous inspire pas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 20: Decision Template -->
+        <section id="decision" class="slide" data-chapter="decision">
+            <div class="slide-content">
+                <span class="section-label label-green">
+                    <span class="material-icons" style="font-size: 14px;">task_alt</span>
+                    Modèle de Décision
+                </span>
+                <h2 class="slide-title">Votre Choix Stratégique</h2>
+
+                <div class="card mt-32">
+                    <div class="template-section" style="background: var(--green-light);">
+                        <div class="template-label" style="color: var(--green-dark);">Déclaration de Choix Stratégique</div>
+                        <div class="template-input" style="font-size: 20px; font-weight: 500; color: var(--gray-600);">« Tunisian Campers va [stratégie choisie] pour devenir [aspiration] d'ici [échéance]. »</div>
+                    </div>
+
+                    <div class="template-section">
+                        <div class="template-label">Justification</div>
+                        <div class="template-input">[Pourquoi cette option plutôt que les autres—2-3 phrases]</div>
+                    </div>
+
+                    <div class="template-section">
+                        <div class="template-label">Hypothèses Clés</div>
+                        <div class="template-input">1. [Hypothèse]  2. [Hypothèse]  3. [Hypothèse]</div>
+                    </div>
+
+                    <div class="grid-2 gap-16">
+                        <div class="template-section" style="margin-bottom: 0;">
+                            <div class="template-label">Métriques de Succès</div>
+                            <div class="template-input">• [Métrique 1]<br>• [Métrique 2]<br>• [Métrique 3]</div>
+                        </div>
+                        <div class="template-section" style="margin-bottom: 0;">
+                            <div class="template-label">Calendrier de Révision</div>
+                            <div class="template-input">Points de contrôle trimestriels<br>Révision complète : [Date]<br>Déclencheurs de pivot : [Conditions]</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 21: Closing -->
+        <section class="slide closing-slide" data-chapter="decision">
+            <div class="slide-content text-center">
+                <div class="hero-icon" style="background: white;">
+                    <span class="material-icons" style="color: var(--green-primary);">rocket_launch</span>
+                </div>
+                <h2 class="slide-title" style="font-size: 48px;">Prêt à Avancer</h2>
+                <p class="slide-subtitle" style="max-width: 600px; margin: 0 auto 40px;">La stratégie est une hypothèse. Le vrai test commence lorsque vous l'exécutez.</p>
+
+                <div class="grid-3" style="max-width: 700px; margin: 0 auto;">
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 32px; color: var(--blue-primary);">lightbulb</span>
+                        <h4 style="margin-top: 12px; font-size: 14px;">Prochaine Étape 1</h4>
+                        <p style="font-size: 13px; color: var(--gray-500);">Plan d'Action 90 Jours</p>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 32px; color: var(--green-primary);">groups</span>
+                        <h4 style="margin-top: 12px; font-size: 14px;">Prochaine Étape 2</h4>
+                        <p style="font-size: 13px; color: var(--gray-500);">Communication d'Équipe</p>
+                    </div>
+                    <div class="card text-center">
+                        <span class="material-icons" style="font-size: 32px; color: var(--purple-primary);">flag</span>
+                        <h4 style="margin-top: 12px; font-size: 14px;">Prochaine Étape 3</h4>
+                        <p style="font-size: 13px; color: var(--gray-500);">Premier Jalon</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Slide tracking
+        const slides = document.querySelectorAll('.slide');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        const navLinks = document.querySelectorAll('.chapter-nav a');
+
+        totalSlidesEl.textContent = slides.length;
+
+        // Update current slide and chapter
+        function updateCurrentSlide() {
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                const slideBottom = slideTop + slide.offsetHeight;
+
+                if (scrollPosition >= slideTop - windowHeight / 2 && scrollPosition < slideBottom - windowHeight / 2) {
+                    currentSlideEl.textContent = index + 1;
+
+                    // Update chapter navigation
+                    const currentChapter = slide.dataset.chapter;
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + currentChapter) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Throttle scroll events
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateCurrentSlide();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Smooth scroll for navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize
+        updateCurrentSlide();
+    </script>
+</body>
+</html>

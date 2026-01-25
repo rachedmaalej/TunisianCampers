@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 3: Planifier & Exécuter | Tunisian Campers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #357D23;
+            --primary-light: #80C261;
+            --primary-pale: #E6F4DD;
+            --accent: #4A8EBF;
+            --accent-light: #8DC7DE;
+            --text-dark: #1a1a2e;
+            --text-light: #4a4a6a;
+            --text-muted: #8888a0;
+            --bg-white: #ffffff;
+            --bg-light: #f8f9fa;
+            --bg-card: #ffffff;
+            --border-light: #e8e8f0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+
+            /* Horizon colors */
+            --horizon-1: #45998A;
+            --horizon-2: #E15720;
+            --horizon-3: #79409E;
+
+            /* KPI category colors */
+            --kpi-finance: #E15720;
+            --kpi-client: #4A8EBF;
+            --kpi-ops: #45998A;
+            --kpi-sustain: #357D23;
+            --kpi-team: #79409E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Presentation Container */
+        .presentation-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Slide Base */
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+            position: relative;
+        }
+
+        /* Title Slide */
+        .slide-title {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .main-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 72px;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .meeting-info {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .info-item .material-icons {
+            font-size: 20px;
+        }
+
+        .team-note {
+            margin-top: 32px;
+            padding: 16px 32px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Content Slides */
+        .slide-content {
+            background: var(--bg-white);
+        }
+
+        .slide-header {
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .slide-title-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slide-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Strategy Recap */
+        .strategy-recap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            flex: 1;
+        }
+
+        .recap-card {
+            padding: 32px;
+            border-radius: 16px;
+        }
+
+        .recap-card.strategy {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .recap-card.vision-mission {
+            background: var(--bg-light);
+            border: 2px solid var(--border-light);
+        }
+
+        .recap-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        .recap-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .recap-fill {
+            background: rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255,255,255,0.4);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 16px;
+            min-height: 60px;
+        }
+
+        .vision-mission .recap-fill {
+            background: white;
+            border-color: var(--border-light);
+            color: var(--text-muted);
+        }
+
+        .pillars-mini {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .pillar-chip {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .vision-mission .pillar-chip {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        /* Roadmap Timeline */
+        .roadmap-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .horizon-column {
+            flex: 1;
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .horizon-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid;
+        }
+
+        .horizon-column:nth-child(1) .horizon-header { border-color: var(--horizon-1); }
+        .horizon-column:nth-child(2) .horizon-header { border-color: var(--horizon-2); }
+        .horizon-column:nth-child(3) .horizon-header { border-color: var(--horizon-3); }
+
+        .horizon-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .horizon-column:nth-child(1) .horizon-icon { background: var(--horizon-1); }
+        .horizon-column:nth-child(2) .horizon-icon { background: var(--horizon-2); }
+        .horizon-column:nth-child(3) .horizon-icon { background: var(--horizon-3); }
+
+        .horizon-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .horizon-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .milestone-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .milestone-item {
+            background: white;
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .milestone-year {
+            background: var(--primary-pale);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .milestone-fill {
+            flex: 1;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Quarterly Plan */
+        .quarters-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            flex: 1;
+        }
+
+        .quarter-card {
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quarter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .quarter-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .quarter-months {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .initiative-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .initiative-item {
+            background: white;
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Capacity Allocation Table */
+        .allocation-container {
+            flex: 1;
+            overflow-x: auto;
+        }
+
+        .allocation-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .allocation-table th,
+        .allocation-table td {
+            padding: 14px 12px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .allocation-table th {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .allocation-table th:first-child {
+            text-align: left;
+            width: 180px;
+        }
+
+        .allocation-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background: var(--bg-light);
+        }
+
+        .allocation-table tr:last-child td {
+            background: var(--primary-pale);
+            font-weight: 700;
+        }
+
+        .percent-cell {
+            background: white;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .team-member {
+            font-size: 11px;
+        }
+
+        .allocation-note {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--primary-pale);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        /* KPI Dashboard */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            flex: 1;
+        }
+
+        .kpi-card {
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid;
+        }
+
+        .kpi-card:nth-child(1) { border-color: var(--kpi-finance); }
+        .kpi-card:nth-child(2) { border-color: var(--kpi-client); }
+        .kpi-card:nth-child(3) { border-color: var(--kpi-ops); }
+        .kpi-card:nth-child(4) { border-color: var(--kpi-sustain); }
+        .kpi-card:nth-child(5) { border-color: var(--kpi-team); }
+
+        .kpi-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card:nth-child(1) .kpi-icon { background: var(--kpi-finance); }
+        .kpi-card:nth-child(2) .kpi-icon { background: var(--kpi-client); }
+        .kpi-card:nth-child(3) .kpi-icon { background: var(--kpi-ops); }
+        .kpi-card:nth-child(4) .kpi-icon { background: var(--kpi-sustain); }
+        .kpi-card:nth-child(5) .kpi-icon { background: var(--kpi-team); }
+
+        .kpi-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .kpi-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .kpi-item {
+            font-size: 12px;
+            color: var(--text-light);
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        /* KPI Targets Table */
+        .targets-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .targets-table th,
+        .targets-table td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .targets-table th {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .targets-table th:first-child {
+            text-align: left;
+            width: 200px;
+        }
+
+        .targets-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background: var(--bg-light);
+        }
+
+        .target-cell {
+            background: white;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Operating Rhythms */
+        .rhythms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            flex: 1;
+        }
+
+        .rhythm-card {
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rhythm-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .rhythm-icon .material-icons {
+            font-size: 28px;
+        }
+
+        .rhythm-frequency {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .rhythm-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .rhythm-duration {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .rhythm-description {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 90-Day Sprint */
+        .sprint-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sprint-timeline {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .sprint-week {
+            flex: 1;
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .week-number {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .week-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .week-task {
+            background: white;
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .sprint-months {
+            display: flex;
+            margin-top: 16px;
+            border-top: 2px solid var(--primary);
+            padding-top: 12px;
+        }
+
+        .sprint-month {
+            flex: 4;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Playbook & Close */
+        .playbook-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .deliverables-column h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-pale);
+        }
+
+        .deliverable-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .deliverable-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .deliverable-item .material-icons {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .deliverable-item span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .closing-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .closing-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .closing-card .material-icons {
+            font-size: 48px;
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+
+        .closing-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .closing-card p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .closing-card .next-review {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .closing-card .next-review span {
+            display: block;
+            font-size: 12px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .closing-card .next-review strong {
+            font-size: 18px;
+        }
+
+        /* Footer Navigation Hint */
+        .nav-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+        }
+
+        .nav-hint kbd {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .rhythms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sprint-timeline {
+                flex-wrap: wrap;
+            }
+
+            .sprint-week {
+                flex-basis: calc(25% - 12px);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .main-title {
+                font-size: 48px;
+            }
+
+            .strategy-recap,
+            .playbook-container {
+                grid-template-columns: 1fr;
+            }
+
+            .quarters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timeline {
+                flex-direction: column;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 24px;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .slide-title-text {
+                font-size: 28px;
+            }
+
+            .meeting-info {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .quarters-grid,
+            .rhythms-grid,
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sprint-week {
+                flex-basis: calc(50% - 12px);
+            }
+
+            .nav-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">1 / 10</div>
+
+    <div class="presentation-container" id="presentationContainer">
+
+        <!-- Slide 1: Title -->
+        <section class="slide slide-title" data-slide="1">
+            <span class="phase-badge">Phase 3</span>
+            <h1 class="main-title">Planifier & Exécuter</h1>
+            <p class="subtitle">Comment y arriver?</p>
+            <div class="meeting-info">
+                <div class="info-item">
+                    <span class="material-icons">event</span>
+                    <span>Meeting 3</span>
+                </div>
+                <div class="info-item">
+                    <span class="material-icons">schedule</span>
+                    <span>2h</span>
+                </div>
+                <div class="info-item">
+                    <span class="material-icons">people</span>
+                    <span>Toute l'équipe</span>
+                </div>
+            </div>
+            <div class="team-note">
+                <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">groups</span>
+                Avec Mohamed, Sami, Leila, Nadia, Karim, Youssef et Ines
+            </div>
+        </section>
+
+        <!-- Slide 2: Strategy Recap -->
+        <section class="slide slide-content" data-slide="2">
+            <div class="slide-header">
+                <span class="slide-number">2</span>
+                <h2 class="slide-title-text">Récap de la Stratégie</h2>
+                <p class="slide-subtitle">Ce que nous avons décidé au Meeting 2</p>
+            </div>
+            <div class="strategy-recap">
+                <div class="recap-card strategy">
+                    <span class="recap-label">Notre Choix Stratégique</span>
+                    <h3 class="recap-title">Direction Choisie</h3>
+                    <div class="recap-fill">À compléter avec le choix validé au M2</div>
+                    <div class="pillars-mini">
+                        <span class="pillar-chip">Pilier 1</span>
+                        <span class="pillar-chip">Pilier 2</span>
+                        <span class="pillar-chip">Pilier 3</span>
+                    </div>
+                </div>
+                <div class="recap-card vision-mission">
+                    <span class="recap-label" style="color: var(--primary);">Vision & Mission</span>
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 14px; color: var(--text-dark); margin-bottom: 8px;">Vision (10 ans)</h4>
+                        <div class="recap-fill">À compléter</div>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 14px; color: var(--text-dark); margin-bottom: 8px;">Mission</h4>
+                        <div class="recap-fill">À compléter</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: 10-Year Roadmap -->
+        <section class="slide slide-content" data-slide="3">
+            <div class="slide-header">
+                <span class="slide-number">3</span>
+                <h2 class="slide-title-text">Feuille de Route 10 Ans</h2>
+                <p class="slide-subtitle">Les grandes étapes par horizon</p>
+            </div>
+            <div class="roadmap-container">
+                <div class="timeline">
+                    <div class="horizon-column">
+                        <div class="horizon-header">
+                            <div class="horizon-icon">
+                                <span class="material-icons">speed</span>
+                            </div>
+                            <div class="horizon-info">
+                                <h4>Horizon 1</h4>
+                                <span>2026-2028</span>
+                            </div>
+                        </div>
+                        <div class="milestone-list">
+                            <div class="milestone-item">
+                                <span class="milestone-year">2026</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2027</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2028</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="horizon-column">
+                        <div class="horizon-header">
+                            <div class="horizon-icon">
+                                <span class="material-icons">trending_up</span>
+                            </div>
+                            <div class="horizon-info">
+                                <h4>Horizon 2</h4>
+                                <span>2029-2032</span>
+                            </div>
+                        </div>
+                        <div class="milestone-list">
+                            <div class="milestone-item">
+                                <span class="milestone-year">2029</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2031</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2032</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="horizon-column">
+                        <div class="horizon-header">
+                            <div class="horizon-icon">
+                                <span class="material-icons">rocket_launch</span>
+                            </div>
+                            <div class="horizon-info">
+                                <h4>Horizon 3</h4>
+                                <span>2033-2035</span>
+                            </div>
+                        </div>
+                        <div class="milestone-list">
+                            <div class="milestone-item">
+                                <span class="milestone-year">2033</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2034</span>
+                                <span class="milestone-fill">Jalon à définir</span>
+                            </div>
+                            <div class="milestone-item">
+                                <span class="milestone-year">2035</span>
+                                <span class="milestone-fill">Vision réalisée</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Year 1 Quarterly Plan -->
+        <section class="slide slide-content" data-slide="4">
+            <div class="slide-header">
+                <span class="slide-number">4</span>
+                <h2 class="slide-title-text">Plan d'Action Année 1</h2>
+                <p class="slide-subtitle">Initiatives par trimestre pour 2026</p>
+            </div>
+            <div class="quarters-grid">
+                <div class="quarter-card">
+                    <div class="quarter-header">
+                        <span class="quarter-label">Q1</span>
+                        <span class="quarter-months">Jan-Mar</span>
+                    </div>
+                    <div class="initiative-list">
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                    </div>
+                </div>
+                <div class="quarter-card">
+                    <div class="quarter-header">
+                        <span class="quarter-label">Q2</span>
+                        <span class="quarter-months">Avr-Jun</span>
+                    </div>
+                    <div class="initiative-list">
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                    </div>
+                </div>
+                <div class="quarter-card">
+                    <div class="quarter-header">
+                        <span class="quarter-label">Q3</span>
+                        <span class="quarter-months">Jul-Sep</span>
+                    </div>
+                    <div class="initiative-list">
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                    </div>
+                </div>
+                <div class="quarter-card">
+                    <div class="quarter-header">
+                        <span class="quarter-label">Q4</span>
+                        <span class="quarter-months">Oct-Déc</span>
+                    </div>
+                    <div class="initiative-list">
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                        <div class="initiative-item">Initiative à définir</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Capacity Allocation Workshop -->
+        <section class="slide slide-content" data-slide="5">
+            <div class="slide-header">
+                <span class="slide-number">5</span>
+                <h2 class="slide-title-text">Atelier: Allocation Capacité</h2>
+                <p class="slide-subtitle">Qui fait quoi, à quel % de son temps?</p>
+            </div>
+            <div class="allocation-container">
+                <table class="allocation-table">
+                    <thead>
+                        <tr>
+                            <th>Initiative</th>
+                            <th><span class="team-member">Mohamed</span></th>
+                            <th><span class="team-member">Sami</span></th>
+                            <th><span class="team-member">Leila</span></th>
+                            <th><span class="team-member">Nadia</span></th>
+                            <th><span class="team-member">Karim</span></th>
+                            <th><span class="team-member">Youssef</span></th>
+                            <th><span class="team-member">Ines</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Initiative 1</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                        </tr>
+                        <tr>
+                            <td>Initiative 2</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                        </tr>
+                        <tr>
+                            <td>Initiative 3</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                        </tr>
+                        <tr>
+                            <td>Initiative 4</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                        </tr>
+                        <tr>
+                            <td>Opérations courantes</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                            <td class="percent-cell">_%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="allocation-note">
+                    <strong>Règle:</strong> Chaque personne déclare sa disponibilité réaliste. Le total doit faire 100%.
+                    Si le total dépasse 100%, nous devons prioriser ou recruter.
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: KPI Dashboard -->
+        <section class="slide slide-content" data-slide="6">
+            <div class="slide-header">
+                <span class="slide-number">6</span>
+                <h2 class="slide-title-text">Dashboard Lite: 5 KPIs Essentiels</h2>
+                <p class="slide-subtitle">Simplicité = Durabilité. Ces 5 indicateurs suffisent.</p>
+            </div>
+            <div style="background: linear-gradient(135deg, var(--primary-pale) 0%, white 100%); border: 3px solid var(--primary); border-radius: 20px; padding: 32px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                    <span class="material-icons" style="font-size: 48px; color: var(--primary);">star</span>
+                    <div>
+                        <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--primary); margin: 0;">North Star Metric</h3>
+                        <p style="font-size: 18px; font-weight: 600; color: var(--text-dark); margin: 0;">Nombre d'expériences transformatrices délivrées</p>
+                    </div>
+                </div>
+                <p style="font-size: 14px; color: var(--text-muted); margin: 0;">Cible 2026: 500 expériences • Cible 2036: 2,000 expériences annuelles</p>
+            </div>
+            <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="kpi-card">
+                    <div class="kpi-icon">
+                        <span class="material-icons">trending_up</span>
+                    </div>
+                    <h4 class="kpi-title">Croissance Revenus</h4>
+                    <div class="kpi-list">
+                        <div class="kpi-item">CA Annuel (TND)</div>
+                        <div class="kpi-item">Croissance vs N-1</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">
+                        <span class="material-icons">favorite</span>
+                    </div>
+                    <h4 class="kpi-title">NPS</h4>
+                    <div class="kpi-list">
+                        <div class="kpi-item">Net Promoter Score</div>
+                        <div class="kpi-item">Satisfaction client</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">
+                        <span class="material-icons">equalizer</span>
+                    </div>
+                    <h4 class="kpi-title">Capacité</h4>
+                    <div class="kpi-list">
+                        <div class="kpi-item">Taux d'utilisation</div>
+                        <div class="kpi-item">Efficacité opérationnelle</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">
+                        <span class="material-icons">repeat</span>
+                    </div>
+                    <h4 class="kpi-title">Fidélité</h4>
+                    <div class="kpi-list">
+                        <div class="kpi-item">Taux de clients récurrents</div>
+                        <div class="kpi-item">Repeat business rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: KPI Targets -->
+        <section class="slide slide-content" data-slide="7">
+            <div class="slide-header">
+                <span class="slide-number">7</span>
+                <h2 class="slide-title-text">Cibles KPIs Simplifiées</h2>
+                <p class="slide-subtitle">5 indicateurs = suivi durable et focus stratégique</p>
+            </div>
+            <table class="targets-table">
+                <thead>
+                    <tr>
+                        <th>KPI</th>
+                        <th>Actuel (2026)</th>
+                        <th>Année 1 (2026)</th>
+                        <th>Année 3 (2029)</th>
+                        <th>Année 10 (2036)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: linear-gradient(135deg, var(--primary-pale) 0%, white 100%);">
+                        <td><strong>North Star: Expériences transformatrices</strong></td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">500</td>
+                        <td class="target-cell">1,000</td>
+                        <td class="target-cell">2,000</td>
+                    </tr>
+                    <tr>
+                        <td>Chiffre d'affaires (TND)</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                    </tr>
+                    <tr>
+                        <td>NPS (Net Promoter Score)</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                        <td class="target-cell">___</td>
+                    </tr>
+                    <tr>
+                        <td>Taux d'utilisation capacité (%)</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                    </tr>
+                    <tr>
+                        <td>Taux de clients récurrents (%)</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                        <td class="target-cell">___%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 24px; padding: 20px; background: var(--bg-light); border-radius: 12px; border-left: 4px solid var(--primary);">
+                <p style="font-size: 14px; color: var(--text-dark); margin: 0;">
+                    <strong style="color: var(--primary);">💡 Pourquoi seulement 5 KPIs ?</strong><br>
+                    Un dashboard avec 30+ indicateurs n'est jamais suivi. 5 KPIs = revue mensuelle de 15 minutes = durabilité garantie.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 8: Operating Rhythms -->
+        <section class="slide slide-content" data-slide="8">
+            <div class="slide-header">
+                <span class="slide-number">8</span>
+                <h2 class="slide-title-text">Cadence de Performance</h2>
+                <p class="slide-subtitle">Les rythmes de suivi et d'amélioration</p>
+            </div>
+            <div class="rhythms-grid">
+                <div class="rhythm-card">
+                    <div class="rhythm-icon">
+                        <span class="material-icons">today</span>
+                    </div>
+                    <span class="rhythm-frequency">Hebdomadaire</span>
+                    <h4 class="rhythm-name">Stand-up Stratégique</h4>
+                    <span class="rhythm-duration">15 min</span>
+                    <p class="rhythm-description">
+                        Tour de table des priorités, statut OKRs, blocages à lever
+                    </p>
+                </div>
+                <div class="rhythm-card">
+                    <div class="rhythm-icon">
+                        <span class="material-icons">date_range</span>
+                    </div>
+                    <span class="rhythm-frequency">Mensuel</span>
+                    <h4 class="rhythm-name">Revue Tableau de Bord</h4>
+                    <span class="rhythm-duration">1 heure</span>
+                    <p class="rhythm-description">
+                        Analyse KPIs, progrès initiatives, décisions à prendre
+                    </p>
+                </div>
+                <div class="rhythm-card">
+                    <div class="rhythm-icon">
+                        <span class="material-icons">event_note</span>
+                    </div>
+                    <span class="rhythm-frequency">Trimestriel</span>
+                    <h4 class="rhythm-name">Revue OKRs</h4>
+                    <span class="rhythm-duration">2 heures</span>
+                    <p class="rhythm-description">
+                        Bilan trimestre, leçons apprises, planification T+1
+                    </p>
+                </div>
+                <div class="rhythm-card">
+                    <div class="rhythm-icon">
+                        <span class="material-icons">calendar_month</span>
+                    </div>
+                    <span class="rhythm-frequency">Annuel</span>
+                    <h4 class="rhythm-name">Revue Stratégie</h4>
+                    <span class="rhythm-duration">1 jour</span>
+                    <p class="rhythm-description">
+                        Bilan année, actualisation plan 3 ans, vision 10 ans
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: 90-Day Sprint -->
+        <section class="slide slide-content" data-slide="9">
+            <div class="slide-header">
+                <span class="slide-number">9</span>
+                <h2 class="slide-title-text">Sprint 90 Jours</h2>
+                <p class="slide-subtitle">Les 12 premières semaines en détail</p>
+            </div>
+            <div class="sprint-container">
+                <div class="sprint-timeline">
+                    <div class="sprint-week">
+                        <span class="week-number">S1-2</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Tâche à définir</div>
+                        </div>
+                    </div>
+                    <div class="sprint-week">
+                        <span class="week-number">S3-4</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Tâche à définir</div>
+                        </div>
+                    </div>
+                    <div class="sprint-week">
+                        <span class="week-number">S5-6</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Tâche à définir</div>
+                        </div>
+                    </div>
+                    <div class="sprint-week">
+                        <span class="week-number">S7-8</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Tâche à définir</div>
+                        </div>
+                    </div>
+                    <div class="sprint-week">
+                        <span class="week-number">S9-10</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Tâche à définir</div>
+                        </div>
+                    </div>
+                    <div class="sprint-week">
+                        <span class="week-number">S11-12</span>
+                        <div class="week-tasks">
+                            <div class="week-task">Tâche à définir</div>
+                            <div class="week-task">Revue Q1</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sprint-months">
+                    <div class="sprint-month">Mois 1</div>
+                    <div class="sprint-month">Mois 2</div>
+                    <div class="sprint-month">Mois 3</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Playbook & Close -->
+        <section class="slide slide-content" data-slide="10">
+            <div class="slide-header">
+                <span class="slide-number">10</span>
+                <h2 class="slide-title-text">Playbook & Clôture</h2>
+                <p class="slide-subtitle">Ce que vous recevrez et les prochaines étapes</p>
+            </div>
+            <div class="playbook-container">
+                <div class="deliverables-column">
+                    <h3>Livrables Finaux</h3>
+                    <div class="deliverable-list">
+                        <div class="deliverable-item">
+                            <span class="material-icons">menu_book</span>
+                            <span>Playbook Stratégique complet</span>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">timeline</span>
+                            <span>Feuille de route 10 ans (PDF)</span>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">assignment</span>
+                            <span>Plan d'action Année 1 détaillé</span>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">dashboard</span>
+                            <span>Template tableau de bord KPIs</span>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">calendar_today</span>
+                            <span>Guide des cadences de revue</span>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">speed</span>
+                            <span>Sprint 90 jours finalisé</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="closing-column">
+                    <div class="closing-card">
+                        <span class="material-icons">celebration</span>
+                        <h3>Ensemble, nous allons construire l'avenir de Tunisian Campers</h3>
+                        <p>
+                            "Together matters" - Chaque membre de l'équipe a un rôle clé dans l'exécution de cette stratégie.
+                        </p>
+                        <div class="next-review">
+                            <span>Première revue trimestrielle</span>
+                            <strong>Dans 3 mois</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="nav-hint">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navigation</span>
+        <span><kbd>Home</kbd> Début</span>
+        <span><kbd>End</kbd> Fin</span>
+    </div>
+
+    <script>
+        const container = document.getElementById('presentationContainer');
+        const counter = document.querySelector('.slide-counter');
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Update slide counter
+        function updateCounter() {
+            const scrollTop = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const currentSlide = Math.round(scrollTop / slideHeight) + 1;
+            counter.textContent = `${currentSlide} / ${totalSlides}`;
+        }
+
+        // Scroll to specific slide
+        function goToSlide(n) {
+            const targetSlide = Math.max(1, Math.min(n, totalSlides));
+            slides[targetSlide - 1].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Get current slide number
+        function getCurrentSlide() {
+            const scrollTop = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            return Math.round(scrollTop / slideHeight) + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const current = getCurrentSlide();
+
+            switch(e.key) {
+                case 'ArrowDown':
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    goToSlide(current + 1);
+                    break;
+                case 'ArrowUp':
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    goToSlide(current - 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(1);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides);
+                    break;
+            }
+        });
+
+        // Update counter on scroll
+        container.addEventListener('scroll', updateCounter);
+
+        // Initial counter update
+        updateCounter();
+    </script>
+</body>
+</html>

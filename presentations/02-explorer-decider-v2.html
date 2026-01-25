@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 2: Explorer & Décider | Tunisian Campers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E15720;
+            --primary-light: #F48E40;
+            --primary-pale: #FCEADE;
+            --accent: #357D23;
+            --accent-light: #80C261;
+            --text-dark: #1a1a2e;
+            --text-light: #4a4a6a;
+            --text-muted: #8888a0;
+            --bg-white: #ffffff;
+            --bg-light: #f8f9fa;
+            --bg-card: #ffffff;
+            --border-light: #e8e8f0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+
+            /* Horizon colors */
+            --horizon-1: #45998A;
+            --horizon-2: #E15720;
+            --horizon-3: #79409E;
+
+            /* Evaluation colors */
+            --quadrant-quickwin: #357D23;
+            --quadrant-major: #4A8EBF;
+            --quadrant-fillin: #F48E40;
+            --quadrant-question: #CE2B26;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Presentation Container */
+        .presentation-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Slide Base */
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+            position: relative;
+        }
+
+        /* Title Slide */
+        .slide-title {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .main-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 72px;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .meeting-info {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .info-item .material-icons {
+            font-size: 20px;
+        }
+
+        /* Content Slides */
+        .slide-content {
+            background: var(--bg-white);
+        }
+
+        .slide-header {
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .slide-title-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slide-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Two Column Layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+
+        .column-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-pale);
+        }
+
+        /* Recap Cards */
+        .recap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .recap-item .material-icons {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .recap-item p {
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        /* Agenda Items */
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .agenda-item:hover {
+            background: var(--primary-pale);
+            transform: translateX(8px);
+        }
+
+        .agenda-time {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .agenda-text {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Three Horizons */
+        .horizons-container {
+            display: flex;
+            gap: 24px;
+            flex: 1;
+            align-items: stretch;
+        }
+
+        .horizon-card {
+            flex: 1;
+            padding: 32px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .horizon-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(40%, -40%);
+        }
+
+        .horizon-1 { background: linear-gradient(135deg, var(--horizon-1) 0%, #6DBBAA 100%); }
+        .horizon-2 { background: linear-gradient(135deg, var(--horizon-2) 0%, var(--primary-light) 100%); }
+        .horizon-3 { background: linear-gradient(135deg, var(--horizon-3) 0%, #AF93C6 100%); }
+
+        .horizon-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .horizon-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .horizon-years {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .horizon-description {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-top: auto;
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            flex: 1;
+        }
+
+        .option-card {
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px dashed var(--border-light);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .option-fill-area {
+            flex: 1;
+            background: white;
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        /* Prioritization Matrix */
+        .matrix-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 0;
+            flex: 1;
+        }
+
+        .matrix-label-y {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            padding: 8px;
+        }
+
+        .matrix-label-x {
+            grid-column: 2 / 4;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            padding: 12px;
+        }
+
+        .matrix-quadrant {
+            border: 2px solid var(--border-light);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 200px;
+        }
+
+        .quadrant-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            display: inline-block;
+            align-self: flex-start;
+        }
+
+        .q-quickwin { background: rgba(53, 125, 35, 0.15); color: var(--quadrant-quickwin); }
+        .q-major { background: rgba(74, 142, 191, 0.15); color: var(--quadrant-major); }
+        .q-fillin { background: rgba(244, 142, 64, 0.15); color: var(--quadrant-fillin); }
+        .q-question { background: rgba(206, 43, 38, 0.15); color: var(--quadrant-question); }
+
+        .quadrant-fill {
+            flex: 1;
+            background: rgba(0,0,0,0.02);
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .matrix-arrow {
+            position: absolute;
+            color: var(--text-muted);
+        }
+
+        /* Evaluation Table */
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .evaluation-table th,
+        .evaluation-table td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .evaluation-table th {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .evaluation-table th:first-child {
+            text-align: left;
+            width: 180px;
+        }
+
+        .evaluation-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background: var(--bg-light);
+        }
+
+        .evaluation-table tr:last-child td {
+            background: var(--primary-pale);
+            font-weight: 700;
+        }
+
+        .score-cell {
+            background: white;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .weight-row td {
+            background: var(--primary-pale) !important;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Hypothesis Template */
+        .hypothesis-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .hypothesis-intro {
+            background: var(--primary-pale);
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .hypothesis-intro p {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .hypothesis-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .hypothesis-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 2px dashed var(--border-light);
+        }
+
+        .hypothesis-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .hypothesis-fill {
+            flex: 1;
+            background: white;
+            border: 1px dashed var(--border-light);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            min-height: 44px;
+        }
+
+        .hypothesis-risk {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Strategic Choice */
+        .choice-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .choice-declaration {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 40px;
+            border-radius: 16px;
+            color: white;
+            text-align: center;
+        }
+
+        .choice-declaration label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .choice-fill {
+            background: rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255,255,255,0.4);
+            border-radius: 12px;
+            padding: 24px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 2px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yes-no-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .yes-column, .no-column {
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        .yes-column {
+            background: rgba(53, 125, 35, 0.1);
+            border: 2px solid var(--accent);
+        }
+
+        .no-column {
+            background: rgba(206, 43, 38, 0.1);
+            border: 2px solid #CE2B26;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .column-header .material-icons {
+            font-size: 28px;
+        }
+
+        .yes-column .column-header {
+            color: var(--accent);
+        }
+
+        .no-column .column-header {
+            color: #CE2B26;
+        }
+
+        .column-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .choice-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px dashed var(--border-light);
+        }
+
+        .choice-item span {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .yes-column .choice-item span {
+            background: var(--accent);
+        }
+
+        .no-column .choice-item span {
+            background: #CE2B26;
+        }
+
+        .choice-item-fill {
+            flex: 1;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Vision & Mission */
+        .vision-mission-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .vision-box, .mission-box {
+            padding: 32px;
+            border-radius: 16px;
+        }
+
+        .vision-box {
+            background: linear-gradient(135deg, var(--primary-pale) 0%, white 100%);
+            border: 2px solid var(--primary);
+        }
+
+        .mission-box {
+            background: linear-gradient(135deg, rgba(53, 125, 35, 0.1) 0%, white 100%);
+            border: 2px solid var(--accent);
+        }
+
+        .vm-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .vision-box .vm-label { color: var(--primary); }
+        .mission-box .vm-label { color: var(--accent); }
+
+        .vm-prompt {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .vm-fill {
+            background: white;
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 80px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .pillars-section {
+            margin-top: 16px;
+        }
+
+        .pillars-section h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .pillar-slot {
+            background: var(--bg-light);
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pillar-slot span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Next Steps */
+        .next-steps-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .deliverables-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .deliverable-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .deliverable-item .material-icons {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .deliverable-item h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .deliverable-item p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meeting-preview {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            padding: 32px;
+            border-radius: 16px;
+            color: white;
+        }
+
+        .meeting-preview h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .preview-item .material-icons {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .preview-note {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Footer Navigation Hint */
+        .nav-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+        }
+
+        .nav-hint kbd {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .main-title {
+                font-size: 48px;
+            }
+
+            .two-columns,
+            .yes-no-grid,
+            .next-steps-container {
+                grid-template-columns: 1fr;
+            }
+
+            .horizons-container {
+                flex-direction: column;
+            }
+
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .matrix-grid {
+                grid-template-columns: 40px 1fr 1fr;
+            }
+
+            .pillars-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 24px;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .slide-title-text {
+                font-size: 28px;
+            }
+
+            .meeting-info {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pillars-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">1 / 9</div>
+
+    <div class="presentation-container" id="presentationContainer">
+
+        <!-- Slide 1: Title -->
+        <section class="slide slide-title" data-slide="1">
+            <span class="phase-badge">Phase 2</span>
+            <h1 class="main-title">Explorer & Décider</h1>
+            <p class="subtitle">Quelle direction prendre?</p>
+            <div class="meeting-info">
+                <div class="info-item">
+                    <span class="material-icons">event</span>
+                    <span>Meeting 2</span>
+                </div>
+                <div class="info-item">
+                    <span class="material-icons">schedule</span>
+                    <span>2 heures</span>
+                </div>
+                <div class="info-item">
+                    <span class="material-icons">people</span>
+                    <span>Mohamed + Consultant</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Recap & Agenda -->
+        <section class="slide slide-content" data-slide="2">
+            <div class="slide-header">
+                <span class="slide-number">2</span>
+                <h2 class="slide-title-text">Récap & Agenda</h2>
+                <p class="slide-subtitle">Ce que nous avons appris + ce que nous allons faire</p>
+            </div>
+            <div class="two-columns">
+                <div class="column">
+                    <h3 class="column-title">Constats Clés du Meeting 1</h3>
+                    <div class="recap-item">
+                        <span class="material-icons">insights</span>
+                        <p>À compléter avec les insights du diagnostic</p>
+                    </div>
+                    <div class="recap-item">
+                        <span class="material-icons">trending_up</span>
+                        <p>Forces et opportunités identifiées</p>
+                    </div>
+                    <div class="recap-item">
+                        <span class="material-icons">warning</span>
+                        <p>Faiblesses et menaces à adresser</p>
+                    </div>
+                    <div class="recap-item">
+                        <span class="material-icons">help_outline</span>
+                        <p>Questions stratégiques formulées</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3 class="column-title">Agenda Simplifié (2 heures)</h3>
+                    <div class="agenda-item">
+                        <span class="agenda-time">10 min</span>
+                        <span class="agenda-text">Récap Diagnostic</span>
+                    </div>
+                    <div class="agenda-item">
+                        <span class="agenda-time">30 min</span>
+                        <span class="agenda-text">3 Options Stratégiques</span>
+                    </div>
+                    <div class="agenda-item">
+                        <span class="agenda-time">40 min</span>
+                        <span class="agenda-text">Discussion & Évaluation</span>
+                    </div>
+                    <div class="agenda-item">
+                        <span class="agenda-time">30 min</span>
+                        <span class="agenda-text">Décision Stratégique</span>
+                    </div>
+                    <div class="agenda-item">
+                        <span class="agenda-time">10 min</span>
+                        <span class="agenda-text">Vision & Prochaines Étapes</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Three Horizons -->
+        <section class="slide slide-content" data-slide="3">
+            <div class="slide-header">
+                <span class="slide-number">3</span>
+                <h2 class="slide-title-text">Les 3 Horizons de Croissance</h2>
+                <p class="slide-subtitle">Comment structurer notre réflexion sur 10 ans</p>
+            </div>
+            <div class="horizons-container">
+                <div class="horizon-card horizon-1">
+                    <span class="horizon-label">Horizon 1</span>
+                    <h3 class="horizon-title">Optimiser l'Existant</h3>
+                    <span class="horizon-years">Années 1-3</span>
+                    <p class="horizon-description">
+                        Améliorer et étendre les activités actuelles.
+                        Maximiser la valeur de ce qui fonctionne déjà.
+                        Générer le cash-flow pour financer H2 et H3.
+                    </p>
+                </div>
+                <div class="horizon-card horizon-2">
+                    <span class="horizon-label">Horizon 2</span>
+                    <h3 class="horizon-title">Développer le Nouveau</h3>
+                    <span class="horizon-years">Années 4-7</span>
+                    <p class="horizon-description">
+                        Lancer de nouvelles offres et marchés.
+                        Construire les capacités de demain.
+                        Équilibrer innovation et rentabilité.
+                    </p>
+                </div>
+                <div class="horizon-card horizon-3">
+                    <span class="horizon-label">Horizon 3</span>
+                    <h3 class="horizon-title">Créer le Futur</h3>
+                    <span class="horizon-years">Années 8-10</span>
+                    <p class="horizon-description">
+                        Explorer les opportunités transformatrices.
+                        Préparer la prochaine génération de l'entreprise.
+                        Investir dans la vision long terme.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Strategic Options -->
+        <section class="slide slide-content" data-slide="4">
+            <div class="slide-header">
+                <span class="slide-number">4</span>
+                <h2 class="slide-title-text">3 Options Stratégiques</h2>
+                <p class="slide-subtitle">Les directions possibles pour Tunisian Campers - Focus sur la clarté</p>
+            </div>
+            <div class="options-grid">
+                <div class="option-card">
+                    <span class="option-number">1</span>
+                    <h4 class="option-title">Option à définir</h4>
+                    <div class="option-fill-area">
+                        Description de l'option, horizon concerné, et implications clés
+                    </div>
+                </div>
+                <div class="option-card">
+                    <span class="option-number">2</span>
+                    <h4 class="option-title">Option à définir</h4>
+                    <div class="option-fill-area">
+                        Description de l'option, horizon concerné, et implications clés
+                    </div>
+                </div>
+                <div class="option-card">
+                    <span class="option-number">3</span>
+                    <h4 class="option-title">Option à définir</h4>
+                    <div class="option-fill-area">
+                        Description de l'option, horizon concerné, et implications clés
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Prioritization Matrix -->
+        <section class="slide slide-content" data-slide="5">
+            <div class="slide-header">
+                <span class="slide-number">5</span>
+                <h2 class="slide-title-text">Matrice de Priorisation</h2>
+                <p class="slide-subtitle">Placer chaque option selon son impact et sa difficulté</p>
+            </div>
+            <div class="matrix-container">
+                <div class="matrix-grid">
+                    <div></div>
+                    <div class="matrix-label-x">Difficulté de mise en oeuvre →</div>
+
+                    <div class="matrix-label-y">Impact potentiel ↑</div>
+
+                    <div class="matrix-quadrant">
+                        <span class="quadrant-title q-quickwin">Quick Wins</span>
+                        <div class="quadrant-fill">Fort impact, facile à faire</div>
+                    </div>
+                    <div class="matrix-quadrant">
+                        <span class="quadrant-title q-major">Projets Majeurs</span>
+                        <div class="quadrant-fill">Fort impact, difficile</div>
+                    </div>
+
+                    <div></div>
+
+                    <div class="matrix-quadrant">
+                        <span class="quadrant-title q-fillin">Fill-ins</span>
+                        <div class="quadrant-fill">Faible impact, facile</div>
+                    </div>
+                    <div class="matrix-quadrant">
+                        <span class="quadrant-title q-question">Questions</span>
+                        <div class="quadrant-fill">Faible impact, difficile - éviter</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Rule of 3 Decision Framework -->
+        <section class="slide slide-content" data-slide="6">
+            <div class="slide-header">
+                <span class="slide-number">6</span>
+                <h2 class="slide-title-text">Règle des 3 Questions</h2>
+                <p class="slide-subtitle">Framework simplifié pour choisir la bonne option</p>
+            </div>
+            <div class="hypothesis-container">
+                <div class="hypothesis-intro">
+                    <p>Pour chaque option finaliste, nous allons répondre à ces 3 questions clés...</p>
+                </div>
+                <div class="hypothesis-list">
+                    <div class="hypothesis-item">
+                        <span class="hypothesis-number">1</span>
+                        <div class="hypothesis-fill" style="color: var(--text-dark); font-weight: 500;">Est-ce que cela résout notre plus gros problème identifié au diagnostic ?</div>
+                        <div class="hypothesis-risk" style="color: var(--primary);">
+                            <span class="material-icons">task_alt</span>
+                            Oui / Non
+                        </div>
+                    </div>
+                    <div class="hypothesis-item">
+                        <span class="hypothesis-number">2</span>
+                        <div class="hypothesis-fill" style="color: var(--text-dark); font-weight: 500;">Pouvons-nous financer et staffier cela de manière réaliste ?</div>
+                        <div class="hypothesis-risk" style="color: var(--primary);">
+                            <span class="material-icons">task_alt</span>
+                            Oui / Non
+                        </div>
+                    </div>
+                    <div class="hypothesis-item">
+                        <span class="hypothesis-number">3</span>
+                        <div class="hypothesis-fill" style="color: var(--text-dark); font-weight: 500;">Serez-vous fier de cette direction dans 10 ans ?</div>
+                        <div class="hypothesis-risk" style="color: var(--primary);">
+                            <span class="material-icons">task_alt</span>
+                            Oui / Non
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 32px; padding: 24px; background: var(--accent-light); color: white; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 18px; font-weight: 600; margin: 0;">
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">check_circle</span>
+                        Si les 3 réponses sont OUI → C'est votre stratégie
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Strategic Choice -->
+        <section class="slide slide-content" data-slide="7">
+            <div class="slide-header">
+                <span class="slide-number">7</span>
+                <h2 class="slide-title-text">Choix Stratégique</h2>
+                <p class="slide-subtitle">Ce que nous décidons de faire - et de NE PAS faire</p>
+            </div>
+            <div class="choice-container">
+                <div class="choice-declaration">
+                    <label>Notre choix stratégique</label>
+                    <div class="choice-fill">À compléter ensemble</div>
+                </div>
+                <div class="yes-no-grid">
+                    <div class="yes-column">
+                        <div class="column-header">
+                            <span class="material-icons">check_circle</span>
+                            <h3>Ce que nous disons OUI</h3>
+                        </div>
+                        <div class="choice-item">
+                            <span>1</span>
+                            <div class="choice-item-fill">Engagement clé</div>
+                        </div>
+                        <div class="choice-item">
+                            <span>2</span>
+                            <div class="choice-item-fill">Engagement clé</div>
+                        </div>
+                        <div class="choice-item">
+                            <span>3</span>
+                            <div class="choice-item-fill">Engagement clé</div>
+                        </div>
+                    </div>
+                    <div class="no-column">
+                        <div class="column-header">
+                            <span class="material-icons">cancel</span>
+                            <h3>Ce que nous disons NON</h3>
+                        </div>
+                        <div class="choice-item">
+                            <span>1</span>
+                            <div class="choice-item-fill">Trade-off explicite</div>
+                        </div>
+                        <div class="choice-item">
+                            <span>2</span>
+                            <div class="choice-item-fill">Trade-off explicite</div>
+                        </div>
+                        <div class="choice-item">
+                            <span>3</span>
+                            <div class="choice-item-fill">Trade-off explicite</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Vision & Mission -->
+        <section class="slide slide-content" data-slide="8">
+            <div class="slide-header">
+                <span class="slide-number">8</span>
+                <h2 class="slide-title-text">Vision & Mission</h2>
+                <p class="slide-subtitle">Raffiner notre direction et notre raison d'être</p>
+            </div>
+            <div class="vision-mission-container">
+                <div class="vision-box">
+                    <span class="vm-label">Vision (10 ans)</span>
+                    <p class="vm-prompt">Dans 10 ans, Tunisian Campers sera...</p>
+                    <div class="vm-fill">À compléter - quelle est notre ambition ultime?</div>
+                </div>
+                <div class="mission-box">
+                    <span class="vm-label">Mission</span>
+                    <p class="vm-prompt">Notre mission est de...</p>
+                    <div class="vm-fill">À compléter - pourquoi existons-nous?</div>
+                </div>
+                <div class="pillars-section">
+                    <h4>Piliers Stratégiques (3-5)</h4>
+                    <div class="pillars-grid">
+                        <div class="pillar-slot">
+                            <span>Pilier 1</span>
+                        </div>
+                        <div class="pillar-slot">
+                            <span>Pilier 2</span>
+                        </div>
+                        <div class="pillar-slot">
+                            <span>Pilier 3</span>
+                        </div>
+                        <div class="pillar-slot">
+                            <span>Pilier 4</span>
+                        </div>
+                        <div class="pillar-slot">
+                            <span>Pilier 5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Next Steps -->
+        <section class="slide slide-content" data-slide="9">
+            <div class="slide-header">
+                <span class="slide-number">9</span>
+                <h2 class="slide-title-text">Prochaines Étapes</h2>
+                <p class="slide-subtitle">Ce qui se passe après ce meeting</p>
+            </div>
+            <div class="next-steps-container">
+                <div class="deliverables-section">
+                    <h3 class="column-title">Le consultant va préparer</h3>
+                    <div class="deliverables-list">
+                        <div class="deliverable-item">
+                            <span class="material-icons">timeline</span>
+                            <div>
+                                <h4>Feuille de Route 10 Ans</h4>
+                                <p>Timeline visuelle avec jalons par horizon</p>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">assignment</span>
+                            <div>
+                                <h4>Plan d'Action Année 1</h4>
+                                <p>Initiatives trimestrielles détaillées</p>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">dashboard</span>
+                            <div>
+                                <h4>Tableau de Bord KPIs</h4>
+                                <p>Indicateurs de performance avec cibles</p>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <span class="material-icons">groups</span>
+                            <div>
+                                <h4>Plan d'Allocation Équipe</h4>
+                                <p>Qui fait quoi, à quel % de temps</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="meeting-preview">
+                    <h3>Meeting 3</h3>
+                    <div class="preview-item">
+                        <span class="material-icons">event</span>
+                        <span>Date à confirmer</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="material-icons">schedule</span>
+                        <span>Durée: 2h</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="material-icons">people</span>
+                        <span>Toute l'équipe (7 personnes)</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="material-icons">track_changes</span>
+                        <span>Focus: Planifier & Exécuter</span>
+                    </div>
+                    <p class="preview-note">
+                        <strong>Important:</strong> Le Meeting 3 implique toute l'équipe pour valider le plan et assigner les responsabilités.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="nav-hint">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navigation</span>
+        <span><kbd>Home</kbd> Début</span>
+        <span><kbd>End</kbd> Fin</span>
+    </div>
+
+    <script>
+        const container = document.getElementById('presentationContainer');
+        const counter = document.querySelector('.slide-counter');
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Update slide counter
+        function updateCounter() {
+            const scrollTop = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const currentSlide = Math.round(scrollTop / slideHeight) + 1;
+            counter.textContent = `${currentSlide} / ${totalSlides}`;
+        }
+
+        // Scroll to specific slide
+        function goToSlide(n) {
+            const targetSlide = Math.max(1, Math.min(n, totalSlides));
+            slides[targetSlide - 1].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Get current slide number
+        function getCurrentSlide() {
+            const scrollTop = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            return Math.round(scrollTop / slideHeight) + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const current = getCurrentSlide();
+
+            switch(e.key) {
+                case 'ArrowDown':
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    goToSlide(current + 1);
+                    break;
+                case 'ArrowUp':
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    goToSlide(current - 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(1);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides);
+                    break;
+            }
+        });
+
+        // Update counter on scroll
+        container.addEventListener('scroll', updateCounter);
+
+        // Initial counter update
+        updateCounter();
+    </script>
+</body>
+</html>
